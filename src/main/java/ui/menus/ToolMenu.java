@@ -18,7 +18,9 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 
 public class ToolMenu {
-    JFrame frame;
+    private final JFrame frame;
+
+    private final Toolkit toolkit = Toolkit.getDefaultToolkit();
 
     public ToolMenu(JFrame frame) {
         this.frame = frame;
@@ -34,13 +36,24 @@ public class ToolMenu {
         return this.createButtonFromAction(new AbstractAction("select", icon) {
             @Override
             public void actionPerformed(ActionEvent e) {
+                frame.setCursor(Cursor.DEFAULT_CURSOR);
+
                 // do something.
             }
         });
     }
 
     private JButton setupColourPickerAction() {
-        var icon = new ImageIcon(ToolMenu.class.getResource("/icons/colour-dropper.png"));
+        var icon = new ImageIcon(ToolMenu.class.getResource("/icons/fill.png"));
+
+
+        // get the best width and height based on Operating System using the Toolkit
+        var dimensions = toolkit.getBestCursorSize(32, 32);
+
+        // Load in our custom 'fill' cursor using the same icon...
+        var cursor = toolkit.createCustomCursor(
+                ImageUtils.resizeIcon(icon, dimensions.width, dimensions.height).getImage(),
+                new Point(frame.getX(), frame.getY()), "");
 
         // resize the icon to 20x20
         icon = ImageUtils.resizeIcon(icon, 20, 20);
@@ -48,6 +61,7 @@ public class ToolMenu {
         return this.createButtonFromAction(new AbstractAction("colour", icon) {
             @Override
             public void actionPerformed(ActionEvent e) {
+                frame.setCursor(cursor);
                 // do something.
             }
         });
@@ -62,6 +76,8 @@ public class ToolMenu {
         return this.createButtonFromAction(new AbstractAction("drawLine", icon) {
             @Override
             public void actionPerformed(ActionEvent e) {
+                frame.setCursor(Cursor.CROSSHAIR_CURSOR);
+
                 // do something.
             }
         });
@@ -76,6 +92,8 @@ public class ToolMenu {
         return this.createButtonFromAction(new AbstractAction("drawRectangle", icon) {
             @Override
             public void actionPerformed(ActionEvent e) {
+                frame.setCursor(Cursor.CROSSHAIR_CURSOR);
+
                 // do something.
             }
         });
@@ -90,6 +108,8 @@ public class ToolMenu {
         return this.createButtonFromAction(new AbstractAction("drawTriangle", icon) {
             @Override
             public void actionPerformed(ActionEvent e) {
+                frame.setCursor(Cursor.CROSSHAIR_CURSOR);
+
                 // do something.
             }
         });
@@ -104,6 +124,8 @@ public class ToolMenu {
         return this.createButtonFromAction(new AbstractAction("drawCicrle", icon) {
             @Override
             public void actionPerformed(ActionEvent e) {
+                frame.setCursor(Cursor.CROSSHAIR_CURSOR);
+
                 // do something.
             }
         });
@@ -118,6 +140,24 @@ public class ToolMenu {
         return this.createButtonFromAction(new AbstractAction("drawImage", icon) {
             @Override
             public void actionPerformed(ActionEvent e) {
+                frame.setCursor(Cursor.CROSSHAIR_CURSOR);
+
+                // do something.
+            }
+        });
+    }
+
+    private JButton setupTextAction() {
+        var icon = new ImageIcon(ToolMenu.class.getResource("/icons/text.png"));
+
+        // resize the icon to 20x20
+        icon = ImageUtils.resizeIcon(icon, 20, 20);
+
+        return this.createButtonFromAction(new AbstractAction("textBox", icon) {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                frame.setCursor(Cursor.TEXT_CURSOR);
+
                 // do something.
             }
         });
@@ -169,6 +209,7 @@ public class ToolMenu {
         panel.add(setupTriangleAction());
         panel.add(setupCircleAction());
         panel.add(setupImageAction());
+        panel.add(setupTextAction());
 
         panel.setMaximumSize(new Dimension(200, 220));
 
