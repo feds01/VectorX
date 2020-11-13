@@ -23,7 +23,8 @@ public class VectorMain extends JFrame {
 
             JFrame frame = new JFrame("VectorX - Editing ${file}");
 
-            //TitlePane titlePane = new TitlePane();
+            frame.getContentPane().setLayout(new BorderLayout());
+            frame.getContentPane().setPreferredSize(new Dimension(WIDTH, HEIGHT));
 
             var menuMaker = new TopMenu();
 
@@ -36,22 +37,16 @@ public class VectorMain extends JFrame {
             var toolbarMaker = new ToolMenu(frame);
             var toolbar = toolbarMaker.createMenu();
 
-
             frame.add(toolbar, BorderLayout.WEST);
 
 
 //                frame.setUndecorated(true);
             frame.setLocationByPlatform(true);
-            frame.setResizable(true);
 
             frame.pack();
             frame.setSize(WIDTH, HEIGHT);
             frame.setVisible(true);
-
             setDefaultCloseOperation(EXIT_ON_CLOSE);
-
-            frame.getContentPane().setLayout(new BorderLayout());
-            frame.getContentPane().setPreferredSize(new Dimension(WIDTH, HEIGHT));
         });
     }
 }
