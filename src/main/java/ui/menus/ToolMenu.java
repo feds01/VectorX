@@ -2,9 +2,17 @@ package ui.menus;
 
 import common.ImageUtils;
 
-import javax.swing.*;
+import javax.swing.AbstractAction;
+import javax.swing.Action;
+import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.JToolBar;
+import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
-import javax.swing.border.LineBorder;
 import javax.swing.border.MatteBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -151,7 +159,7 @@ public class ToolMenu {
 
         var panel = new JPanel();
 
-        panel.setLayout(new GridLayout(0, 2, 0, 10));
+        panel.setLayout(new GridLayout(0, 1, 0, 10));
 
         // Add the actions to the toolbars.
         panel.add(setupPointerAction());
@@ -162,7 +170,7 @@ public class ToolMenu {
         panel.add(setupCircleAction());
         panel.add(setupImageAction());
 
-        panel.setMaximumSize(new Dimension(200, 120));
+        panel.setMaximumSize(new Dimension(200, 220));
 
         toolbar.add(Box.createVerticalStrut(5));
         toolbar.add(panel);
