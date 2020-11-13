@@ -36,7 +36,7 @@ public class ToolMenu {
         return this.createButtonFromAction(new AbstractAction("select", icon) {
             @Override
             public void actionPerformed(ActionEvent e) {
-                frame.setCursor(Cursor.DEFAULT_CURSOR);
+                frame.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 
                 // do something.
             }
@@ -76,7 +76,7 @@ public class ToolMenu {
         return this.createButtonFromAction(new AbstractAction("drawLine", icon) {
             @Override
             public void actionPerformed(ActionEvent e) {
-                frame.setCursor(Cursor.CROSSHAIR_CURSOR);
+                frame.setCursor(new Cursor(Cursor.CROSSHAIR_CURSOR));
 
                 // do something.
             }
@@ -92,7 +92,7 @@ public class ToolMenu {
         return this.createButtonFromAction(new AbstractAction("drawRectangle", icon) {
             @Override
             public void actionPerformed(ActionEvent e) {
-                frame.setCursor(Cursor.CROSSHAIR_CURSOR);
+                frame.setCursor(new Cursor(Cursor.CROSSHAIR_CURSOR));
 
                 // do something.
             }
@@ -108,7 +108,7 @@ public class ToolMenu {
         return this.createButtonFromAction(new AbstractAction("drawTriangle", icon) {
             @Override
             public void actionPerformed(ActionEvent e) {
-                frame.setCursor(Cursor.CROSSHAIR_CURSOR);
+                frame.setCursor(new Cursor(Cursor.CROSSHAIR_CURSOR));
 
                 // do something.
             }
@@ -124,7 +124,7 @@ public class ToolMenu {
         return this.createButtonFromAction(new AbstractAction("drawCicrle", icon) {
             @Override
             public void actionPerformed(ActionEvent e) {
-                frame.setCursor(Cursor.CROSSHAIR_CURSOR);
+                frame.setCursor(new Cursor(Cursor.CROSSHAIR_CURSOR));
 
                 // do something.
             }
@@ -140,7 +140,7 @@ public class ToolMenu {
         return this.createButtonFromAction(new AbstractAction("drawImage", icon) {
             @Override
             public void actionPerformed(ActionEvent e) {
-                frame.setCursor(Cursor.CROSSHAIR_CURSOR);
+                frame.setCursor(new Cursor(Cursor.CROSSHAIR_CURSOR));
 
                 // do something.
             }
@@ -156,7 +156,7 @@ public class ToolMenu {
         return this.createButtonFromAction(new AbstractAction("textBox", icon) {
             @Override
             public void actionPerformed(ActionEvent e) {
-                frame.setCursor(Cursor.TEXT_CURSOR);
+                frame.setCursor(new Cursor(Cursor.TEXT_CURSOR));
 
                 // do something.
             }
