@@ -1,6 +1,7 @@
 
 
-import ui.menu.MenuMaker;
+import ui.menus.ToolMenu;
+import ui.menus.TopMenu;
 
 import javax.swing.*;
 import java.awt.*;
@@ -24,12 +25,20 @@ public class VectorMain extends JFrame {
 
             //TitlePane titlePane = new TitlePane();
 
-            var menuMaker = new MenuMaker();
+            var menuMaker = new TopMenu();
 
             // make the menu
-            var menu = menuMaker.createMenuBar();
+            var menu = menuMaker.createMenu();
 
             frame.setJMenuBar(menu);
+
+            // create the toolbar
+            var toolbarMaker = new ToolMenu(frame);
+            var toolbar = toolbarMaker.createMenu();
+
+
+            frame.add(toolbar, BorderLayout.WEST);
+
 
 //                frame.setUndecorated(true);
             frame.setLocationByPlatform(true);

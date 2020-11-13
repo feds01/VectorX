@@ -1,8 +1,8 @@
-package ui.menu;
+package ui.menus;
 
 import javax.swing.*;
 
-public class MenuMaker {
+public class TopMenu implements BaseMenu {
     private JMenu createEditMenu() {
         JMenu editMenu = new JMenu("Edit");
         JMenuItem undoItem = new JMenuItem("Undo");
@@ -38,13 +38,12 @@ public class MenuMaker {
         return fileMenu;
     }
 
-    public JMenuBar createMenuBar() {
+    @Override
+    public JMenuBar createMenu() {
         JMenuBar menuBar = new JMenuBar();
         menuBar.add(createFileMenu());
         menuBar.add(createEditMenu());
         menuBar.add(createHelpMenu());
-
-
 
         return menuBar;
     }
