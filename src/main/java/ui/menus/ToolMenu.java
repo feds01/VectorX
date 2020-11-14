@@ -179,8 +179,7 @@ public class ToolMenu {
      *
      */
     public JToolBar createMenu() {
-        var toolbar = new JToolBar();
-        toolbar.setOrientation(SwingConstants.VERTICAL);
+        var toolbar = new JToolBar(SwingConstants.VERTICAL);
 
         // prevent it from being floated
         toolbar.setFloatable(false);

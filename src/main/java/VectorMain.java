@@ -1,5 +1,6 @@
 
 
+import ui.menus.PropertiesMenu;
 import ui.menus.ToolMenu;
 import ui.menus.TopMenu;
 
@@ -37,7 +38,12 @@ public class VectorMain extends JFrame {
             var toolbarMaker = new ToolMenu(frame);
             var toolbar = toolbarMaker.createMenu();
 
+            var propertiesPanelMaker = new PropertiesMenu(frame);
+            var propertiesMenu = propertiesPanelMaker.createMenu();
+
+
             frame.add(toolbar, BorderLayout.WEST);
+            frame.add(propertiesMenu, BorderLayout.EAST);
 
 
 //                frame.setUndecorated(true);
