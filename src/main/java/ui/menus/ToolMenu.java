@@ -73,12 +73,15 @@ public class ToolMenu {
             public void focusLost(FocusEvent e) {
                 AbstractButton btn = (AbstractButton) e.getSource();
 
-                var icon = tool.getImageIcon(false);
+                // prevent the change in icon if the cause of the event is activation
+                if (e.getCause() != FocusEvent.Cause.ACTIVATION) {
+                    var icon = tool.getImageIcon(false);
 
-                // resize the icon to 20x20
-                icon = ImageUtils.resizeIcon(icon, 20, 20);
+                    // resize the icon to 20x20
+                    icon = ImageUtils.resizeIcon(icon, 20, 20);
 
-                btn.setIcon(icon);
+                    btn.setIcon(icon);
+                }
             }
 
             @Override
