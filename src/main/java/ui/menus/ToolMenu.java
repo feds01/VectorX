@@ -2,50 +2,72 @@ package ui.menus;
 
 import common.ImageUtils;
 
-import javax.swing.AbstractAction;
-import javax.swing.Action;
-import javax.swing.BorderFactory;
-import javax.swing.Box;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.JToolBar;
-import javax.swing.SwingConstants;
+import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.MatteBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
+import java.util.HashMap;
+import java.util.Map;
 
+/**
+ *
+ * */
 public class ToolMenu {
+
+    /**
+     *
+     * */
     private final JFrame frame;
 
+    /**
+     *
+     * */
     private final Toolkit toolkit = Toolkit.getDefaultToolkit();
+
+
+    /**
+     *
+     * */
+    public static final Map<String, String> iconMap = new HashMap<>();
+
+    static {
+        iconMap.put("select", "/icons/selector");
+        iconMap.put("fill", "/icons/fill");
+        iconMap.put("line", "/icons/line");
+        iconMap.put("rectangle", "/icons/rectangle");
+        iconMap.put("ellipsis", "/icons/circle");
+        iconMap.put("image", "/icons/image");
+        iconMap.put("triangle", "/icons/triangle");
+        iconMap.put("text", "/icons/text");
+    }
 
     public ToolMenu(JFrame frame) {
         this.frame = frame;
     }
 
-
-    private JButton setupPointerAction() {
-        var icon = new ImageIcon(ToolMenu.class.getResource("/icons/selector.png"));
+    private JButton setupAction(String command) {
+        var icon = new ImageIcon(ToolMenu.class.getResource(iconMap.get(command) + ".png"));
 
         // resize the icon to 20x20
         icon = ImageUtils.resizeIcon(icon, 20, 20);
 
-        return this.createButtonFromAction(new AbstractAction("select", icon) {
+        return this.createButtonFromAction(new AbstractAction(command, icon) {
             @Override
             public void actionPerformed(ActionEvent e) {
                 frame.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 
                 // do something.
             }
-        });
+        }, command);
     }
 
     private JButton setupColourPickerAction() {
-        var icon = new ImageIcon(ToolMenu.class.getResource("/icons/fill.png"));
+        String command = "fill";
 
+        var icon = new ImageIcon(ToolMenu.class.getResource(iconMap.get(command) + ".png"));
 
         // get the best width and height based on Operating System using the Toolkit
         var dimensions = toolkit.getBestCursorSize(32, 32);
@@ -58,119 +80,54 @@ public class ToolMenu {
         // resize the icon to 20x20
         icon = ImageUtils.resizeIcon(icon, 20, 20);
 
-        return this.createButtonFromAction(new AbstractAction("colour", icon) {
+        return this.createButtonFromAction(new AbstractAction(command, icon) {
             @Override
             public void actionPerformed(ActionEvent e) {
                 frame.setCursor(cursor);
                 // do something.
             }
-        });
+        }, command);
     }
-
-    private JButton setupLineAction() {
-        var icon = new ImageIcon(ToolMenu.class.getResource("/icons/line.png"));
-
-        // resize the icon to 20x20
-        icon = ImageUtils.resizeIcon(icon, 20, 20);
-
-        return this.createButtonFromAction(new AbstractAction("drawLine", icon) {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                frame.setCursor(new Cursor(Cursor.CROSSHAIR_CURSOR));
-
-                // do something.
-            }
-        });
-    }
-
-    private JButton setupRectangleAction() {
-        var icon = new ImageIcon(ToolMenu.class.getResource("/icons/rectangle.png"));
-
-        // resize the icon to 20x20
-        icon = ImageUtils.resizeIcon(icon, 20, 20);
-
-        return this.createButtonFromAction(new AbstractAction("drawRectangle", icon) {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                frame.setCursor(new Cursor(Cursor.CROSSHAIR_CURSOR));
-
-                // do something.
-            }
-        });
-    }
-
-    private JButton setupTriangleAction() {
-        var icon = new ImageIcon(ToolMenu.class.getResource("/icons/triangle.png"));
-
-        // resize the icon to 20x20
-        icon = ImageUtils.resizeIcon(icon, 20, 20);
-
-        return this.createButtonFromAction(new AbstractAction("drawTriangle", icon) {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                frame.setCursor(new Cursor(Cursor.CROSSHAIR_CURSOR));
-
-                // do something.
-            }
-        });
-    }
-
-    private JButton setupCircleAction() {
-        var icon = new ImageIcon(ToolMenu.class.getResource("/icons/circle.png"));
-
-        // resize the icon to 20x20
-        icon = ImageUtils.resizeIcon(icon, 20, 20);
-
-        return this.createButtonFromAction(new AbstractAction("drawCicrle", icon) {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                frame.setCursor(new Cursor(Cursor.CROSSHAIR_CURSOR));
-
-                // do something.
-            }
-        });
-    }
-
-    private JButton setupImageAction() {
-        var icon = new ImageIcon(ToolMenu.class.getResource("/icons/image.png"));
-
-        // resize the icon to 20x20
-        icon = ImageUtils.resizeIcon(icon, 20, 20);
-
-        return this.createButtonFromAction(new AbstractAction("drawImage", icon) {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                frame.setCursor(new Cursor(Cursor.CROSSHAIR_CURSOR));
-
-                // do something.
-            }
-        });
-    }
-
-    private JButton setupTextAction() {
-        var icon = new ImageIcon(ToolMenu.class.getResource("/icons/text.png"));
-
-        // resize the icon to 20x20
-        icon = ImageUtils.resizeIcon(icon, 20, 20);
-
-        return this.createButtonFromAction(new AbstractAction("textBox", icon) {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                frame.setCursor(new Cursor(Cursor.TEXT_CURSOR));
-
-                // do something.
-            }
-        });
-    }
-
 
     /**
      */
-    private JButton createButtonFromAction(Action action) {
+    private JButton createButtonFromAction(Action action, String command) {
         var button = new JButton(action);
 
         button.setText("");
+        button.setBorder(null);
+        button.setFocusPainted(false);
         button.setBorderPainted(false);
+
+        button.setBackground(new Color(0xFFFFFF));
+
+        button.addFocusListener(new FocusListener() {
+
+            @Override
+            public void focusLost(FocusEvent e) {
+                AbstractButton btn = (AbstractButton) e.getSource();
+
+
+                var icon = new ImageIcon(ToolMenu.class.getResource(iconMap.get(command) + ".png"));
+
+                // resize the icon to 20x20
+                icon = ImageUtils.resizeIcon(icon, 20, 20);
+
+                btn.setIcon(icon);
+            }
+
+            @Override
+            public void focusGained(FocusEvent e) {
+                AbstractButton btn = (AbstractButton) e.getSource();
+
+                var icon = new ImageIcon(ToolMenu.class.getResource(iconMap.get(command) + "_selected.png"));
+
+                // resize the icon to 20x20
+                icon = ImageUtils.resizeIcon(icon, 20, 20);
+
+                btn.setIcon(icon);
+            }
+        });
 
         return button;
     }
@@ -198,19 +155,24 @@ public class ToolMenu {
 
         var panel = new JPanel();
 
-        panel.setLayout(new GridLayout(0, 1, 0, 10));
+        panel.setLayout(new GridLayout(0, 1, 0, 20));
 
         // Add the actions to the toolbars.
-        panel.add(setupPointerAction());
+        panel.add(setupAction("select"));
         panel.add(setupColourPickerAction());
-        panel.add(setupLineAction());
-        panel.add(setupRectangleAction());
-        panel.add(setupTriangleAction());
-        panel.add(setupCircleAction());
-        panel.add(setupImageAction());
-        panel.add(setupTextAction());
+        panel.add(setupAction("line"));
+        panel.add(setupAction("rectangle"));
+        panel.add(setupAction("ellipsis"));
+        panel.add(setupAction("triangle"));
+        panel.add(setupAction("image"));
+        panel.add(setupAction("text"));
 
-        panel.setMaximumSize(new Dimension(200, 220));
+        panel.setMaximumSize(new Dimension(200, 300));
+        panel.setBackground(new Color(0xFFFFFF));
+
+        toolbar.setCursor(Cursor.getDefaultCursor());
+
+        toolbar.setBackground(new Color(0xFFFFFF));
 
         toolbar.add(Box.createVerticalStrut(5));
         toolbar.add(panel);

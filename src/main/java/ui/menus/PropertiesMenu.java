@@ -36,6 +36,8 @@ public class PropertiesMenu  {
 
         panel.add(new JTextArea("Properties"));
 
+        propertyBar.setCursor(Cursor.getDefaultCursor());
+
         propertyBar.add(panel);
         propertyBar.add(Box.createVerticalGlue());
 

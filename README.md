@@ -4,6 +4,7 @@ In this practical you are required to write a simple vector graphics drawing pro
 program should support the following feature requirements.
 
 ### Running the tests (without stacscheck)
+------------------------------------------------------
 - Ensure that the libraries in the lib folder has executable permissions on linux or unix-like
   system by adding the 'execute' flag:  
   ```~/code/ $ chmod +x ./lib/*.jar```
@@ -21,6 +22,7 @@ program should support the following feature requirements.
 
   
 ### Example run
+------------------------------------------------------
 ```shell script
 ```
 

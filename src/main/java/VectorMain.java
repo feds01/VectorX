@@ -45,12 +45,10 @@ public class VectorMain extends JFrame {
             frame.add(toolbar, BorderLayout.WEST);
             frame.add(propertiesMenu, BorderLayout.EAST);
 
-
-//                frame.setUndecorated(true);
             frame.setLocationByPlatform(true);
 
             frame.pack();
-            frame.setSize(WIDTH, HEIGHT);
+            frame.setSize( WIDTH, HEIGHT);
             frame.setVisible(true);
             setDefaultCloseOperation(EXIT_ON_CLOSE);
         });
