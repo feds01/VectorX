@@ -1,6 +1,7 @@
 package ui.menus;
 
 import common.ImageUtils;
+import drawing.ToolType;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -31,43 +32,41 @@ public class ToolMenu {
     /**
      *
      * */
-    public static final Map<String, String> iconMap = new HashMap<>();
+    public static final Map<ToolType, String> iconMap = new HashMap<>();
 
     static {
-        iconMap.put("select", "/icons/selector");
-        iconMap.put("fill", "/icons/fill");
-        iconMap.put("line", "/icons/line");
-        iconMap.put("rectangle", "/icons/rectangle");
-        iconMap.put("ellipsis", "/icons/circle");
-        iconMap.put("image", "/icons/image");
-        iconMap.put("triangle", "/icons/triangle");
-        iconMap.put("text", "/icons/text");
+        iconMap.put(ToolType.SELECTOR, "/icons/selector");
+        iconMap.put(ToolType.FILL, "/icons/fill");
+        iconMap.put(ToolType.LINE, "/icons/line");
+        iconMap.put(ToolType.RECTANGLE, "/icons/rectangle");
+        iconMap.put(ToolType.ELLIPSIS, "/icons/circle");
+        iconMap.put(ToolType.IMAGE, "/icons/image");
+        iconMap.put(ToolType.TRIANGLE, "/icons/triangle");
+        iconMap.put(ToolType.TEXT, "/icons/text");
     }
 
     public ToolMenu(JFrame frame) {
         this.frame = frame;
     }
 
-    private JButton setupAction(String command) {
-        var icon = new ImageIcon(ToolMenu.class.getResource(iconMap.get(command) + ".png"));
+    private JButton setupAction(ToolType type) {
+        var icon = new ImageIcon(ToolMenu.class.getResource(iconMap.get(type) + ".png"));
 
         // resize the icon to 20x20
         icon = ImageUtils.resizeIcon(icon, 20, 20);
 
-        return this.createButtonFromAction(new AbstractAction(command, icon) {
+        return this.createButtonFromAction(new AbstractAction(type.toString(), icon) {
             @Override
             public void actionPerformed(ActionEvent e) {
                 frame.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 
                 // do something.
             }
-        }, command);
+        }, type);
     }
 
     private JButton setupColourPickerAction() {
-        String command = "fill";
-
-        var icon = new ImageIcon(ToolMenu.class.getResource(iconMap.get(command) + ".png"));
+        var icon = new ImageIcon(ToolMenu.class.getResource(iconMap.get(ToolType.FILL) + ".png"));
 
         // get the best width and height based on Operating System using the Toolkit
         var dimensions = toolkit.getBestCursorSize(32, 32);
@@ -80,18 +79,18 @@ public class ToolMenu {
         // resize the icon to 20x20
         icon = ImageUtils.resizeIcon(icon, 20, 20);
 
-        return this.createButtonFromAction(new AbstractAction(command, icon) {
+        return this.createButtonFromAction(new AbstractAction(ToolType.FILL.toString(), icon) {
             @Override
             public void actionPerformed(ActionEvent e) {
                 frame.setCursor(cursor);
                 // do something.
             }
-        }, command);
+        }, ToolType.FILL);
     }
 
     /**
      */
-    private JButton createButtonFromAction(Action action, String command) {
+    private JButton createButtonFromAction(Action action, ToolType type) {
         var button = new JButton(action);
 
         button.setText("");
@@ -108,7 +107,7 @@ public class ToolMenu {
                 AbstractButton btn = (AbstractButton) e.getSource();
 
 
-                var icon = new ImageIcon(ToolMenu.class.getResource(iconMap.get(command) + ".png"));
+                var icon = new ImageIcon(ToolMenu.class.getResource(iconMap.get(type) + ".png"));
 
                 // resize the icon to 20x20
                 icon = ImageUtils.resizeIcon(icon, 20, 20);
@@ -120,7 +119,7 @@ public class ToolMenu {
             public void focusGained(FocusEvent e) {
                 AbstractButton btn = (AbstractButton) e.getSource();
 
-                var icon = new ImageIcon(ToolMenu.class.getResource(iconMap.get(command) + "_selected.png"));
+                var icon = new ImageIcon(ToolMenu.class.getResource(iconMap.get(type) + "_selected.png"));
 
                 // resize the icon to 20x20
                 icon = ImageUtils.resizeIcon(icon, 20, 20);
@@ -158,14 +157,14 @@ public class ToolMenu {
         panel.setLayout(new GridLayout(0, 1, 0, 20));
 
         // Add the actions to the toolbars.
-        panel.add(setupAction("select"));
+        panel.add(setupAction(ToolType.SELECTOR));
         panel.add(setupColourPickerAction());
-        panel.add(setupAction("line"));
-        panel.add(setupAction("rectangle"));
-        panel.add(setupAction("ellipsis"));
-        panel.add(setupAction("triangle"));
-        panel.add(setupAction("image"));
-        panel.add(setupAction("text"));
+        panel.add(setupAction(ToolType.LINE));
+        panel.add(setupAction(ToolType.RECTANGLE));
+        panel.add(setupAction(ToolType.ELLIPSIS));
+        panel.add(setupAction(ToolType.TRIANGLE));
+        panel.add(setupAction(ToolType.IMAGE));
+        panel.add(setupAction(ToolType.TEXT));
 
         panel.setMaximumSize(new Dimension(200, 300));
         panel.setBackground(new Color(0xFFFFFF));
