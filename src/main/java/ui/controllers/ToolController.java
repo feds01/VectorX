@@ -1,19 +1,19 @@
 package ui.controllers;
 
-import drawing.Tool;
+import drawing.tool.DrawingTool;
 
 public class ToolController {
-    private Tool currentTool;
+    private DrawingTool currentTool;
 
-    public ToolController(Tool tool) {
+    public ToolController(DrawingTool tool) {
         this.currentTool = tool;
     }
 
-    public Tool getCurrentTool() {
+    public DrawingTool getCurrentTool() {
         return currentTool;
     }
 
-    public void setCurrentTool(Tool currentTool) {
+    public void setCurrentTool(DrawingTool currentTool) {
         this.currentTool = currentTool;
     }
 }

@@ -1,96 +1,63 @@
 package ui.menus;
 
 import common.ImageUtils;
+import drawing.tool.DrawingTool;
+import drawing.tool.FillTool;
+import drawing.tool.GenericTool;
 import drawing.ToolType;
 
-import javax.swing.*;
+import javax.swing.AbstractAction;
+import javax.swing.AbstractButton;
+import javax.swing.Action;
+import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.JToolBar;
+import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.MatteBorder;
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Cursor;
+import java.awt.Dimension;
+import java.awt.GridLayout;
+import java.awt.Insets;
+import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  *
- * */
+ */
 public class ToolMenu {
 
     /**
      *
-     * */
+     */
     private final JFrame frame;
-
-    /**
-     *
-     * */
-    private final Toolkit toolkit = Toolkit.getDefaultToolkit();
-
-
-    /**
-     *
-     * */
-    public static final Map<ToolType, String> iconMap = new HashMap<>();
-
-    static {
-        iconMap.put(ToolType.SELECTOR, "/icons/selector");
-        iconMap.put(ToolType.FILL, "/icons/fill");
-        iconMap.put(ToolType.LINE, "/icons/line");
-        iconMap.put(ToolType.RECTANGLE, "/icons/rectangle");
-        iconMap.put(ToolType.ELLIPSIS, "/icons/circle");
-        iconMap.put(ToolType.IMAGE, "/icons/image");
-        iconMap.put(ToolType.TRIANGLE, "/icons/triangle");
-        iconMap.put(ToolType.TEXT, "/icons/text");
-    }
 
     public ToolMenu(JFrame frame) {
         this.frame = frame;
     }
 
-    private JButton setupAction(ToolType type) {
-        var icon = new ImageIcon(ToolMenu.class.getResource(iconMap.get(type) + ".png"));
-
-        // resize the icon to 20x20
-        icon = ImageUtils.resizeIcon(icon, 20, 20);
-
-        return this.createButtonFromAction(new AbstractAction(type.toString(), icon) {
+    private JButton setupAction(DrawingTool tool) {
+        return this.createButtonFromAction(new AbstractAction(tool.getType().toString(), tool.getImageIcon(false)) {
             @Override
             public void actionPerformed(ActionEvent e) {
-                frame.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
-
-                // do something.
-            }
-        }, type);
-    }
-
-    private JButton setupColourPickerAction() {
-        var icon = new ImageIcon(ToolMenu.class.getResource(iconMap.get(ToolType.FILL) + ".png"));
-
-        // get the best width and height based on Operating System using the Toolkit
-        var dimensions = toolkit.getBestCursorSize(32, 32);
-
-        // Load in our custom 'fill' cursor using the same icon...
-        var cursor = toolkit.createCustomCursor(
-                ImageUtils.resizeIcon(icon, dimensions.width, dimensions.height).getImage(),
-                new Point(frame.getX(), frame.getY()), "");
-
-        // resize the icon to 20x20
-        icon = ImageUtils.resizeIcon(icon, 20, 20);
-
-        return this.createButtonFromAction(new AbstractAction(ToolType.FILL.toString(), icon) {
-            @Override
-            public void actionPerformed(ActionEvent e) {
+                Cursor cursor = tool.getCursor();
                 frame.setCursor(cursor);
+
                 // do something.
             }
-        }, ToolType.FILL);
+        }, tool);
     }
 
     /**
+     *
      */
-    private JButton createButtonFromAction(Action action, ToolType type) {
+    private JButton createButtonFromAction(Action action, DrawingTool tool) {
         var button = new JButton(action);
 
         button.setText("");
@@ -106,8 +73,7 @@ public class ToolMenu {
             public void focusLost(FocusEvent e) {
                 AbstractButton btn = (AbstractButton) e.getSource();
 
-
-                var icon = new ImageIcon(ToolMenu.class.getResource(iconMap.get(type) + ".png"));
+                var icon = tool.getImageIcon(false);
 
                 // resize the icon to 20x20
                 icon = ImageUtils.resizeIcon(icon, 20, 20);
@@ -119,7 +85,7 @@ public class ToolMenu {
             public void focusGained(FocusEvent e) {
                 AbstractButton btn = (AbstractButton) e.getSource();
 
-                var icon = new ImageIcon(ToolMenu.class.getResource(iconMap.get(type) + "_selected.png"));
+                var icon = tool.getImageIcon(true);
 
                 // resize the icon to 20x20
                 icon = ImageUtils.resizeIcon(icon, 20, 20);
@@ -157,14 +123,15 @@ public class ToolMenu {
         panel.setLayout(new GridLayout(0, 1, 0, 20));
 
         // Add the actions to the toolbars.
-        panel.add(setupAction(ToolType.SELECTOR));
-        panel.add(setupColourPickerAction());
-        panel.add(setupAction(ToolType.LINE));
-        panel.add(setupAction(ToolType.RECTANGLE));
-        panel.add(setupAction(ToolType.ELLIPSIS));
-        panel.add(setupAction(ToolType.TRIANGLE));
-        panel.add(setupAction(ToolType.IMAGE));
-        panel.add(setupAction(ToolType.TEXT));
+        panel.add(setupAction(new GenericTool(ToolType.SELECTOR, new Cursor(Cursor.DEFAULT_CURSOR), "/icons/selector")));
+        panel.add(setupAction(new FillTool()));
+        panel.add(setupAction(new GenericTool(ToolType.LINE, new Cursor(Cursor.CROSSHAIR_CURSOR), "/icons/line")));
+        panel.add(setupAction(new GenericTool(ToolType.RECTANGLE, new Cursor(Cursor.CROSSHAIR_CURSOR), "/icons/rectangle")));
+        panel.add(setupAction(new GenericTool(ToolType.ELLIPSIS, new Cursor(Cursor.CROSSHAIR_CURSOR), "/icons/circle")));
+        panel.add(setupAction(new GenericTool(ToolType.TRIANGLE, new Cursor(Cursor.CROSSHAIR_CURSOR), "/icons/triangle")));
+        panel.add(setupAction(new GenericTool(ToolType.IMAGE, new Cursor(Cursor.HAND_CURSOR), "/icons/image")));
+        panel.add(setupAction(new GenericTool(ToolType.TEXT, new Cursor(Cursor.TEXT_CURSOR), "/icons/text")));
+
 
         panel.setMaximumSize(new Dimension(200, 300));
         panel.setBackground(new Color(0xFFFFFF));
