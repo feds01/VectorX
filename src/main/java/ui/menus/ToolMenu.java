@@ -1,29 +1,16 @@
 package ui.menus;
 
 import common.ImageUtils;
+import drawing.ToolType;
 import drawing.tool.DrawingTool;
 import drawing.tool.FillTool;
 import drawing.tool.GenericTool;
-import drawing.ToolType;
+import ui.controllers.ToolController;
 
-import javax.swing.AbstractAction;
-import javax.swing.AbstractButton;
-import javax.swing.Action;
-import javax.swing.BorderFactory;
-import javax.swing.Box;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.JToolBar;
-import javax.swing.SwingConstants;
+import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.MatteBorder;
-import java.awt.Color;
-import java.awt.Cursor;
-import java.awt.Dimension;
-import java.awt.GridLayout;
-import java.awt.Insets;
-import java.awt.Point;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
@@ -33,13 +20,24 @@ import java.awt.event.FocusListener;
  */
 public class ToolMenu {
 
+    // the selector tool is considered to be the default tool
+    private static GenericTool selectorTool = new GenericTool(ToolType.SELECTOR, new Cursor(Cursor.DEFAULT_CURSOR), "/icons/selector");
+
     /**
      *
      */
     private final JFrame frame;
 
-    public ToolMenu(JFrame frame) {
+    /**
+     *
+     */
+    private final ToolController controller;
+
+    public ToolMenu(JFrame frame, ToolController controller) {
         this.frame = frame;
+        this.controller = controller;
+
+        this.controller.setCurrentTool(selectorTool);
     }
 
     private JButton setupAction(DrawingTool tool) {
@@ -48,6 +46,8 @@ public class ToolMenu {
             public void actionPerformed(ActionEvent e) {
                 Cursor cursor = tool.getCursor();
                 frame.setCursor(cursor);
+
+                controller.setCurrentTool(tool);
 
                 // do something.
             }
@@ -123,7 +123,7 @@ public class ToolMenu {
         panel.setLayout(new GridLayout(0, 1, 0, 20));
 
         // Add the actions to the toolbars.
-        panel.add(setupAction(new GenericTool(ToolType.SELECTOR, new Cursor(Cursor.DEFAULT_CURSOR), "/icons/selector")));
+        panel.add(setupAction(selectorTool));
         panel.add(setupAction(new FillTool()));
         panel.add(setupAction(new GenericTool(ToolType.LINE, new Cursor(Cursor.CROSSHAIR_CURSOR), "/icons/line")));
         panel.add(setupAction(new GenericTool(ToolType.RECTANGLE, new Cursor(Cursor.CROSSHAIR_CURSOR), "/icons/rectangle")));

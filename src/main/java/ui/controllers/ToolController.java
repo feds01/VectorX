@@ -2,18 +2,34 @@ package ui.controllers;
 
 import drawing.tool.DrawingTool;
 
-public class ToolController {
-    private DrawingTool currentTool;
+import javax.swing.event.SwingPropertyChangeSupport;
+import java.beans.PropertyChangeListener;
 
-    public ToolController(DrawingTool tool) {
-        this.currentTool = tool;
-    }
+
+public class ToolController {
+    private DrawingTool currentTool = null;
+
+    private SwingPropertyChangeSupport pcs = new SwingPropertyChangeSupport(this);
+
+    public ToolController() {}
 
     public DrawingTool getCurrentTool() {
         return currentTool;
     }
 
+    public void addPropertyChangeListener(PropertyChangeListener listener) {
+        this.pcs.addPropertyChangeListener(listener);
+    }
+
+    public void removePropertyChangeListener(PropertyChangeListener listener) {
+        this.pcs.removePropertyChangeListener(listener);
+    }
+
     public void setCurrentTool(DrawingTool currentTool) {
+        DrawingTool oldTool = this.currentTool;
+
         this.currentTool = currentTool;
+
+        pcs.firePropertyChange("change", oldTool, this.currentTool);
     }
 }

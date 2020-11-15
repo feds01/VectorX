@@ -1,5 +1,6 @@
 
 
+import ui.controllers.ToolController;
 import ui.menus.PropertiesMenu;
 import ui.menus.ToolMenu;
 import ui.menus.TopMenu;
@@ -34,16 +35,20 @@ public class VectorMain extends JFrame {
 
             frame.setJMenuBar(menu);
 
+            // setup the tool controller so the state can be shared between the tool chooser,
+            // the canvas and the property bar. The tool controller is assuming that no tool
+            // is currently under selection.
+            var toolController = new ToolController();
+
             // create the toolbar
-            var toolbarMaker = new ToolMenu(frame);
+            var toolbarMaker = new ToolMenu(frame, toolController);
             var toolbar = toolbarMaker.createMenu();
 
-            var propertiesPanelMaker = new PropertiesMenu(frame);
-            var propertiesMenu = propertiesPanelMaker.createMenu();
+            var propertiesPanel = new PropertiesMenu(toolController);
 
 
             frame.add(toolbar, BorderLayout.WEST);
-            frame.add(propertiesMenu, BorderLayout.EAST);
+            frame.add(propertiesPanel.propertyBar, BorderLayout.EAST);
 
             frame.setLocationByPlatform(true);
 
