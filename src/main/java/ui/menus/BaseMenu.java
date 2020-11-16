@@ -1,6 +1,6 @@
 package ui.menus;
 
-import javax.swing.*;
+import javax.swing.JMenuBar;
 
 /**
  *

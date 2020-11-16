@@ -19,7 +19,7 @@ import java.awt.Shape;
 import java.awt.geom.RoundRectangle2D;
 
 
-public class Slider {
+public class SliderInput {
     /**
      *
      */
@@ -33,12 +33,12 @@ public class Slider {
     /**
      *
      * */
-    private final TextField field;
+    private final TextFieldInput field;
 
     /**
      *
      */
-    public Slider(String label, int min, int max, int value) {
+    public SliderInput(String label, int min, int max, int value) {
         if (min >= max) {
             throw new IllegalArgumentException("Minimum value cannot be larger or equal to maximum value.");
         }
@@ -98,7 +98,7 @@ public class Slider {
         gbc.gridx = 2;
         gbc.gridy = 0;
 
-        this.field = new TextField(String.valueOf(value), "px", false);
+        this.field = new TextFieldInput(String.valueOf(value), "px", false);
 
         // Add right hand-side border to separate the slider and the text field.
         this.field.getComponent().setBorder(new MatteBorder(new Insets(0, 20, 0, 0), Color.white));

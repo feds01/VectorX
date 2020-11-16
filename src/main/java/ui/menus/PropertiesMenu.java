@@ -2,12 +2,22 @@ package ui.menus;
 
 import drawing.tool.DrawingTool;
 import ui.controllers.ToolController;
-import ui.input.Slider;
+import ui.input.CoordinateInput;
+import ui.input.SliderInput;
+import ui.input.TextFieldInput;
 
-import javax.swing.*;
+import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.MatteBorder;
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Cursor;
+import java.awt.Dimension;
+import java.awt.Insets;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
@@ -19,7 +29,7 @@ public class PropertiesMenu {
     /**
      *
      */
-    public final JToolBar propertyBar;
+    public final JPanel propertyBar;
 
     /**
      *
@@ -35,21 +45,11 @@ public class PropertiesMenu {
      *
      */
     public PropertiesMenu(ToolController controller) {
-        this.propertyBar = new JToolBar(SwingConstants.VERTICAL);
+        this.propertyBar = new JPanel();
 
         this.setController(controller);
 
-        // prevent it from being floated
-        propertyBar.setFloatable(false);
-
-        // add a border to the toolbar
-        propertyBar.setBorderPainted(true);
-
         propertyBar.setCursor(Cursor.getDefaultCursor());
-
-        propertyBar.setLayout(new BoxLayout(propertyBar, BoxLayout.Y_AXIS));
-        propertyBar.setAlignmentX(Component.CENTER_ALIGNMENT);
-
 
         // Add the left side border
         propertyBar.setBorder(BorderFactory.createCompoundBorder(
@@ -57,14 +57,25 @@ public class PropertiesMenu {
                 new EmptyBorder(new Insets(0, 5, 0, 5))
         ));
 
+        propertyBar.setBackground(Color.WHITE);
+
+        propertyBar.setLayout(new BoxLayout(propertyBar, BoxLayout.Y_AXIS));
+        propertyBar.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+
+        this.toolTitle = new JLabel(controller.getCurrentTool().getType().toString());
+        this.toolTitle.setAlignmentX(Component.CENTER_ALIGNMENT);
+
         // set maximum property width to 200
         propertyBar.setPreferredSize(new Dimension(240, 100000));
 
-        this.toolTitle = new JLabel(controller.getCurrentTool().getType().toString());
+        propertyBar.add("Object Properties", this.toolTitle);
+        propertyBar.add(Box.createVerticalStrut(10));
 
-        propertyBar.add(this.toolTitle);
-        propertyBar.add(new Slider("thickness", 1, 16, 2).getComponent());
-        propertyBar.add(new Slider("thickness", 1, 16, 2).getComponent());
+        propertyBar.add(new TextFieldInput("Description", "").getComponent());
+        propertyBar.add(new CoordinateInput("0", "X", "0", "Y").getComponent());
+        propertyBar.add(new SliderInput("thickness", 1, 16, 2).getComponent());
+        propertyBar.add(new SliderInput("thickness", 1, 16, 2).getComponent());
     }
 
     /**

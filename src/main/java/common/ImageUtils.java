@@ -1,17 +1,17 @@
 package common;
 
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.ImageIcon;
+import java.awt.Image;
 
 
 /**
  *
- * */
+ */
 public class ImageUtils {
 
     /**
      *
-     * */
+     */
     public static ImageIcon resizeIcon(ImageIcon icon, int width, int height) {
         var image = icon.getImage();
 
