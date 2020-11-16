@@ -2,6 +2,7 @@ package ui.menus;
 
 import drawing.tool.DrawingTool;
 import ui.controllers.ToolController;
+import ui.input.Slider;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -44,6 +45,11 @@ public class PropertiesMenu {
         // add a border to the toolbar
         propertyBar.setBorderPainted(true);
 
+        propertyBar.setCursor(Cursor.getDefaultCursor());
+
+        propertyBar.setLayout(new BoxLayout(propertyBar, BoxLayout.Y_AXIS));
+        propertyBar.setAlignmentX(Component.CENTER_ALIGNMENT);
+
 
         // Add the left side border
         propertyBar.setBorder(BorderFactory.createCompoundBorder(
@@ -52,21 +58,13 @@ public class PropertiesMenu {
         ));
 
         // set maximum property width to 200
-        propertyBar.setPreferredSize(new Dimension(200, 100000));
-
-
-        var panel = new JPanel();
+        propertyBar.setPreferredSize(new Dimension(240, 100000));
 
         this.toolTitle = new JLabel(controller.getCurrentTool().getType().toString());
 
-        panel.add(new JTextArea("Properties"));
-        panel.add(this.toolTitle);
-
-        propertyBar.setCursor(Cursor.getDefaultCursor());
-
-        propertyBar.add(panel);
-        propertyBar.add(Box.createVerticalGlue());
-
+        propertyBar.add(this.toolTitle);
+        propertyBar.add(new Slider("thickness", 1, 16, 2).getComponent());
+        propertyBar.add(new Slider("thickness", 1, 16, 2).getComponent());
     }
 
     /**
@@ -91,37 +89,5 @@ public class PropertiesMenu {
             propertyBar.revalidate();
             propertyBar.repaint();
         }
-    }
-
-
-    public JToolBar createMenu() {
-        JToolBar propertyBar = new JToolBar(SwingConstants.VERTICAL);
-
-        // prevent it from being floated
-        propertyBar.setFloatable(false);
-
-
-        // add a border to the toolbar
-        propertyBar.setBorderPainted(true);
-
-//        var margin = new EmptyBorder(new Insets(0, 5, 0, 5));
-//        var lineBorder = new LineBorder(Color.BLACK);
-
-        propertyBar.setBorder(BorderFactory.createCompoundBorder(
-                new MatteBorder(0, 1, 0, 0, Color.BLACK),
-                new EmptyBorder(new Insets(0, 5, 0, 5))
-        ));
-
-        var panel = new JPanel();
-
-        panel.add(new JTextArea("Properties"));
-        panel.add(new JTextArea(controller.getCurrentTool().getType().toString()));
-
-        propertyBar.setCursor(Cursor.getDefaultCursor());
-
-        propertyBar.add(panel);
-        propertyBar.add(Box.createVerticalGlue());
-
-        return propertyBar;
     }
 }
