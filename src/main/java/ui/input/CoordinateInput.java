@@ -1,14 +1,17 @@
 package ui.input;
 
+import common.FontLoader;
+
 import javax.swing.Box;
-import javax.swing.GroupLayout;
 import javax.swing.JPanel;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
-import java.util.concurrent.Flow;
 
 public class CoordinateInput {
+
+    private final FontLoader fontLoader = FontLoader.getInstance();
+
     private final JPanel panel;
 
     private final TextFieldInput xField;
@@ -19,6 +22,7 @@ public class CoordinateInput {
         this.panel = new JPanel();
 
         this.panel.setBackground(Color.WHITE);
+        this.panel.setFont(fontLoader.getFont("NotoSans"));
 
         this.panel.setLayout(new FlowLayout(FlowLayout.LEADING));
 

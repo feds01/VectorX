@@ -1,5 +1,7 @@
 package ui.input;
 
+import common.FontLoader;
+
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JLabel;
@@ -12,6 +14,9 @@ import java.awt.FlowLayout;
 import java.awt.Insets;
 
 public class TextFieldInput {
+
+    private final FontLoader fontLoader = FontLoader.getInstance();
+
     private final JPanel panel;
 
     private final JTextField field;
@@ -24,6 +29,7 @@ public class TextFieldInput {
         var layout = new FlowLayout(FlowLayout.LEADING);
 
         this.panel.setLayout(layout);
+        this.panel.setBackground(Color.WHITE);
 
 
         this.panel.setPreferredSize(new Dimension(20, 20));
@@ -32,23 +38,31 @@ public class TextFieldInput {
 
         this.field = new JTextField(value,2);
 
+        this.field.setFont(fontLoader.getFont("NotoSans"));
+
         // Add the text field border
+        this.field.setBackground(Color.LIGHT_GRAY);
         this.field.setBorder(new MatteBorder(new Insets(0, 0, 1, 0), Color.GRAY));
 
         // Create the label and set the background of the label to white
 
         if (!label.equals("")) {
             this.label = new JLabel(label);
+
+            this.label.setFont(fontLoader.getFont("NotoSans"));
             this.label.setBackground(Color.WHITE);
+            this.label.setOpaque(true);
+
+            var gap = Box.createHorizontalStrut(5);
 
             // Add the label at the front instead of the back
             if (front) {
                 this.panel.add(this.label);
-                this.panel.add(Box.createHorizontalStrut(5));
+                this.panel.add(gap);
                 this.panel.add(this.field);
             } else {
                 this.panel.add(this.field);
-                this.panel.add(Box.createHorizontalStrut(5));
+                this.panel.add(gap);
                 this.panel.add(this.label);
             }
         } else {

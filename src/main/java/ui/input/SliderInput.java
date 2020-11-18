@@ -1,5 +1,7 @@
 package ui.input;
 
+import common.FontLoader;
+
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -20,6 +22,10 @@ import java.awt.geom.RoundRectangle2D;
 
 
 public class SliderInput {
+
+
+    private final FontLoader fontLoader = FontLoader.getInstance();
+
     /**
      *
      */
@@ -49,6 +55,8 @@ public class SliderInput {
 
 
         this.panel = new JPanel();
+
+        this.panel.setFont(fontLoader.getFont("NotoSans"));
 
         // Set the BoxLayout to be X_AXIS: from left to right
         GridBagLayout layout = new GridBagLayout();

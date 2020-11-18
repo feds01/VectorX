@@ -1,12 +1,17 @@
 
 
+import common.FontLoader;
 import ui.controllers.ToolController;
 import ui.menus.PropertiesMenu;
 import ui.menus.ToolMenu;
 import ui.menus.TopMenu;
 
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.JFrame;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.EventQueue;
 
 public class VectorMain extends JFrame {
     private static final int WIDTH = 1024;
@@ -17,13 +22,17 @@ public class VectorMain extends JFrame {
     }
 
     public VectorMain() {
+
+        // Start font loader
+        var fontLoader = FontLoader.getInstance();
+
         EventQueue.invokeLater(() -> {
             try {
                 UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
             } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException ignored) {
             }
 
-            JFrame frame = new JFrame("VectorX - Editing ${file}");
+            JFrame frame = new JFrame("VectorX - New File");
 
             frame.getContentPane().setLayout(new BorderLayout());
             frame.getContentPane().setPreferredSize(new Dimension(WIDTH, HEIGHT));
@@ -34,6 +43,7 @@ public class VectorMain extends JFrame {
             var menu = menuMaker.createMenu();
 
             frame.setJMenuBar(menu);
+            frame.setFont(fontLoader.getFont("NotoSans"));
 
             // setup the tool controller so the state can be shared between the tool chooser,
             // the canvas and the property bar. The tool controller is assuming that no tool
@@ -48,7 +58,7 @@ public class VectorMain extends JFrame {
 
 
             frame.add(toolbar, BorderLayout.WEST);
-            frame.add(propertiesPanel.propertyBar, BorderLayout.EAST);
+            frame.add(propertiesPanel.panel, BorderLayout.EAST);
 
             frame.setLocationByPlatform(true);
 

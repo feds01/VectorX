@@ -1,5 +1,6 @@
 package ui.menus;
 
+import common.FontLoader;
 import drawing.tool.DrawingTool;
 import ui.controllers.ToolController;
 import ui.input.CoordinateInput;
@@ -28,8 +29,13 @@ public class PropertiesMenu {
 
     /**
      *
+     * */
+    private final FontLoader fontLoader = FontLoader.getInstance();
+
+    /**
+     *
      */
-    public final JPanel propertyBar;
+    public final JPanel panel;
 
     /**
      *
@@ -45,37 +51,38 @@ public class PropertiesMenu {
      *
      */
     public PropertiesMenu(ToolController controller) {
-        this.propertyBar = new JPanel();
+        this.panel = new JPanel();
 
         this.setController(controller);
 
-        propertyBar.setCursor(Cursor.getDefaultCursor());
+        panel.setCursor(Cursor.getDefaultCursor());
 
         // Add the left side border
-        propertyBar.setBorder(BorderFactory.createCompoundBorder(
+        panel.setBorder(BorderFactory.createCompoundBorder(
                 new MatteBorder(0, 1, 0, 0, Color.BLACK),
                 new EmptyBorder(new Insets(0, 5, 0, 5))
         ));
 
-        propertyBar.setBackground(Color.WHITE);
+        panel.setBackground(Color.WHITE);
 
-        propertyBar.setLayout(new BoxLayout(propertyBar, BoxLayout.Y_AXIS));
-        propertyBar.setAlignmentX(Component.CENTER_ALIGNMENT);
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+        panel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
 
         this.toolTitle = new JLabel(controller.getCurrentTool().getType().toString());
         this.toolTitle.setAlignmentX(Component.CENTER_ALIGNMENT);
+        this.toolTitle.setFont(fontLoader.getFont("NotoSans"));
 
         // set maximum property width to 200
-        propertyBar.setPreferredSize(new Dimension(240, 100000));
+        panel.setPreferredSize(new Dimension(240, 100000));
 
-        propertyBar.add("Object Properties", this.toolTitle);
-        propertyBar.add(Box.createVerticalStrut(10));
+        panel.add("Object Properties", this.toolTitle);
+        panel.add(Box.createVerticalStrut(10));
 
-        propertyBar.add(new TextFieldInput("Description", "").getComponent());
-        propertyBar.add(new CoordinateInput("0", "X", "0", "Y").getComponent());
-        propertyBar.add(new SliderInput("thickness", 1, 16, 2).getComponent());
-        propertyBar.add(new SliderInput("thickness", 1, 16, 2).getComponent());
+        panel.add(new TextFieldInput("Description", "").getComponent());
+        panel.add(new CoordinateInput("0", "X", "0", "Y").getComponent());
+        panel.add(new SliderInput("thickness", 1, 16, 2).getComponent());
+        panel.add(new SliderInput("thickness", 1, 16, 2).getComponent());
     }
 
     /**
@@ -97,8 +104,8 @@ public class PropertiesMenu {
 
             toolTitle.setText(currentTool.getType().toString());
 
-            propertyBar.revalidate();
-            propertyBar.repaint();
+            panel.revalidate();
+            panel.repaint();
         }
     }
 }
