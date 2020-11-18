@@ -6,8 +6,10 @@ import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSlider;
+import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.MatteBorder;
+import javax.swing.event.ChangeEvent;
 import javax.swing.plaf.basic.BasicSliderUI;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -18,6 +20,7 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.RenderingHints;
 import java.awt.Shape;
+import java.awt.event.ActionEvent;
 import java.awt.geom.RoundRectangle2D;
 
 
@@ -38,7 +41,7 @@ public class SliderInput {
 
     /**
      *
-     * */
+     */
     private final TextFieldInput field;
 
     /**
@@ -88,6 +91,7 @@ public class SliderInput {
         this.slider.setBorder(new EmptyBorder(new Insets(5, 0, 5, 0)));
         this.slider.setBackground(Color.WHITE);
 
+
         // Add slider label
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.gridx = 1;
@@ -113,6 +117,13 @@ public class SliderInput {
 
         this.panel.add(field.getComponent(), gbc);
         this.panel.setMaximumSize(new Dimension(240, 20));
+
+
+        // Add change listener to the slider and the text field
+        this.slider.addChangeListener(this::sliderChangeListener);
+
+        this.field.addChangeListener(this::textFieldChangeListener);
+//        this.field
     }
 
     /**
@@ -127,6 +138,41 @@ public class SliderInput {
      */
     public int getValue() {
         return this.slider.getValue();
+    }
+
+
+    private void sliderChangeListener(ChangeEvent e) {
+        JSlider slider = (JSlider) e.getSource();
+
+        // Graceful value retrieving. Get the value of the slider
+        // when the user stops dragging the slider.
+        if (!slider.getValueIsAdjusting()) {
+            int sliderValue = slider.getValue();
+
+
+            // set the text field input value to the slider value
+            this.field.setValue(String.valueOf(sliderValue));
+
+        }
+    }
+
+    private void textFieldChangeListener(ActionEvent event) {
+        JTextField field = (JTextField) event.getSource();
+
+        // if the text is equal to an empty string, don't change the value since we
+        // don't know if the user is still editing the value
+        try {
+            int textValue = Integer.parseInt(field.getText());
+
+            // TODO: use caller specified validation method to check
+            //       whether the value is valid or not.
+
+            // set the text field input value to the slider value
+            this.slider.setValue(textValue);
+
+        } catch (NumberFormatException e) {
+            field.setText(String.valueOf(this.slider.getValue()));
+        }
     }
 }
 

@@ -12,6 +12,9 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.Objects;
 
 public class TextFieldInput {
 
@@ -20,6 +23,8 @@ public class TextFieldInput {
     private final JPanel panel;
 
     private final JTextField field;
+
+    private String previousValue = "";
 
     private JLabel label = null;
 
@@ -36,7 +41,7 @@ public class TextFieldInput {
         this.panel.setMaximumSize(new Dimension(240, 20));
 
 
-        this.field = new JTextField(value,2);
+        this.field = new JTextField(value, 2);
 
         this.field.setFont(fontLoader.getFont("NotoSans"));
 
@@ -92,5 +97,14 @@ public class TextFieldInput {
 
     public JTextField getField() {
         return this.field;
+    }
+
+    /**
+     *
+     */
+    public void addChangeListener(ActionListener textFieldChangeListener) {
+        Objects.requireNonNull(this.field);
+
+        this.field.addActionListener(textFieldChangeListener);
     }
 }
