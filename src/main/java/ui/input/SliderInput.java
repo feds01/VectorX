@@ -46,6 +46,11 @@ public class SliderInput {
 
     /**
      *
+     * */
+    private final JLabel label;
+
+    /**
+     *
      */
     public SliderInput(String label, int min, int max, int value) {
         if (min >= max) {
@@ -78,7 +83,9 @@ public class SliderInput {
         gbc.gridx = 0;
         gbc.gridy = 0;
 
-        this.panel.add(new JLabel(label), gbc);
+        this.label = new JLabel(label);
+
+        this.panel.add(this.label, gbc);
 
         // Create the slider
         this.slider = new JSlider(JSlider.HORIZONTAL, min, max, value) {
@@ -173,6 +180,14 @@ public class SliderInput {
         } catch (NumberFormatException e) {
             field.setText(String.valueOf(this.slider.getValue()));
         }
+    }
+
+    public void disableLabel() {
+        this.label.setVisible(false);
+    }
+
+    public void disableTextBox() {
+        this.panel.remove(this.field.getComponent());
     }
 }
 

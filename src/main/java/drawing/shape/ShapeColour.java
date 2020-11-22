@@ -48,8 +48,7 @@ public class ShapeColour {
         int b = this.colour % 256;
         int g = (this.colour / 256) % 256;
         int r = this.colour / 65536;
-        //System.out.printf("%s %s %s",b, g, r);
 
-        return new Color(r, g, b, (int) this.alpha * 255);
+        return new Color(r, g, b, Math.round(this.alpha * 255f));
     }
 }

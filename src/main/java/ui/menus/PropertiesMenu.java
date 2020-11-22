@@ -85,7 +85,7 @@ public class PropertiesMenu {
         panel.add(new CoordinateInput("0", "X", "0", "Y").getComponent());
         panel.add(new SliderInput("thickness", 1, 16, 2).getComponent());
         panel.add(new SliderInput("thickness", 1, 16, 2).getComponent());
-        panel.add(new ColourPickerInput(new ShapeColour(0xddeeff, 0.7f)));
+        panel.add(new ColourPickerInput(new ShapeColour(0xccaadd, 0.7f)));
     }
 
     /**

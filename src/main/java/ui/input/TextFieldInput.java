@@ -43,6 +43,11 @@ public class TextFieldInput {
 
         this.field = new JTextField(value, 2);
 
+        // slow the blinking rate to once a second
+        this.field.getCaret().setBlinkRate(1000);
+
+
+        // set custom font
         this.field.setFont(fontLoader.getFont("NotoSans"));
 
         // Add the text field border
@@ -77,6 +82,8 @@ public class TextFieldInput {
 
         this.panel.setLayout(new BoxLayout(this.panel, BoxLayout.X_AXIS));
     }
+
+    public TextFieldInput(String value) { this(value, "", false); }
 
     public TextFieldInput(String value, String label) {
         this(value, label, false);
