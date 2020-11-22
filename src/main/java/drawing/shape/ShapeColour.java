@@ -1,5 +1,7 @@
 package drawing.shape;
 
+import java.awt.*;
+
 public class ShapeColour {
     private int colour;
     private float alpha;
@@ -40,5 +42,14 @@ public class ShapeColour {
         }
 
         this.colour = colour;
+    }
+
+    public Color toColour() {
+        int b = this.colour % 256;
+        int g = (this.colour / 256) % 256;
+        int r = this.colour / 65536;
+        //System.out.printf("%s %s %s",b, g, r);
+
+        return new Color(r, g, b, (int) this.alpha * 255);
     }
 }

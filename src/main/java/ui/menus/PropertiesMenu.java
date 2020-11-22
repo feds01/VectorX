@@ -1,8 +1,10 @@
 package ui.menus;
 
 import common.FontLoader;
+import drawing.shape.ShapeColour;
 import drawing.tool.DrawingTool;
 import ui.controllers.ToolController;
+import ui.input.ColourPickerInput;
 import ui.input.CoordinateInput;
 import ui.input.SliderInput;
 import ui.input.TextFieldInput;
@@ -83,6 +85,7 @@ public class PropertiesMenu {
         panel.add(new CoordinateInput("0", "X", "0", "Y").getComponent());
         panel.add(new SliderInput("thickness", 1, 16, 2).getComponent());
         panel.add(new SliderInput("thickness", 1, 16, 2).getComponent());
+        panel.add(new ColourPickerInput(new ShapeColour(0xddeeff, 0.7f)));
     }
 
     /**
