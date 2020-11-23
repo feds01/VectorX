@@ -114,4 +114,8 @@ public class TextFieldInput {
 
         this.field.addActionListener(textFieldChangeListener);
     }
+
+    public String getValue() {
+        return this.field.getText();
+    }
 }

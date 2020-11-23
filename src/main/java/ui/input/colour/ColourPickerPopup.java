@@ -18,11 +18,17 @@ import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.geom.Area;
 import java.awt.geom.RoundRectangle2D;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 
 /**
  *
- * */
+ */
 public class ColourPickerPopup extends Box {
+    private PropertyChangeSupport changes = new PropertyChangeSupport(this);
+
+
     private static final int HEIGHT = 210;
     private static final int WIDTH = 210;
 
@@ -32,17 +38,19 @@ public class ColourPickerPopup extends Box {
     private static final int BORDER_POINTER_PADDING = 6;
 
     private final Color borderColour = Color.GRAY;
+    private final TextFieldInput green;
+    private final TextFieldInput red;
+    private final TextFieldInput blue;
+    private final ColourPanel colourBox;
 
-    private final Color colour;
     private final Insets insets;
+    private final SliderInput alphaSlider;
 
     /**
      *
-     * */
-    ColourPickerPopup(Color colour) {
+     */
+    ColourPickerPopup(Color initialColour) {
         super(BoxLayout.Y_AXIS);
-
-        this.colour = colour;
 
         this.setOpaque(true);
         this.setBackground(Color.WHITE);
@@ -62,9 +70,9 @@ public class ColourPickerPopup extends Box {
         rgbPanel.setBackground(Color.WHITE);
         rgbPanel.setLayout(new GridLayout(1, 3, 5, 0));
 
-        TextFieldInput red = new TextFieldInput(String.valueOf(this.colour.getRed()));
-        TextFieldInput green = new TextFieldInput(String.valueOf(this.colour.getGreen()));
-        TextFieldInput blue = new TextFieldInput(String.valueOf(this.colour.getBlue()));
+        this.red = new TextFieldInput(String.valueOf(initialColour.getRed()));
+        this.green = new TextFieldInput(String.valueOf(initialColour.getGreen()));
+        this.blue = new TextFieldInput(String.valueOf(initialColour.getBlue()));
 
         rgbPanel.add(red.getComponent());
         rgbPanel.add(green.getComponent());
@@ -72,31 +80,73 @@ public class ColourPickerPopup extends Box {
 
         rgbPanel.setMaximumSize(new Dimension(140, 20));
 
-        SliderInput alphaSlider = new SliderInput("alpha", 0, 255, this.colour.getAlpha());
+        this.alphaSlider = new SliderInput("alpha", 0, 255, initialColour.getAlpha());
 
         alphaSlider.disableLabel();
         alphaSlider.disableTextBox();
 
+        alphaSlider.addPropertyChangeListener(this::alphaSliderListener);
+
         alphaSlider.getComponent().setMaximumSize(new Dimension(140, 20));
 
-        JPanel colourBox = new JPanel();
-
-        colourBox.setMinimumSize(new Dimension(140, 140));
-        colourBox.setMaximumSize(new Dimension(140, 140));
-        colourBox.setBackground(colour);
+        this.colourBox = new ColourPanel(initialColour);
+        this.colourBox.addPropertyChangeListener(this::colourPanelListener);
 
         this.add(Box.createVerticalStrut(5));
-        this.add(colourBox);
+        this.add(this.colourBox);
         this.add(Box.createVerticalStrut(5));
         this.add(rgbPanel);
         this.add(Box.createVerticalStrut(5));
         this.add(alphaSlider.getComponent());
     }
 
+    /**
+     *
+     * */
+    private void alphaSliderListener(PropertyChangeEvent propertyChangeEvent) {
+        var oldColour = colourBox.getColour();
+
+        colourBox.setAlpha((Integer) propertyChangeEvent.getNewValue());
+
+        changes.firePropertyChange("colour", oldColour, colourBox.getColour());
+    }
 
     /**
      *
      * */
+    private void colourPanelListener(PropertyChangeEvent propertyChangeEvent) {
+        Color oldColor = (Color) propertyChangeEvent.getOldValue();
+        Color color = (Color) propertyChangeEvent.getNewValue();
+
+        red.setValue(String.valueOf(color.getRed()));
+        green.setValue(String.valueOf(color.getGreen()));
+        blue.setValue(String.valueOf(color.getBlue()));
+        alphaSlider.setValue(color.getAlpha());
+
+
+        changes.firePropertyChange("colour", oldColor, color);
+    }
+
+    /**
+     *
+     * */
+    @Override
+    public void addPropertyChangeListener(PropertyChangeListener listener) {
+        changes.addPropertyChangeListener(listener);
+    }
+
+    /**
+     *
+     * */
+    @Override
+    public void removePropertyChangeListener(PropertyChangeListener listener) {
+        this.changes.removePropertyChangeListener(listener);
+    }
+
+
+    /**
+     *
+     */
     @Override
     public Insets getInsets() {
         return insets;
@@ -104,7 +154,7 @@ public class ColourPickerPopup extends Box {
 
     /**
      *
-     * */
+     */
     @Override
     protected void paintBorder(Graphics g) {
         super.paintBorder(g);

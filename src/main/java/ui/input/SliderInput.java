@@ -22,10 +22,13 @@ import java.awt.RenderingHints;
 import java.awt.Shape;
 import java.awt.event.ActionEvent;
 import java.awt.geom.RoundRectangle2D;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 
 
 public class SliderInput {
 
+    private PropertyChangeSupport changes = new PropertyChangeSupport(this);
 
     private final FontLoader fontLoader = FontLoader.getInstance();
 
@@ -46,7 +49,7 @@ public class SliderInput {
 
     /**
      *
-     * */
+     */
     private final JLabel label;
 
     /**
@@ -148,6 +151,21 @@ public class SliderInput {
     }
 
 
+    /**
+     *
+     */
+    public void setValue(int value) {
+        this.slider.setValue(value);
+    }
+
+    public void addPropertyChangeListener(PropertyChangeListener listener) {
+        changes.addPropertyChangeListener(listener);
+    }
+
+    public void removePropertyChangeListener(PropertyChangeListener listener) {
+        changes.removePropertyChangeListener(listener);
+    }
+
     private void sliderChangeListener(ChangeEvent e) {
         JSlider slider = (JSlider) e.getSource();
 
@@ -155,9 +173,10 @@ public class SliderInput {
         // when the user stops dragging the slider.
         if (!slider.getValueIsAdjusting()) {
             int sliderValue = slider.getValue();
-
+            int textValue = Integer.parseInt(this.field.getValue());
 
             // set the text field input value to the slider value
+            changes.firePropertyChange("slider", textValue, sliderValue);
             this.field.setValue(String.valueOf(sliderValue));
 
         }
@@ -175,6 +194,7 @@ public class SliderInput {
             //       whether the value is valid or not.
 
             // set the text field input value to the slider value
+            changes.firePropertyChange("slider", this.slider.getValue(), textValue);
             this.slider.setValue(textValue);
 
         } catch (NumberFormatException e) {

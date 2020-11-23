@@ -18,7 +18,6 @@ import java.awt.Toolkit;
 import java.awt.event.AWTEventListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.awt.geom.RoundRectangle2D;
 
 /**
@@ -45,6 +44,9 @@ public class ColourPicker extends JToggleButton {
      */
     private final JFrame frame;
 
+    /**
+     *
+     * */
     AWTEventListener listener = new AWTEventListener() {
         @Override
         public void eventDispatched(AWTEvent event) {
@@ -86,10 +88,10 @@ public class ColourPicker extends JToggleButton {
     /**
      *
      */
-    public ColourPicker(Color colour, JFrame frame) {
+    public ColourPicker(Color initialColour, JFrame frame) {
         super();
 
-        this.colour = colour;
+        this.colour = initialColour;
         this.frame = frame;
 
         // Create the picker.
@@ -107,6 +109,13 @@ public class ColourPicker extends JToggleButton {
             this.pickerPopup.show();
 
             Toolkit.getDefaultToolkit().addAWTEventListener(listener, ActionEvent.MOUSE_EVENT_MASK);
+        });
+
+        this.picker.addPropertyChangeListener(evt -> {
+            colour = (Color) evt.getNewValue();
+
+            this.setBackground(colour);
+            this.repaint();
         });
     }
 
