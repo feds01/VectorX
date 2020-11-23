@@ -42,11 +42,11 @@ public class CoordinateInput {
         return this.panel;
     }
 
-    public TextFieldInput getxField() {
+    public TextFieldInput getXField() {
         return xField;
     }
 
-    public TextFieldInput getyField() {
+    public TextFieldInput getYField() {
         return yField;
     }
 }
