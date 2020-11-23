@@ -1,3 +1,7 @@
 .idea/
 
-MiniProject-2.iml
+target/
+
+VectorX.iml
+colour_picker.txt
+src/test/
