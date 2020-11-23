@@ -1,5 +1,7 @@
 package drawing.shape;
 
+import java.awt.Color;
+
 public class Ellipses implements Shape {
     @Override
     public float getCenterX() {
@@ -37,7 +39,7 @@ public class Ellipses implements Shape {
     }
 
     @Override
-    public ShapeColour getShapeStroke() {
+    public Color getShapeStroke() {
         return null;
     }
 
@@ -47,7 +49,7 @@ public class Ellipses implements Shape {
     }
 
     @Override
-    public ShapeColour getShapeFill() {
+    public Color getShapeFill() {
         return null;
     }
 

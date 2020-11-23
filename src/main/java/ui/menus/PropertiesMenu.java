@@ -1,7 +1,6 @@
 package ui.menus;
 
 import common.FontLoader;
-import drawing.shape.ShapeColour;
 import drawing.tool.DrawingTool;
 import ui.controllers.ToolController;
 import ui.input.ColourPickerInput;
@@ -12,6 +11,7 @@ import ui.input.TextFieldInput;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
@@ -52,7 +52,7 @@ public class PropertiesMenu {
     /**
      *
      */
-    public PropertiesMenu(ToolController controller) {
+    public PropertiesMenu(JFrame frame, ToolController controller) {
         this.panel = new JPanel();
 
         this.setController(controller);
@@ -61,7 +61,7 @@ public class PropertiesMenu {
 
         // Add the left side border
         panel.setBorder(BorderFactory.createCompoundBorder(
-                new MatteBorder(0, 1, 0, 0, Color.BLACK),
+                new MatteBorder(0, 1, 0, 0, Color.GRAY),
                 new EmptyBorder(new Insets(0, 5, 0, 5))
         ));
 
@@ -85,7 +85,7 @@ public class PropertiesMenu {
         panel.add(new CoordinateInput("0", "X", "0", "Y").getComponent());
         panel.add(new SliderInput("thickness", 1, 16, 2).getComponent());
         panel.add(new SliderInput("thickness", 1, 16, 2).getComponent());
-        panel.add(new ColourPickerInput(new ShapeColour(0xccaadd, 0.7f)));
+        panel.add(new ColourPickerInput(new Color(0xccaaddee, true), frame));
     }
 
     /**

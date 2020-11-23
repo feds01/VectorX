@@ -1,5 +1,7 @@
 package drawing.shape;
 
+import java.awt.Color;
+
 public interface Shape {
     public float getCenterX();
     public void setCenterX();
@@ -11,10 +13,10 @@ public interface Shape {
     public void setProperties();
     public void setProperty();
 
-    public ShapeColour getShapeStroke();
+    public Color getShapeStroke();
     public void setShapeStroke();
 
-    public ShapeColour getShapeFill();
+    public Color getShapeFill();
     public void setShapeFill();
 
     public void draw();

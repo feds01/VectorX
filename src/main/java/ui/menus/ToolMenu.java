@@ -130,7 +130,7 @@ public class ToolMenu {
 //        var lineBorder = new LineBorder(Color.BLACK);
 
         toolbar.setBorder(BorderFactory.createCompoundBorder(
-                new MatteBorder(0, 0, 0, 1, Color.BLACK),
+                new MatteBorder(0, 0, 0, 1, Color.GRAY),
                 new EmptyBorder(new Insets(0, 5, 0, 5))
         ));
 
