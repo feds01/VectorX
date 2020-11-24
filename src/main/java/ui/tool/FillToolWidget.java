@@ -1,6 +1,7 @@
 package ui.tool;
 
 import drawing.shape.Shape;
+import ui.common.WidgetFactory;
 import ui.input.ColourPickerInput;
 
 import javax.swing.JFrame;
@@ -19,7 +20,7 @@ public class FillToolWidget extends BaseToolWidget {
 
         this.tools.add(fillTool);
 
-        this.panel.add(new JLabel("Fill a colour"));
+        this.panel.add(WidgetFactory.createTitleWidget("APPEARANCE"));
         this.panel.add(fillTool.getComponent());
     }
 }

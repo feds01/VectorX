@@ -100,6 +100,7 @@ public class ColourPicker extends JToggleButton {
         this.setBackground(this.colour);
         this.setBorderPainted(false);
 
+
         this.setPreferredSize(new Dimension(20, 20));
         this.setMaximumSize(new Dimension(20, 20));
 
@@ -141,9 +142,13 @@ public class ColourPicker extends JToggleButton {
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         g2.setColor(this.colour);
 
-        Shape s = new RoundRectangle2D.Float(1, 1, 16, 16, 6, 6);
+        Shape s = new RoundRectangle2D.Float(1, 1, getWidth() - 2, getHeight() - 2, 6, 6);
 
         g2.fill(s);
+
+        g2.setColor(Color.GRAY);
+        g2.drawRoundRect(0, 0, getWidth() - 1, getHeight() - 1, 6, 6);
+
         super.paintChildren(g);
 
     }

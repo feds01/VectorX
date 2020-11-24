@@ -4,6 +4,7 @@ package ui.input;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 
 /**
@@ -34,6 +35,7 @@ public class CheckBoxInput extends BaseInput<Boolean> {
         if (!labelText.equals("")) {
             JLabel label = new JLabel(labelText);
             label.setFont(fontLoader.getFont("NotoSans"));
+            label.setForeground(Color.GRAY);
 
             this.panel.add(label);
         }

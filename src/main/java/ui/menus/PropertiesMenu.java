@@ -1,15 +1,10 @@
 package ui.menus;
 
-import common.FontLoader;
-import drawing.tool.DrawingTool;
 import ui.controllers.ToolController;
 import ui.tool.BaseToolWidget;
 
 import javax.swing.BorderFactory;
-import javax.swing.Box;
 import javax.swing.BoxLayout;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.MatteBorder;
@@ -26,10 +21,7 @@ import java.beans.PropertyChangeListener;
  */
 public class PropertiesMenu {
 
-    /**
-     *
-     */
-    private final FontLoader fontLoader = FontLoader.getInstance();
+//    private final FontLoader fontLoader = FontLoader.getInstance();
 
     /**
      *
@@ -41,10 +33,8 @@ public class PropertiesMenu {
      */
     private BaseToolWidget toolWidget;
 
-    /**
-     *
-     */
-    public JLabel toolTitle;
+
+//    public JLabel toolTitle;
 
     /**
      *
@@ -54,7 +44,7 @@ public class PropertiesMenu {
     /**
      *
      */
-    public PropertiesMenu(JFrame frame, ToolController controller) {
+    public PropertiesMenu(ToolController controller) {
         this.panel = new JPanel();
 
         this.setController(controller);
@@ -76,24 +66,15 @@ public class PropertiesMenu {
         panel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
 
-        this.toolTitle = new JLabel(controller.getCurrentTool().getType().toString());
-        this.toolTitle.setAlignmentX(Component.CENTER_ALIGNMENT);
-        this.toolTitle.setFont(fontLoader.getFont("NotoSans"));
-
+//        this.toolTitle = new JLabel(controller.getCurrentTool().getType().toString());
+//        this.toolTitle.setAlignmentX(Component.CENTER_ALIGNMENT);
+//        this.toolTitle.setFont(fontLoader.getFont("NotoSans"));
+//
         this.toolWidget = controller.getCurrentToolWidget();
 
-        panel.add("Object Properties", this.toolTitle);
-        panel.add(Box.createVerticalStrut(10));
+//        panel.add("Object Properties", this.toolTitle);
+//        panel.add(Box.createVerticalStrut(10));
         panel.add(this.toolWidget.getComponent());
-
-//        panel.add(new TextFieldInput("Data Description", "Description").getComponent());
-//        panel.add(new CoordinateInput("offset", new Point(20, 20), "X", "Y").getComponent());
-//        panel.add(new SliderInput("brushThickness", 2, "thickness", 1, 16).getComponent());
-//        panel.add(new SliderInput("colourThickness", 2, "thickness", 1, 16).getComponent());
-//        panel.add(new ColourPickerInput("fillColour", new Color(0xccaaddee, true), "FILL", frame).getComponent());
-//        panel.add(new ColourPickerInput("strokeColour", new Color(0x6a0dadee, true), "STROKE", frame).getComponent());
-//        panel.add(new CheckBoxInput("Use Fill", false, "FILL").getComponent());
-//        panel.add(new CheckBoxInput("Use Stroke", false).getComponent());
     }
 
     /**
@@ -116,11 +97,11 @@ public class PropertiesMenu {
         @Override
         public void propertyChange(PropertyChangeEvent evt) {
 
-            if (evt.getPropertyName().equals("titleChange")) {
-                var currentTool = (DrawingTool) evt.getNewValue();
-
-                toolTitle.setText(currentTool.getType().toString());
-            }
+//            if (evt.getPropertyName().equals("titleChange")) {
+//                var currentTool = (DrawingTool) evt.getNewValue();
+//
+//                toolTitle.setText(currentTool.getType().toString());
+//            }
 
             if (evt.getPropertyName().equals("widgetChange")) {
 
@@ -129,7 +110,7 @@ public class PropertiesMenu {
 
                 toolWidget = (BaseToolWidget) evt.getNewValue();
 
-                panel.add(toolTitle);
+//                panel.add(toolTitle);
                 panel.add(toolWidget.getComponent());
             }
 

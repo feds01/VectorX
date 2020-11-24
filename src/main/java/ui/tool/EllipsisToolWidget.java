@@ -1,6 +1,7 @@
 package ui.tool;
 
 import drawing.shape.Ellipses;
+import ui.common.WidgetFactory;
 import ui.input.ColourPickerInput;
 import ui.input.CoordinateInput;
 import ui.input.SliderInput;
@@ -18,11 +19,11 @@ public class EllipsisToolWidget extends BaseToolWidget {
         this.tools.add(startPosition);
 
         // TODO: replace with endX and endY properties.
-        var endPosition = new CoordinateInput("end", new Point(shape.getX(), shape.getY()), "EndX", "EndY");
+        var endPosition = new CoordinateInput("end", new Point(shape.getX(), shape.getY()), "W", "H");
         this.tools.add(endPosition);
 
         int rotationValue =  (Integer) shape.getProperties().get("rotation").getValue();
-        var rotation = new TextFieldInput("rotation", String.valueOf(rotationValue));
+        var rotation = new TextFieldInput("rotation", String.valueOf(rotationValue), "rotation", true);
         this.tools.add(rotation);
 
 
@@ -40,9 +41,12 @@ public class EllipsisToolWidget extends BaseToolWidget {
 
         this.tools.add(strokeColour);
 
+        this.panel.add(WidgetFactory.createTitleWidget("TRANSFORM"));
         this.panel.add(startPosition.getComponent());
         this.panel.add(endPosition.getComponent());
         this.panel.add(rotation.getComponent());
+
+        this.panel.add(WidgetFactory.createTitleWidget("APPEARANCE"));
         this.panel.add(lineThickness.getComponent());
         this.panel.add(strokeColour.getComponent());
         this.panel.add(fillColour.getComponent());

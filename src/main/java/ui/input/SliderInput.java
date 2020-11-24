@@ -71,6 +71,10 @@ public class SliderInput extends BaseInput<Integer> {
 
             this.label = new JLabel(labelText);
 
+            this.label.setFont(fontLoader.getFont("NotoSans"));
+            this.label.setForeground(Color.GRAY);
+
+
             this.panel.add(this.label, gbc);
         }
 

@@ -2,6 +2,7 @@ package ui.input;
 
 import ui.input.colour.ColourPicker;
 
+import javax.swing.Box;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import java.awt.Color;
@@ -25,9 +26,11 @@ public class ColourPickerInput extends BaseInput<Color> {
         // create the label for the picker component
         JLabel label = new JLabel(labelText);
         label.setFont(fontLoader.getFont("NotoSans"));
+        label.setForeground(Color.GRAY);
 
         // add components to the panel component
         this.panel.add(this.picker);
+        this.panel.add(Box.createHorizontalStrut(5));
         this.panel.add(label);
     }
 

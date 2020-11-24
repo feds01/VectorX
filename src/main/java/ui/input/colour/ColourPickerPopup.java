@@ -8,6 +8,7 @@ import javax.swing.BoxLayout;
 import javax.swing.JPanel;
 import java.awt.BasicStroke;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -26,7 +27,7 @@ import java.beans.PropertyChangeSupport;
  *
  */
 public class ColourPickerPopup extends Box {
-    private PropertyChangeSupport changes = new PropertyChangeSupport(this);
+    private final PropertyChangeSupport changes = new PropertyChangeSupport(this);
 
 
     private static final int HEIGHT = 210;
@@ -69,10 +70,12 @@ public class ColourPickerPopup extends Box {
 
         rgbPanel.setBackground(Color.WHITE);
         rgbPanel.setLayout(new GridLayout(1, 3, 5, 0));
+        rgbPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         this.red = new TextFieldInput("red", String.valueOf(initialColour.getRed()));
         this.green = new TextFieldInput("green", String.valueOf(initialColour.getGreen()));
         this.blue = new TextFieldInput("blue", String.valueOf(initialColour.getBlue()));
+
 
         rgbPanel.add(red.getComponent());
         rgbPanel.add(green.getComponent());

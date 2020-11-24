@@ -2,6 +2,7 @@ package ui.input;
 
 import javax.swing.Box;
 import javax.swing.JTextField;
+import java.awt.Dimension;
 import java.awt.Point;
 import java.beans.PropertyChangeEvent;
 
@@ -16,10 +17,21 @@ public class CoordinateInput extends BaseInput<Point> {
         super(name, point);
 
         this.xField = new TextFieldInput("x", String.valueOf(point.x), xLabel, true);
+
+        this.xField.getComponent().setMaximumSize(new Dimension(60, 20));
+        this.xField.getComponent().setPreferredSize(new Dimension(60, 20));
+        this.xField.getLabel().setPreferredSize(new Dimension(20, 20));
+        this.xField.getLabel().setMaximumSize(new Dimension(20, 20));
+
         this.xField.addPropertyChangeListener(this::valueChangeListener);
 
 
         this.yField = new TextFieldInput("y", String.valueOf(point.y), yLabel, true);
+        this.yField.getComponent().setMaximumSize(new Dimension(60, 20));
+        this.yField.getComponent().setPreferredSize(new Dimension(60, 20));
+        this.yField.getLabel().setPreferredSize(new Dimension(20, 20));
+        this.yField.getLabel().setMaximumSize(new Dimension(20, 20));
+
         this.yField.addPropertyChangeListener(this::valueChangeListener);
 
 

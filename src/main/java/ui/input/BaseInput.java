@@ -49,10 +49,14 @@ public abstract class BaseInput<T> {
         this.panel.setBackground(Color.WHITE);
         this.panel.setFont(fontLoader.getFont("NotoSans"));
 
-        this.panel.setLayout(new FlowLayout(FlowLayout.LEADING));
 
-        this.panel.setPreferredSize(new Dimension(120, 24));
-        this.panel.setMaximumSize(new Dimension(240, 24));
+        var layout = new FlowLayout(FlowLayout.LEADING);
+        layout.setHgap(0);
+
+        this.panel.setLayout(layout);
+
+        this.panel.setPreferredSize(new Dimension(120, 26));
+        this.panel.setMaximumSize(new Dimension(240, 26));
     }
 
     /**
