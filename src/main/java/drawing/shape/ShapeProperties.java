@@ -1,23 +1,28 @@
 package drawing.shape;
 
+import java.util.HashMap;
 import java.util.Map;
 
 public class ShapeProperties {
-    private Map<String, ShapeProperty> properties;
+    private Map<String, ShapeProperty<?>> properties;
 
-    public ShapeProperties(Map<String, ShapeProperty> properties) {
+    public ShapeProperties(Map<String, ShapeProperty<?>> properties) {
         this.properties = properties;
     }
 
-    public Map<String, ShapeProperty> getProperties() {
+    public ShapeProperties() {
+        this(new HashMap<>());
+    }
+
+    public Map<String, ShapeProperty<?>> getProperties() {
         return properties;
     }
 
-    public void setProperties(Map<String, ShapeProperty> properties) {
+    public void setProperties(Map<String, ShapeProperty<?>> properties) {
         this.properties = properties;
     }
 
-    public void addProperty(ShapeProperty property) {
+    public void addProperty(ShapeProperty<?> property) {
         var name = property.getName();
 
         if (this.properties.containsKey(name)) {
@@ -25,5 +30,13 @@ public class ShapeProperties {
         }
 
         this.properties.put(name, property);
+    }
+
+    public ShapeProperty<?> get(String name) {
+        return properties.get(name);
+    }
+
+    public void set(String name, ShapeProperty<?> value) {
+        this.properties.put(name, value);
     }
 }

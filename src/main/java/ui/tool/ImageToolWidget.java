@@ -1,12 +1,38 @@
 package ui.tool;
 
+import drawing.shape.ImageShape;
+import ui.input.CheckBoxInput;
+import ui.input.CoordinateInput;
+import ui.input.TextFieldInput;
+
+import javax.swing.JFrame;
 import javax.swing.JPanel;
+import java.awt.Point;
 
 public class ImageToolWidget extends BaseToolWidget {
-    /**
-     * @param panel
-     */
-    public ImageToolWidget(JPanel panel) {
-        super(panel);
+    private ImageShape shape;
+
+    public ImageToolWidget(ImageShape shape, JFrame frame) {
+        super();
+
+        var startPosition = new CoordinateInput("start", new Point(shape.getX(), shape.getY()), "X", "Y");
+        this.tools.add(startPosition);
+
+        // TODO: replace with endX and endY properties.
+        var endPosition = new CoordinateInput("end", new Point(shape.getX(), shape.getY()), "width", "height");
+        this.tools.add(endPosition);
+
+        int rotationValue =  (Integer) shape.getProperties().get("rotation").getValue();
+        var rotation = new TextFieldInput("rotation", String.valueOf(rotationValue));
+        this.tools.add(rotation);
+
+        var monochromeValue = (Boolean) shape.getProperties().get("monochrome").getValue();
+        var monochrome = new CheckBoxInput("monochrome", monochromeValue, "monochrome");
+
+
+        this.panel.add(startPosition.getComponent());
+        this.panel.add(endPosition.getComponent());
+        this.panel.add(rotation.getComponent());
+        this.panel.add(monochrome.getComponent());
     }
 }

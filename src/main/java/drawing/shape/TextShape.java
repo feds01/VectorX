@@ -2,15 +2,15 @@ package drawing.shape;
 
 import java.awt.Color;
 
-public class Line implements Shape {
+public class TextShape implements Shape {
     private int x;
     private int y;
 
-    private ShapeProperties properties = new ShapeProperties();
+    private final ShapeProperties properties = new ShapeProperties();
 
     private final ShapePropertyFactory propertyFactory = new ShapePropertyFactory();
 
-    public Line(int x, int y, int width, int height) {
+    public TextShape(int x, int y, int width, int height) {
         this.x = x;
         this.y = y;
 
@@ -25,9 +25,8 @@ public class Line implements Shape {
 
         this.properties.addProperty(propertyFactory.createColourProperty("fillColour", Color.WHITE));
 
-        this.properties.addProperty(new ShapeProperty<>("thickness", 1, value -> 1 <= value && value <= 16));
+        this.properties.addProperty(new ShapeProperty<>("fontSize", 10, value -> 4 <= value && value <= 20));
     }
-
 
     @Override
     public int getX() {
@@ -56,7 +55,7 @@ public class Line implements Shape {
 
     @Override
     public void setProperties(ShapeProperties properties) {
-        this.properties = properties;
+
     }
 
     @Override
@@ -69,6 +68,17 @@ public class Line implements Shape {
         this.properties.set("fillColour", propertyFactory.createColourProperty("strokeColour", stroke));
     }
 
+
+    @Override
+    public Color getShapeFill() {
+        return (Color) this.properties.get("fillColour").getValue();
+    }
+
+    @Override
+    public void setShapeFill(Color fill) {
+        this.properties.set("fillColour", propertyFactory.createColourProperty("fillColour", fill));
+    }
+
     @Override
     public void draw() {
 
@@ -76,6 +86,6 @@ public class Line implements Shape {
 
     @Override
     public boolean isFillable() {
-        return false;
+        return true;
     }
 }

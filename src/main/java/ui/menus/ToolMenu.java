@@ -2,10 +2,23 @@ package ui.menus;
 
 import common.ImageUtils;
 import drawing.ToolType;
+import drawing.shape.ImageShape;
+import drawing.shape.Line;
+import drawing.shape.Rectangle;
+import drawing.shape.Ellipses;
+import drawing.shape.TextShape;
+import drawing.shape.Triangle;
 import drawing.tool.DrawingTool;
 import drawing.tool.FillTool;
 import drawing.tool.GenericTool;
 import ui.controllers.ToolController;
+import ui.tool.EllipsisToolWidget;
+import ui.tool.FillToolWidget;
+import ui.tool.ImageToolWidget;
+import ui.tool.LineToolWidget;
+import ui.tool.RectangleToolWidget;
+import ui.tool.TextToolWidget;
+import ui.tool.TriangleToolWidget;
 
 import javax.swing.AbstractAction;
 import javax.swing.AbstractButton;
@@ -34,7 +47,7 @@ import java.awt.event.FocusListener;
 public class ToolMenu {
 
     // the selector tool is considered to be the default tool
-    private static GenericTool selectorTool = new GenericTool(ToolType.SELECTOR, new Cursor(Cursor.DEFAULT_CURSOR), "/icons/selector");
+    private static final GenericTool selectorTool = new GenericTool(ToolType.SELECTOR, new Cursor(Cursor.DEFAULT_CURSOR), "/icons/selector");
 
     /**
      *
@@ -60,9 +73,50 @@ public class ToolMenu {
                 Cursor cursor = tool.getCursor();
                 frame.setCursor(cursor);
 
+
                 controller.setCurrentTool(tool);
 
-                // do something.
+
+                // TODO: temporary!
+                switch (tool.getType()) {
+                    case SELECTOR:
+                        break;
+                    case FILL:
+                        var fillObj = new Rectangle(10, 20, 40, 50);
+
+                        controller.setCurrentWidget(new FillToolWidget(fillObj, frame));
+                        break;
+                    case LINE:
+                        var line = new Line(10, 20, 40, 50);
+
+                        controller.setCurrentWidget(new LineToolWidget(line, frame));
+                        break;
+                    case TRIANGLE:
+                        var triangle = new Triangle(10, 20, 40, 50);
+
+                        controller.setCurrentWidget(new TriangleToolWidget(triangle, frame));
+                        break;
+                    case RECTANGLE:
+                        var rect = new Rectangle(10, 20, 40, 50);
+
+                        controller.setCurrentWidget(new RectangleToolWidget(rect, frame));
+                        break;
+                    case ELLIPSIS:
+                        var ellipsis = new Ellipses(10, 20, 40, 50);
+
+                        controller.setCurrentWidget(new EllipsisToolWidget(ellipsis, frame));
+                        break;
+                    case IMAGE:
+                        var image = new ImageShape(10, 20, 40, 50);
+
+                        controller.setCurrentWidget(new ImageToolWidget(image, frame));
+                        break;
+                    case TEXT:
+                        var text = new TextShape(10, 20, 40, 50);
+
+                        controller.setCurrentWidget(new TextToolWidget(text, frame));
+                        break;
+                }
             }
         }, tool);
     }

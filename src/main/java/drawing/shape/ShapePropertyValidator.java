@@ -1,7 +1,6 @@
 package drawing.shape;
 
-public interface ShapePropertyValidator {
+public interface ShapePropertyValidator<T> {
 
-
-    public boolean apply(Object value);
+    public boolean apply(T value);
 }
