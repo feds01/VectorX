@@ -70,9 +70,9 @@ public class ColourPickerPopup extends Box {
         rgbPanel.setBackground(Color.WHITE);
         rgbPanel.setLayout(new GridLayout(1, 3, 5, 0));
 
-        this.red = new TextFieldInput(String.valueOf(initialColour.getRed()));
-        this.green = new TextFieldInput(String.valueOf(initialColour.getGreen()));
-        this.blue = new TextFieldInput(String.valueOf(initialColour.getBlue()));
+        this.red = new TextFieldInput("red", String.valueOf(initialColour.getRed()));
+        this.green = new TextFieldInput("green", String.valueOf(initialColour.getGreen()));
+        this.blue = new TextFieldInput("blue", String.valueOf(initialColour.getBlue()));
 
         rgbPanel.add(red.getComponent());
         rgbPanel.add(green.getComponent());
@@ -80,7 +80,7 @@ public class ColourPickerPopup extends Box {
 
         rgbPanel.setMaximumSize(new Dimension(140, 20));
 
-        this.alphaSlider = new SliderInput("alpha", 0, 255, initialColour.getAlpha());
+        this.alphaSlider = new SliderInput("alpha", initialColour.getAlpha(), 0, 255);
 
         alphaSlider.disableLabel();
         alphaSlider.disableTextBox();

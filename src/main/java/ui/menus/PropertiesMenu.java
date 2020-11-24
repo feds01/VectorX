@@ -3,6 +3,7 @@ package ui.menus;
 import common.FontLoader;
 import drawing.tool.DrawingTool;
 import ui.controllers.ToolController;
+import ui.input.CheckBoxInput;
 import ui.input.ColourPickerInput;
 import ui.input.CoordinateInput;
 import ui.input.SliderInput;
@@ -21,6 +22,7 @@ import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Insets;
+import java.awt.Point;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
@@ -81,12 +83,14 @@ public class PropertiesMenu {
         panel.add("Object Properties", this.toolTitle);
         panel.add(Box.createVerticalStrut(10));
 
-        panel.add(new TextFieldInput("Description", "").getComponent());
-        panel.add(new CoordinateInput("0", "X", "0", "Y").getComponent());
-        panel.add(new SliderInput("thickness", 1, 16, 2).getComponent());
-        panel.add(new SliderInput("thickness", 1, 16, 2).getComponent());
-        panel.add(new ColourPickerInput(new Color(0xccaaddee, true), "FILL", frame).getComponent());
-        panel.add(new ColourPickerInput(new Color(0x6a0dadee, true), "STROKE", frame).getComponent());
+        panel.add(new TextFieldInput("Data Description", "Description").getComponent());
+        panel.add(new CoordinateInput("offset", new Point(20, 20), "X", "Y").getComponent());
+        panel.add(new SliderInput("brushThickness", 2, "thickness", 1, 16).getComponent());
+        panel.add(new SliderInput("colourThickness", 2, "thickness", 1, 16).getComponent());
+        panel.add(new ColourPickerInput("fillColour", new Color(0xccaaddee, true), "FILL", frame).getComponent());
+        panel.add(new ColourPickerInput("strokeColour", new Color(0x6a0dadee, true), "STROKE", frame).getComponent());
+        panel.add(new CheckBoxInput("Use Fill", false, "FILL").getComponent());
+        panel.add(new CheckBoxInput("Use Stroke", false).getComponent());
     }
 
     /**

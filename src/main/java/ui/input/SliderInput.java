@@ -1,7 +1,5 @@
 package ui.input;
 
-import common.FontLoader;
-
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -20,22 +18,12 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.RenderingHints;
 import java.awt.Shape;
-import java.awt.event.ActionEvent;
 import java.awt.geom.RoundRectangle2D;
-import java.beans.PropertyChangeListener;
-import java.beans.PropertyChangeSupport;
+import java.beans.PropertyChangeEvent;
 
 
-public class SliderInput {
+public class SliderInput extends BaseInput<Integer> {
 
-    private PropertyChangeSupport changes = new PropertyChangeSupport(this);
-
-    private final FontLoader fontLoader = FontLoader.getInstance();
-
-    /**
-     *
-     */
-    private final JPanel panel;
 
     /**
      *
@@ -50,12 +38,14 @@ public class SliderInput {
     /**
      *
      */
-    private final JLabel label;
+    private JLabel label = null;
 
     /**
      *
      */
-    public SliderInput(String label, int min, int max, int value) {
+    public SliderInput(String name, int value, String labelText, int min, int max) {
+        super(name, value);
+
         if (min >= max) {
             throw new IllegalArgumentException("Minimum value cannot be larger or equal to maximum value.");
         }
@@ -65,30 +55,24 @@ public class SliderInput {
         }
 
 
-        this.panel = new JPanel();
-
-        this.panel.setFont(fontLoader.getFont("NotoSans"));
-
-        // Set the BoxLayout to be X_AXIS: from left to right
         GridBagLayout layout = new GridBagLayout();
 
         GridBagConstraints gbc = new GridBagConstraints();
-
-        // Set the Boxayout to be Y_AXIS from top to down
-        //BoxLayout boxlayout = new BoxLayout(panel, BoxLayout.Y_AXIS);
 
         panel.setLayout(layout);
         panel.setBackground(new Color(0xFFFFFF));
 
 
-        // Add slider label
-        gbc.fill = GridBagConstraints.HORIZONTAL;
-        gbc.gridx = 0;
-        gbc.gridy = 0;
+        if (!labelText.equals("")) {
+            // Add slider label
+            gbc.fill = GridBagConstraints.HORIZONTAL;
+            gbc.gridx = 0;
+            gbc.gridy = 0;
 
-        this.label = new JLabel(label);
+            this.label = new JLabel(labelText);
 
-        this.panel.add(this.label, gbc);
+            this.panel.add(this.label, gbc);
+        }
 
         // Create the slider
         this.slider = new JSlider(JSlider.HORIZONTAL, min, max, value) {
@@ -120,7 +104,7 @@ public class SliderInput {
         gbc.gridx = 2;
         gbc.gridy = 0;
 
-        this.field = new TextFieldInput(String.valueOf(value), "px", false);
+        this.field = new TextFieldInput(name, String.valueOf(value), "px", false);
 
         // Add right hand-side border to separate the slider and the text field.
         this.field.getComponent().setBorder(new MatteBorder(new Insets(0, 20, 0, 0), Color.white));
@@ -128,12 +112,39 @@ public class SliderInput {
         this.panel.add(field.getComponent(), gbc);
         this.panel.setMaximumSize(new Dimension(240, 20));
 
-
         // Add change listener to the slider and the text field
         this.slider.addChangeListener(this::sliderChangeListener);
 
-        this.field.addChangeListener(this::textFieldChangeListener);
-//        this.field
+        this.field.addPropertyChangeListener(this::textFieldChangeListener);
+
+    }
+
+    public SliderInput(String name, int value, int min, int max) {
+        this(name, value, "", min, max);
+    }
+
+    /**
+     *
+     * */
+    private void textFieldChangeListener(PropertyChangeEvent event) {
+        JTextField field = (JTextField) event.getSource();
+
+        // if the text is equal to an empty string, don't change the value since we
+        // don't know if the user is still editing the value
+        try {
+            int textValue = Integer.parseInt(field.getText());
+
+            // TODO: use caller specified validation method to check
+            //       whether the value is valid or not.
+
+            // set the text field input value to the slider value
+            changes.firePropertyChange(name, this.slider.getValue(), textValue);
+
+            this.slider.setValue(textValue);
+
+        } catch (NumberFormatException e) {
+            field.setText(String.valueOf(this.slider.getValue()));
+        }
     }
 
     /**
@@ -146,7 +157,7 @@ public class SliderInput {
     /**
      *
      */
-    public int getValue() {
+    public Integer getValue() {
         return this.slider.getValue();
     }
 
@@ -158,14 +169,9 @@ public class SliderInput {
         this.slider.setValue(value);
     }
 
-    public void addPropertyChangeListener(PropertyChangeListener listener) {
-        changes.addPropertyChangeListener(listener);
-    }
-
-    public void removePropertyChangeListener(PropertyChangeListener listener) {
-        changes.removePropertyChangeListener(listener);
-    }
-
+    /**
+     *
+     */
     private void sliderChangeListener(ChangeEvent e) {
         JSlider slider = (JSlider) e.getSource();
 
@@ -182,28 +188,11 @@ public class SliderInput {
         }
     }
 
-    private void textFieldChangeListener(ActionEvent event) {
-        JTextField field = (JTextField) event.getSource();
-
-        // if the text is equal to an empty string, don't change the value since we
-        // don't know if the user is still editing the value
-        try {
-            int textValue = Integer.parseInt(field.getText());
-
-            // TODO: use caller specified validation method to check
-            //       whether the value is valid or not.
-
-            // set the text field input value to the slider value
-            changes.firePropertyChange("slider", this.slider.getValue(), textValue);
-            this.slider.setValue(textValue);
-
-        } catch (NumberFormatException e) {
-            field.setText(String.valueOf(this.slider.getValue()));
-        }
-    }
-
     public void disableLabel() {
-        this.label.setVisible(false);
+        if (label != null) {
+            this.label.setVisible(false);
+        }
+
     }
 
     public void disableTextBox() {

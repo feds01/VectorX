@@ -106,11 +106,17 @@ public class ColourPanel extends JPanel {
 
                 int x = event.getX();
                 int y = event.getY();
+                int currentColour = 0;
 
-                int currentColour = bufferedImage.getRGB(x1 + 5, y1 + 5);
+                try {
+                    if (x > 0 && x <= getWidth()) x1 = x - 5;
+                    if (y > 0 && y <= getHeight()) y1 = y - 5;
 
-                if (x > 0 && x <= getWidth()) x1 = x - 5;
-                if (y > 0 && y <= getHeight()) y1 = y - 5;
+                    currentColour = bufferedImage.getRGB(x1 + 5, y1 + 5);
+                } catch (ArrayIndexOutOfBoundsException e) {
+                    return;
+                }
+
 
                 red = (currentColour >> 16) & 0xFF;
                 green = (currentColour >> 8) & 0xFF;

@@ -1,51 +1,41 @@
 package ui.input;
 
-import common.FontLoader;
-
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JLabel;
-import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.MatteBorder;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.awt.Insets;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.Objects;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 
-public class TextFieldInput {
+public class TextFieldInput extends BaseInput<String> {
 
-    private final FontLoader fontLoader = FontLoader.getInstance();
-
-    private final JPanel panel;
+    private final PropertyChangeSupport changes = new PropertyChangeSupport(this);
 
     private final JTextField field;
 
-    private String previousValue = "";
-
     private JLabel label = null;
 
-    public TextFieldInput(String value, String label, boolean front) {
-        this.panel = new JPanel();
+    public TextFieldInput(String name, String value, String label, boolean front) {
+        super(name, value);
 
-        var layout = new FlowLayout(FlowLayout.LEADING);
-
-        this.panel.setLayout(layout);
-        this.panel.setBackground(Color.WHITE);
-
-
-        this.panel.setPreferredSize(new Dimension(20, 20));
-        this.panel.setMaximumSize(new Dimension(240, 20));
-
+        this.panel.setPreferredSize(new Dimension(60, 20));
 
         this.field = new JTextField(value, 2);
+        this.field.setName(name);
 
         // slow the blinking rate to once a second
         this.field.getCaret().setBlinkRate(1000);
 
+        this.field.addActionListener(e -> {
+            for (PropertyChangeListener l : this.field.getPropertyChangeListeners()) {
+                l.propertyChange(new PropertyChangeEvent(this.field, name, value, this.field.getText()));
+            }
+        });
 
         // set custom font
         this.field.setFont(fontLoader.getFont("NotoSans"));
@@ -55,7 +45,6 @@ public class TextFieldInput {
         this.field.setBorder(new MatteBorder(new Insets(0, 0, 1, 0), Color.GRAY));
 
         // Create the label and set the background of the label to white
-
         if (!label.equals("")) {
             this.label = new JLabel(label);
 
@@ -79,23 +68,35 @@ public class TextFieldInput {
             this.panel.add(field);
         }
 
-
         this.panel.setLayout(new BoxLayout(this.panel, BoxLayout.X_AXIS));
     }
 
-    public TextFieldInput(String value) { this(value, "", false); }
+    public TextFieldInput(String name, String value) { this(name, value, "", false); }
 
-    public TextFieldInput(String value, String label) {
-        this(value, label, false);
+//    public TextFieldInput(String name, String value, String label) {
+//        this(name, value, label, false);
+//    }
+
+    /**
+     *
+     * */
+    public void addPropertyChangeListener(PropertyChangeListener listener) {
+        this.field.addPropertyChangeListener(listener);
+    }
+
+    /**
+     *
+     * */
+    public void removePropertyChangeListener(PropertyChangeListener listener) {
+        this.field.removePropertyChangeListener(listener);
     }
 
     public void setValue(String value) {
         this.field.setText(value);
     }
 
-
-    public JPanel getComponent() {
-        return this.panel;
+    public String getValue() {
+        return this.field.getText();
     }
 
     public JLabel getLabel() {
@@ -104,18 +105,5 @@ public class TextFieldInput {
 
     public JTextField getField() {
         return this.field;
-    }
-
-    /**
-     *
-     */
-    public void addChangeListener(ActionListener textFieldChangeListener) {
-        Objects.requireNonNull(this.field);
-
-        this.field.addActionListener(textFieldChangeListener);
-    }
-
-    public String getValue() {
-        return this.field.getText();
     }
 }

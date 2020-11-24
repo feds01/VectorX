@@ -1,36 +1,26 @@
 package ui.input;
 
-import common.FontLoader;
-
 import javax.swing.Box;
-import javax.swing.JPanel;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
+import javax.swing.JTextField;
+import java.awt.Point;
+import java.beans.PropertyChangeEvent;
 
-public class CoordinateInput {
+public class CoordinateInput extends BaseInput<Point> {
 
-    private final FontLoader fontLoader = FontLoader.getInstance();
-
-    private final JPanel panel;
 
     private final TextFieldInput xField;
 
     private final TextFieldInput yField;
 
-    public CoordinateInput(String xValue, String xLabel, String yValue, String yLabel) {
-        this.panel = new JPanel();
+    public CoordinateInput(String name, Point point, String xLabel, String yLabel) {
+        super(name, point);
 
-        this.panel.setBackground(Color.WHITE);
-        this.panel.setFont(fontLoader.getFont("NotoSans"));
+        this.xField = new TextFieldInput("x", String.valueOf(point.x), xLabel, true);
+        this.xField.addPropertyChangeListener(this::valueChangeListener);
 
-        this.panel.setLayout(new FlowLayout(FlowLayout.LEADING));
 
-        this.panel.setPreferredSize(new Dimension(120, 20));
-        this.panel.setMaximumSize(new Dimension(240, 20));
-
-        this.xField = new TextFieldInput(xValue, xLabel, true);
-        this.yField = new TextFieldInput(yValue, yLabel, true);
+        this.yField = new TextFieldInput("y", String.valueOf(point.y), yLabel, true);
+        this.yField.addPropertyChangeListener(this::valueChangeListener);
 
 
         this.panel.add(xField.getComponent());
@@ -38,8 +28,18 @@ public class CoordinateInput {
         this.panel.add(yField.getComponent());
     }
 
-    public JPanel getComponent() {
-        return this.panel;
+    private void valueChangeListener(PropertyChangeEvent event) {
+        JTextField input = (JTextField) event.getSource();
+
+        Point oldPoint = this.value;
+
+        if (input.getName().equals("x")) {
+            this.value.x = Integer.parseInt(input.getText());
+        } else {
+            this.value.y = Integer.parseInt(input.getText());
+        }
+
+        changes.firePropertyChange(name, oldPoint, this.value);
     }
 
     public TextFieldInput getXField() {
