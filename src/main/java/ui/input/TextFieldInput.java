@@ -10,12 +10,8 @@ import java.awt.Dimension;
 import java.awt.Insets;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.beans.PropertyChangeSupport;
 
 public class TextFieldInput extends BaseInput<String> {
-
-    private final PropertyChangeSupport changes = new PropertyChangeSupport(this);
-
     private final JTextField field;
 
     private JLabel label = null;

@@ -58,7 +58,7 @@ public abstract class BaseInput<T> {
     /**
      *
      * */
-    protected String getName() {
+    public String getName() {
         return name;
     }
 
