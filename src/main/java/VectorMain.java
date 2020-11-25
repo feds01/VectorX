@@ -8,15 +8,14 @@ import ui.menus.ToolMenu;
 import ui.menus.TopMenu;
 
 import javax.swing.JFrame;
+import javax.swing.JTextField;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.EventQueue;
-import java.awt.KeyEventDispatcher;
 import java.awt.KeyboardFocusManager;
 import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 
 public class VectorMain extends JFrame {
     private static final int WIDTH = 1024;
@@ -64,51 +63,56 @@ public class VectorMain extends JFrame {
             frame.add(propertiesPanel.panel, BorderLayout.EAST);
 
             // setup toolbar shortcuts on the frame
-            KeyboardFocusManager.getCurrentKeyboardFocusManager()
-                    .addKeyEventDispatcher(e -> {
-                        int keyCode = e.getKeyCode();
+            KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(e -> {
 
-                        // Don't do anything if the event isn't a KEY_PRESSED event
-                        if (e.getID() != KeyEvent.KEY_PRESSED) {
-                            return false;
-                        }
+                // Ignore events that come from other components than a button
+                if (e.getSource() instanceof JTextField) {
+                    return false;
+                }
 
-                        switch (keyCode) {
-                            case KeyEvent.VK_S: {
-                                toolbar.setCurrentTool(ToolType.SELECTOR);
-                                break;
-                            }
-                            case KeyEvent.VK_F: {
-                                toolbar.setCurrentTool(ToolType.FILL);
-                                break;
-                            }
-                            case KeyEvent.VK_L: {
-                                toolbar.setCurrentTool(ToolType.LINE);
-                                break;
-                            }
-                            case KeyEvent.VK_R: {
-                                toolbar.setCurrentTool(ToolType.RECTANGLE);
-                                break;
-                            }
-                            case KeyEvent.VK_E: {
-                                toolbar.setCurrentTool(ToolType.ELLIPSIS);
-                                break;
-                            }
-                            case KeyEvent.VK_T: {
-                                toolbar.setCurrentTool(ToolType.TRIANGLE);
-                                break;
-                            }
-                            case KeyEvent.VK_I: {
-                                toolbar.setCurrentTool(ToolType.IMAGE);
-                                break;
-                            }
-                            case KeyEvent.VK_W: {
-                                toolbar.setCurrentTool(ToolType.TEXT);
-                                break;
-                            }
-                        }
-                        return false;
-                    });
+                // Don't do anything if the event isn't a KEY_PRESSED event
+                if (e.getID() != KeyEvent.KEY_PRESSED) {
+                    return false;
+                }
+
+                int keyCode = e.getKeyCode();
+
+                switch (keyCode) {
+                    case KeyEvent.VK_S: {
+                        toolbar.setCurrentTool(ToolType.SELECTOR);
+                        break;
+                    }
+                    case KeyEvent.VK_F: {
+                        toolbar.setCurrentTool(ToolType.FILL);
+                        break;
+                    }
+                    case KeyEvent.VK_L: {
+                        toolbar.setCurrentTool(ToolType.LINE);
+                        break;
+                    }
+                    case KeyEvent.VK_R: {
+                        toolbar.setCurrentTool(ToolType.RECTANGLE);
+                        break;
+                    }
+                    case KeyEvent.VK_E: {
+                        toolbar.setCurrentTool(ToolType.ELLIPSIS);
+                        break;
+                    }
+                    case KeyEvent.VK_T: {
+                        toolbar.setCurrentTool(ToolType.TRIANGLE);
+                        break;
+                    }
+                    case KeyEvent.VK_I: {
+                        toolbar.setCurrentTool(ToolType.IMAGE);
+                        break;
+                    }
+                    case KeyEvent.VK_W: {
+                        toolbar.setCurrentTool(ToolType.TEXT);
+                        break;
+                    }
+                }
+                return false;
+            });
 
 
             frame.setLocationByPlatform(true);
