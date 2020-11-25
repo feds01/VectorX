@@ -1,4 +1,4 @@
-package ui.menus;
+package ui.widget;
 
 import ui.controllers.ToolController;
 import ui.tool.BaseToolWidget;

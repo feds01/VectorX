@@ -1,4 +1,4 @@
-package ui.menus;
+package ui.widget;
 
 import common.ImageUtils;
 import drawing.ToolType;

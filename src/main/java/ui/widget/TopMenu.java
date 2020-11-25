@@ -1,10 +1,17 @@
-package ui.menus;
+package ui.widget;
 
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 
-public class TopMenu implements BaseMenu {
+/**
+ *
+ * */
+public class TopMenu {
+
+    /**
+     *
+     * */
     private JMenu createEditMenu() {
         JMenu editMenu = new JMenu("Edit");
         JMenuItem undoItem = new JMenuItem("Undo");
@@ -21,6 +28,9 @@ public class TopMenu implements BaseMenu {
         return editMenu;
     }
 
+    /**
+     *
+     * */
     private JMenu createHelpMenu() {
         JMenu helpMenu = new JMenu("Help");
         JMenuItem cutItem = new JMenuItem("About");
@@ -29,6 +39,9 @@ public class TopMenu implements BaseMenu {
         return helpMenu;
     }
 
+    /**
+     *
+     * */
     private JMenu createFileMenu() {
         JMenu fileMenu = new JMenu("File");
         JMenuItem newItem = new JMenuItem("New");
@@ -40,7 +53,9 @@ public class TopMenu implements BaseMenu {
         return fileMenu;
     }
 
-    @Override
+    /**
+     *
+     * */
     public JMenuBar createMenu() {
         JMenuBar menuBar = new JMenuBar();
         menuBar.add(createFileMenu());

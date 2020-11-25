@@ -1,15 +1,17 @@
 import common.FontLoader;
 import drawing.ToolType;
 import ui.controllers.ToolController;
-import ui.menus.PropertiesMenu;
-import ui.menus.ToolMenu;
-import ui.menus.TopMenu;
+import ui.widget.CanvasWidget;
+import ui.widget.PropertiesMenu;
+import ui.widget.ToolMenu;
+import ui.widget.TopMenu;
 
 import javax.swing.JFrame;
 import javax.swing.JTextField;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.KeyboardFocusManager;
@@ -34,6 +36,11 @@ public class VectorMain extends JFrame {
      *
      */
     private final FontLoader fontLoader = FontLoader.getInstance();
+
+    /**
+     *
+     * */
+    private CanvasWidget canvasWidget;
 
     /**
      *
@@ -67,13 +74,15 @@ public class VectorMain extends JFrame {
             frame.getContentPane().setLayout(new BorderLayout());
             frame.getContentPane().setPreferredSize(new Dimension(WIDTH, HEIGHT));
 
+            frame.setBackground(Color.GRAY);
+            frame.setFont(fontLoader.getFont("NotoSans"));
+
             var menuMaker = new TopMenu();
 
             // make the menu
             var menu = menuMaker.createMenu();
 
             frame.setJMenuBar(menu);
-            frame.setFont(fontLoader.getFont("NotoSans"));
 
             // setup the tool controller so the state can be shared between the tool chooser,
             // the canvas and the property bar. The tool controller is assuming that no tool
@@ -82,9 +91,11 @@ public class VectorMain extends JFrame {
 
             // create the toolbar
             this.toolbar = new ToolMenu(frame, toolController);
+            this.canvasWidget = new CanvasWidget();
             this.propertiesPanel = new PropertiesMenu(toolController);
 
             frame.add(toolbar, BorderLayout.WEST);
+            frame.add(canvasWidget, BorderLayout.CENTER);
             frame.add(propertiesPanel.panel, BorderLayout.EAST);
 
             // setup toolbar shortcuts on the frame
