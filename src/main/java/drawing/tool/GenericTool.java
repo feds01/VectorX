@@ -11,11 +11,13 @@ public class GenericTool implements DrawingTool {
     private final ToolType type;
     private final Cursor cursor;
 
+    private final String tooltip;
     private final String resourceUri;
 
-    public GenericTool(ToolType type, Cursor cursor, String resourceUri) {
+    public GenericTool(ToolType type, Cursor cursor, String tooltip, String resourceUri) {
         this.type = type;
         this.cursor = cursor;
+        this.tooltip = tooltip;
 
         this.resourceUri = resourceUri;
     }
@@ -26,9 +28,16 @@ public class GenericTool implements DrawingTool {
     }
 
     @Override
+    public String getToolTip() {
+        return tooltip;
+    }
+
+    @Override
     public ToolType getType() {
         return this.type;
     }
+
+
 
     @Override
     public ImageIcon getImageIcon(boolean selected) {

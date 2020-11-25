@@ -31,6 +31,11 @@ public class FillTool implements DrawingTool {
     }
 
     @Override
+    public String getToolTip() {
+        return "Fill (F)";
+    }
+
+    @Override
     public ToolType getType() {
         return this.type;
     }

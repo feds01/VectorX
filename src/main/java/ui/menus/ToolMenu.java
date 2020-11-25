@@ -45,13 +45,61 @@ import java.util.Map;
  */
 public class ToolMenu extends JToolBar {
 
-    // the selector tool is considered to be the default tool
-    private static final GenericTool selectorTool = new GenericTool(ToolType.SELECTOR, new Cursor(Cursor.DEFAULT_CURSOR), "/icons/selector");
+    /**
+     *
+     */
+    private final Map<ToolType, JButton> buttonMap = new LinkedHashMap<>();
 
     /**
      *
      */
-    Map<ToolType, JButton> tools = new LinkedHashMap<>();
+    private final Map<ToolType, DrawingTool> toolMap = new LinkedHashMap<>() {
+        {
+            put(ToolType.SELECTOR, new GenericTool(
+                    ToolType.SELECTOR,
+                    new Cursor(Cursor.DEFAULT_CURSOR),
+                    "Select (S)",
+                    "/icons/selector"));
+
+            put(ToolType.FILL, new FillTool());
+
+            put(ToolType.LINE, new GenericTool(
+                    ToolType.LINE,
+                    new Cursor(Cursor.CROSSHAIR_CURSOR),
+                    "Line (L)",
+                    "/icons/line"));
+
+            put(ToolType.RECTANGLE, new GenericTool(
+                    ToolType.RECTANGLE,
+                    new Cursor(Cursor.CROSSHAIR_CURSOR),
+                    "Rectangle (R)",
+                    "/icons/rectangle"));
+
+            put(ToolType.ELLIPSIS, new GenericTool(
+                    ToolType.ELLIPSIS,
+                    new Cursor(Cursor.CROSSHAIR_CURSOR),
+                    "Ellipse (E)",
+                    "/icons/circle"));
+
+            put(ToolType.TRIANGLE, new GenericTool(
+                    ToolType.TRIANGLE,
+                    new Cursor(Cursor.CROSSHAIR_CURSOR),
+                    "Triangle (T)",
+                    "/icons/triangle"));
+
+            put(ToolType.IMAGE, new GenericTool(
+                    ToolType.IMAGE,
+                    new Cursor(Cursor.HAND_CURSOR),
+                    "Image (I)",
+                    "/icons/image"));
+            put(ToolType.TEXT, new GenericTool(
+                    ToolType.TEXT,
+                    new Cursor(Cursor.TEXT_CURSOR),
+                    "Text (W)",
+                    "/icons/text"
+            ));
+        }
+    };
 
     /**
      *
@@ -69,22 +117,24 @@ public class ToolMenu extends JToolBar {
         this.frame = frame;
         this.controller = controller;
 
-        this.controller.setCurrentTool(selectorTool);
-
         this.controller.addPropertyChangeListener(l -> {
             if (l.getPropertyName().equals("toolChange")) {
+
                 var tool = (DrawingTool) l.getNewValue();
                 var oldTool = (DrawingTool) l.getOldValue();
 
                 var icon = tool.getImageIcon(true);
-                var oldIcon = oldTool.getImageIcon(false);
 
                 // resize the icon to 20x20
                 icon = ImageUtils.resizeIcon(icon, 20, 20);
-                oldIcon = ImageUtils.resizeIcon(oldIcon, 20, 20);
+                this.buttonMap.get(tool.getType()).setIcon(icon);
 
-                this.tools.get(tool.getType()).setIcon(icon);
-                this.tools.get(oldTool.getType()).setIcon(oldIcon);
+                // On application start, the initial tool will be null
+                if (oldTool != null) {
+                    var oldIcon = oldTool.getImageIcon(false);
+                    oldIcon = ImageUtils.resizeIcon(oldIcon, 20, 20);
+                    this.buttonMap.get(oldTool.getType()).setIcon(oldIcon);
+                }
 
                 this.revalidate();
                 this.repaint();
@@ -107,16 +157,13 @@ public class ToolMenu extends JToolBar {
         panel.setLayout(new GridLayout(0, 1, 0, 20));
 
         // Add the actions to the toolbars.
-        this.tools.put(ToolType.SELECTOR, setupAction(selectorTool));
-        this.tools.put(ToolType.FILL, setupAction(new FillTool()));
-        this.tools.put(ToolType.LINE, setupAction(new GenericTool(ToolType.LINE, new Cursor(Cursor.CROSSHAIR_CURSOR), "/icons/line")));
-        this.tools.put(ToolType.RECTANGLE, setupAction(new GenericTool(ToolType.RECTANGLE, new Cursor(Cursor.CROSSHAIR_CURSOR), "/icons/rectangle")));
-        this.tools.put(ToolType.ELLIPSIS, setupAction(new GenericTool(ToolType.ELLIPSIS, new Cursor(Cursor.CROSSHAIR_CURSOR), "/icons/circle")));
-        this.tools.put(ToolType.TRIANGLE, setupAction(new GenericTool(ToolType.TRIANGLE, new Cursor(Cursor.CROSSHAIR_CURSOR), "/icons/triangle")));
-        this.tools.put(ToolType.IMAGE, setupAction(new GenericTool(ToolType.IMAGE, new Cursor(Cursor.HAND_CURSOR), "/icons/image")));
-        this.tools.put(ToolType.TEXT, setupAction(new GenericTool(ToolType.TEXT, new Cursor(Cursor.TEXT_CURSOR), "/icons/text")));
+        this.toolMap.keySet().forEach(key -> this.buttonMap.put(key, setupAction(this.toolMap.get(key))));
 
-        this.tools.values().forEach(panel::add);
+        // Add all the created buttons in button map
+        this.buttonMap.values().forEach(panel::add);
+
+        // set the current tool after the buttons have been added to the UI
+        this.setCurrentTool(ToolType.SELECTOR);
 
         panel.setMaximumSize(new Dimension(200, 300));
         panel.setBackground(new Color(0xFFFFFF));
@@ -138,16 +185,8 @@ public class ToolMenu extends JToolBar {
                 Cursor cursor = tool.getCursor();
                 frame.setCursor(cursor);
 
-                // update the button icon to 'blue' when it's selected
-                var button = (JButton) e.getSource();
-
-                // resize the icon to 20x20
-                var icon = ImageUtils.resizeIcon(tool.getImageIcon(true), 20, 20);
-
-                button.setIcon(icon);
-
-                controller.setCurrentTool(tool);
-
+                // update the current tool the user selected tool
+                setCurrentTool(tool.getType());
 
                 // TODO: temporary!
                 switch (tool.getType()) {
@@ -200,11 +239,12 @@ public class ToolMenu extends JToolBar {
         var button = new JButton(action);
 
         button.setText("");
+        button.setToolTipText(tool.getToolTip());
         button.setBorder(null);
         button.setFocusPainted(false);
         button.setBorderPainted(false);
 
-        if (controller.getCurrentTool().getType() == tool.getType()) {
+        if (controller.getCurrentTool() != null && controller.getCurrentTool().getType() == tool.getType()) {
             var icon = tool.getImageIcon(true);
 
             // resize the icon to 20x20
@@ -216,5 +256,20 @@ public class ToolMenu extends JToolBar {
         button.setBackground(new Color(0xFFFFFF));
 
         return button;
+    }
+
+
+    /**
+     *
+     * */
+    public void setCurrentTool(ToolType type) {
+        var currentTool = this.controller.getCurrentTool();
+
+        // avoid setting a new tool menu if the type didn't change
+        if (currentTool != null && currentTool.getType() == type) {
+            return;
+        }
+
+        this.controller.setCurrentTool(this.toolMap.get(type));
     }
 }
