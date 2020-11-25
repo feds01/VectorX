@@ -6,6 +6,7 @@ import ui.input.TextFieldInput;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Component;
@@ -73,8 +74,11 @@ public class ColourPickerPopup extends Box {
         rgbPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         this.red = new TextFieldInput("red", String.valueOf(initialColour.getRed()));
+        this.red.addPropertyChangeListener(this::textFieldChangeListener);
         this.green = new TextFieldInput("green", String.valueOf(initialColour.getGreen()));
+        this.green.addPropertyChangeListener(this::textFieldChangeListener);
         this.blue = new TextFieldInput("blue", String.valueOf(initialColour.getBlue()));
+        this.blue.addPropertyChangeListener(this::textFieldChangeListener);
 
 
         rgbPanel.add(red.getComponent());
@@ -133,9 +137,59 @@ public class ColourPickerPopup extends Box {
     /**
      *
      * */
+    private void textFieldChangeListener(PropertyChangeEvent event) {
+        JTextField field = (JTextField) event.getSource();
+
+        // if the text is equal to an empty string, don't change the value since we
+        // don't know if the user is still editing the value
+        try {
+            int value = Integer.parseInt(field.getText());
+
+            // TODO: use caller specified validation method to check
+            //       whether the value is valid or not.
+
+            // set the text field input value to the slider value
+//            changes.firePropertyChange(event.getPropertyName(), textValue, textValue);
+            Color oldColour = this.colourBox.getColour();
+            Color newColour;
+
+            if (value < 0 || value > 255) {
+                throw new IllegalArgumentException("Colour cant be greater than 255 or smaller than 0");
+            }
+
+            switch (event.getPropertyName()) {
+                case "red":
+                    newColour = new Color(value, oldColour.getGreen(), oldColour.getBlue(), oldColour.getAlpha());
+
+                    this.colourBox.setColour(newColour);
+                    break;
+                case "green":
+                    newColour = new Color(oldColour.getRed(), value, oldColour.getBlue(), oldColour.getAlpha());
+
+                    this.colourBox.setColour(newColour);
+
+                    break;
+                case "blue":
+                    newColour = new Color(oldColour.getRed(), oldColour.getGreen(), value, oldColour.getAlpha());
+
+                    this.colourBox.setColour(newColour);
+                    break;
+                default:
+                    return;
+            }
+
+            changes.firePropertyChange("colour", oldColour, newColour);
+        } catch (Exception e) {
+            field.setText((String) event.getOldValue());
+        }
+    }
+
+    /**
+     *
+     * */
     @Override
     public void addPropertyChangeListener(PropertyChangeListener listener) {
-        changes.addPropertyChangeListener(listener);
+        this.changes.addPropertyChangeListener(listener);
     }
 
     /**

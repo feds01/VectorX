@@ -138,9 +138,6 @@ public class SliderInput extends BaseInput<Integer> {
         try {
             int textValue = Integer.parseInt(field.getText());
 
-            // TODO: use caller specified validation method to check
-            //       whether the value is valid or not.
-
             // set the text field input value to the slider value
             changes.firePropertyChange(name, this.slider.getValue(), textValue);
 

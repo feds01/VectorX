@@ -27,11 +27,15 @@ public class TextFieldInput extends BaseInput<String> {
      * */
     private JLabel label = null;
 
+    private String oldValue;
+
     /**
      *
      * */
     public TextFieldInput(String name, String value, String label, boolean front) {
         super(name, value);
+
+        this.oldValue = value;
 
         this.panel.setPreferredSize(new Dimension(100, 20));
 
@@ -47,8 +51,10 @@ public class TextFieldInput extends BaseInput<String> {
 
         this.field.addActionListener(e -> {
             for (PropertyChangeListener l : this.field.getPropertyChangeListeners()) {
-                l.propertyChange(new PropertyChangeEvent(this.field, name, value, this.field.getText()));
+                l.propertyChange(new PropertyChangeEvent(this.field, name, oldValue, this.field.getText()));
             }
+
+            this.oldValue = this.field.getText();
         });
 
         this.field.addFocusListener(new FocusListener() {
