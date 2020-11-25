@@ -62,7 +62,7 @@ public class ToolController {
 
         this.currentTool = currentTool;
 
-        pcs.firePropertyChange("titleChange", oldTool, this.currentTool);
+        pcs.firePropertyChange("toolChange", oldTool, this.currentTool);
     }
 
     /**

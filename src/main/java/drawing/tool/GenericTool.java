@@ -5,6 +5,7 @@ import drawing.ToolType;
 
 import javax.swing.ImageIcon;
 import java.awt.Cursor;
+import java.util.Objects;
 
 public class GenericTool implements DrawingTool {
     private final ToolType type;
@@ -40,5 +41,21 @@ public class GenericTool implements DrawingTool {
         }
 
         return ImageUtils.resizeIcon(icon, 20, 20);
+    }
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        GenericTool that = (GenericTool) o;
+        return type == that.type &&
+                Objects.equals(cursor, that.cursor) &&
+                Objects.equals(resourceUri, that.resourceUri);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(type, cursor, resourceUri);
     }
 }

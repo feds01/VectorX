@@ -51,8 +51,7 @@ public class VectorMain extends JFrame {
             var toolController = new ToolController();
 
             // create the toolbar
-            var toolbarMaker = new ToolMenu(frame, toolController);
-            var toolbar = toolbarMaker.createMenu();
+            var toolbar = new ToolMenu(frame, toolController);
 
             var propertiesPanel = new PropertiesMenu(toolController);
 

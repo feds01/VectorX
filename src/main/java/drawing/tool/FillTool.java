@@ -7,6 +7,7 @@ import javax.swing.ImageIcon;
 import java.awt.Cursor;
 import java.awt.Point;
 import java.awt.Toolkit;
+import java.util.Objects;
 
 public class FillTool implements DrawingTool {
     private final Toolkit toolkit = Toolkit.getDefaultToolkit();
@@ -45,5 +46,19 @@ public class FillTool implements DrawingTool {
         }
 
         return ImageUtils.resizeIcon(icon, 20, 20);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        FillTool fillTool = (FillTool) o;
+        return Objects.equals(toolkit, fillTool.toolkit) &&
+                type == fillTool.type;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(toolkit, type);
     }
 }
