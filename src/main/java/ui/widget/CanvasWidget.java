@@ -1,27 +1,52 @@
 package ui.widget;
 
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.MouseInfo;
+import java.awt.Point;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseWheelEvent;
 import java.awt.geom.AffineTransform;
 
-public class CanvasWidget extends JPanel {
+public class CanvasWidget extends JPanel implements MouseListener, MouseMotionListener {
     private double zoomFactor = 1;
-    private boolean isZooming;
     private double prevZoomFactor = 1;
+
+    private boolean isZooming;
+    private boolean released;
+    private boolean isDragging;
+
     private double xOffset = 0;
     private double yOffset = 0;
+
+    private int xDiff;
+    private int yDiff;
+    private Point startPoint;
+
+    /**
+     *
+     */
+    private final double MAX_SCALE_ZOOM = 2.0;
+
+    /**
+     *
+     */
+    private final double MIN_SCALE_ZOOM = 0.25;
+
 
     public CanvasWidget() {
         this.setLayout(new GridBagLayout());
 
-        JPanel canvas = new JPanel();
+        JPanel canvas = new Canvas();
 
         canvas.setPreferredSize(new Dimension(600, 700));
         canvas.setMaximumSize(new Dimension(600, 700));
@@ -29,6 +54,9 @@ public class CanvasWidget extends JPanel {
         canvas.setBackground(Color.white);
 
         this.add(canvas, new GridBagConstraints());
+
+        this.addMouseListener(this);
+        this.addMouseMotionListener(this);
     }
 
     @Override
@@ -51,17 +79,18 @@ public class CanvasWidget extends JPanel {
             at.translate(xOffset, yOffset);
             at.scale(zoomFactor, zoomFactor);
 
+            Dimension dim;
+
             if (this.zoomFactor > 1.0) {
-                var dim = new Dimension(
+                dim = new Dimension(
                         (int) Math.round(getWidth() * this.zoomFactor),
                         (int) Math.round(getHeight() * this.zoomFactor));
 
-                this.setPreferredSize(dim);
             } else {
-                var dim = new Dimension(getParent().getWidth(), getParent().getHeight());
+                dim = new Dimension(getParent().getWidth(), getParent().getHeight());
 
-                this.setPreferredSize(dim);
             }
+            this.setPreferredSize(dim);
             this.revalidate();
 
             prevZoomFactor = zoomFactor;
@@ -70,6 +99,20 @@ public class CanvasWidget extends JPanel {
 
             isZooming = false;
         }
+
+        if (isDragging) {
+            AffineTransform at = new AffineTransform();
+            at.translate(xOffset + xDiff, yOffset + yDiff);
+            at.scale(zoomFactor, zoomFactor);
+            g2.transform(at);
+
+            if (released) {
+                xOffset += xDiff;
+                yOffset += yDiff;
+                isDragging = false;
+            }
+
+        }
     }
 
     public void handleScroll(MouseWheelEvent event) {
@@ -77,16 +120,62 @@ public class CanvasWidget extends JPanel {
             this.isZooming = true;
 
             //Zoom in
-            if (event.getWheelRotation() < 0) {
+            if (event.getWheelRotation() < 0 && zoomFactor < MAX_SCALE_ZOOM) {
                 zoomFactor *= 1.1;
                 repaint();
             }
 
             //Zoom out
-            if (event.getWheelRotation() > 0) {
+            if (event.getWheelRotation() > 0 && zoomFactor > MIN_SCALE_ZOOM) {
                 zoomFactor /= 1.1;
                 repaint();
             }
         }
+    }
+
+    @Override
+    public void mouseDragged(MouseEvent e) {
+        Point curPoint = e.getLocationOnScreen();
+        xDiff = curPoint.x - startPoint.x;
+        yDiff = curPoint.y - startPoint.y;
+
+        if (SwingUtilities.isMiddleMouseButton(e)) {
+            this.setCursor(new Cursor(Cursor.MOVE_CURSOR));
+
+            isDragging = true;
+            repaint();
+        }
+    }
+
+    @Override
+    public void mouseMoved(MouseEvent e) {
+    }
+
+    @Override
+    public void mouseClicked(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mousePressed(MouseEvent e) {
+        released = false;
+        startPoint = MouseInfo.getPointerInfo().getLocation();
+    }
+
+    @Override
+    public void mouseReleased(MouseEvent e) {
+        this.setCursor(Cursor.getDefaultCursor());
+        released = true;
+        repaint();
+    }
+
+    @Override
+    public void mouseEntered(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseExited(MouseEvent e) {
+
     }
 }
