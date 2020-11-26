@@ -9,6 +9,7 @@ import drawing.shape.Shape;
 import drawing.shape.TextShape;
 import drawing.shape.Triangle;
 import ui.controllers.ToolController;
+import ui.controllers.WidgetController;
 
 import javax.imageio.ImageIO;
 import javax.swing.JFileChooser;
@@ -21,6 +22,7 @@ import javax.swing.filechooser.FileSystemView;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Point;
 import java.awt.RenderingHints;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
@@ -50,9 +52,13 @@ public class Canvas extends JPanel implements MouseMotionListener, MouseInputLis
      */
     private Shape currentObject = null;
 
+    private Shape selectedShape = null;
+
     private Shape highlightedShape = null;
 
     private final ToolController toolController;
+
+    private final WidgetController widgetController;
 
     private int mouseX1;
     private int mouseY1;
@@ -62,8 +68,9 @@ public class Canvas extends JPanel implements MouseMotionListener, MouseInputLis
     /**
      *
      */
-    public Canvas(ToolController toolController) {
+    public Canvas(ToolController toolController, WidgetController widgetController) {
         this.toolController = toolController;
+        this.widgetController = widgetController;
 
         this.addMouseListener(this);
         this.addMouseMotionListener(this);
@@ -89,10 +96,14 @@ public class Canvas extends JPanel implements MouseMotionListener, MouseInputLis
             currentObject.draw(g2, true);
         }
 
-
-        // Draw any highlighted shape
+        // Draw any highlighted shape...
         if (highlightedShape != null) {
             highlightedShape.drawBoundary(g2);
+        }
+
+        // Draw a selected bounding box if a shape has been selected...
+        if (selectedShape != null) {
+            selectedShape.drawSelectedBoundary(g2);
         }
 
         g.dispose();
@@ -130,6 +141,19 @@ public class Canvas extends JPanel implements MouseMotionListener, MouseInputLis
                 this.repaint();
 
                 currentObject = null;
+            }
+        }
+
+
+        if (currentTool.getType() == ToolType.SELECTOR) {
+            var selectedShape = getShapeIfHoveringShape(e.getPoint());
+
+            if (!Objects.equals(selectedShape, this.selectedShape)) {
+                this.selectedShape = selectedShape;
+                this.repaint();
+
+                // Update the tool widget
+                this.widgetController.setCurrentWidgetFromShape(selectedShape);
             }
 
         }
@@ -237,26 +261,11 @@ public class Canvas extends JPanel implements MouseMotionListener, MouseInputLis
         }
 
         if (currentTool.getType() == ToolType.SELECTOR) {
-            List<Shape> shapes = this.objects;
-
-            // Because we care about the items that are on the top
-            // of the stack first, we will inspect items that are on
-            // top first and then move to the bottom.
-            Collections.reverse(shapes);
-
-            Shape newHighlightedShape = null;
-
-            for (Shape shape : shapes) {
-                if (shape.isPointWithinBounds(e.getPoint())) {
-
-                    System.out.println(shape);
-                    newHighlightedShape = shape;
-                    break;
-                }
-            }
+            Shape newHighlightedShape = this.getShapeIfHoveringShape(e.getPoint());
 
             // Don't re-draw the selected object if they are the same or null
-            if (!Objects.equals(newHighlightedShape, this.highlightedShape)) {
+            if (!Objects.equals(newHighlightedShape, this.highlightedShape) &&
+                !Objects.equals(this.selectedShape, this.highlightedShape)) {
 
                 // set the 'new' shape to the currently highlighted one...
                 this.highlightedShape = newHighlightedShape;
@@ -264,7 +273,27 @@ public class Canvas extends JPanel implements MouseMotionListener, MouseInputLis
                 this.repaint();
             }
         }
+    }
 
+    /**
+     *
+     * */
+    public Shape getShapeIfHoveringShape(Point point) {
+        List<Shape> shapes = this.objects;
+
+        // Because we care about the items that are on the top
+        // of the stack first, we will inspect items that are on
+        // top first and then move to the bottom.
+        Collections.reverse(shapes);
+
+        for (Shape shape : shapes) {
+            if (shape.isPointWithinBounds(point)) {
+
+                return shape;
+            }
+        }
+
+        return null;
     }
 
     /**

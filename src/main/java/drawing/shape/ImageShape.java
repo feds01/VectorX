@@ -1,5 +1,7 @@
 package drawing.shape;
 
+import drawing.ToolType;
+
 import javax.swing.GrayFilter;
 import java.awt.Color;
 import java.awt.Graphics2D;
@@ -40,6 +42,11 @@ public class ImageShape implements Shape {
         this.properties.addProperty(propertyFactory.createColourProperty("fillColour", Color.WHITE));
 
         this.properties.addProperty(new ShapeProperty<>("thickness", 1, value -> 1 <= value && value <= 16));
+    }
+
+    @Override
+    public ToolType getToolType() {
+        return ToolType.IMAGE;
     }
 
     @Override
@@ -99,6 +106,11 @@ public class ImageShape implements Shape {
 
         g.setColor(Shape.SELECTOR_COLOUR);
         g.drawRect(xPos, yPos, image.getWidth(), image.getHeight());
+    }
+
+    @Override
+    public void drawSelectedBoundary(Graphics2D g) {
+
     }
 
     @Override

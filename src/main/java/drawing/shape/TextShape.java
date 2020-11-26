@@ -1,5 +1,7 @@
 package drawing.shape;
 
+import drawing.ToolType;
+
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
@@ -50,6 +52,11 @@ public class TextShape implements Shape {
         this.properties.addProperty(propertyFactory.createColourProperty("fillColour", Color.WHITE));
 
         this.properties.addProperty(new ShapeProperty<>("fontSize", 10, value -> 4 <= value && value <= 20));
+    }
+
+    @Override
+    public ToolType getToolType() {
+        return ToolType.TEXT;
     }
 
     @Override
@@ -111,6 +118,11 @@ public class TextShape implements Shape {
 
         g.setColor(Shape.SELECTOR_COLOUR);
         g.drawRect(x, y, width, height);
+    }
+
+    @Override
+    public void drawSelectedBoundary(Graphics2D g) {
+
     }
 
     @Override

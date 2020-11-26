@@ -1,5 +1,7 @@
 package drawing.shape;
 
+import drawing.ToolType;
+
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Point;
@@ -37,6 +39,11 @@ public class Triangle implements Shape {
         this.properties.addProperty(new ShapeProperty<>("thickness", 1, value -> 1 <= value && value <= 16));
 
         this.setPoints();
+    }
+
+    @Override
+    public ToolType getToolType() {
+        return ToolType.TRIANGLE;
     }
 
     @Override
@@ -104,6 +111,11 @@ public class Triangle implements Shape {
     public void drawBoundary(Graphics2D g) {
         g.setColor(Shape.SELECTOR_COLOUR);
         g.drawPolygon(xPoints, yPoints, 3);
+    }
+
+    @Override
+    public void drawSelectedBoundary(Graphics2D g) {
+
     }
 
     @Override

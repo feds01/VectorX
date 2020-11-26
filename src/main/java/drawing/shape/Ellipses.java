@@ -1,6 +1,6 @@
 package drawing.shape;
 
-import javafx.scene.shape.Ellipse;
+import drawing.ToolType;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
@@ -40,6 +40,11 @@ public class Ellipses implements Shape {
 
 
     @Override
+    public ToolType getToolType() {
+        return ToolType.ELLIPSIS;
+    }
+
+    @Override
     public int getX() {
         return x;
     }
@@ -69,20 +74,6 @@ public class Ellipses implements Shape {
         this.properties = properties;
     }
 
-
-//    @Override
-//    public void setProperty(String name, Object value) {
-//        ShapeProperty<?> oldProperty = this.properties.get(name);
-//
-//        if (oldProperty == null) {
-//            throw new IllegalStateException("Cannot set property that doesn't exist");
-//        }
-//
-//
-//        oldProperty.setValue(value);
-//        this.properties.set(name, oldProperty);
-//    }
-
     @Override
     public Color getShapeStrokeColour() {
         return (Color) this.properties.get("strokeColour").getValue();
@@ -111,6 +102,11 @@ public class Ellipses implements Shape {
 
         g.setColor(Shape.SELECTOR_COLOUR);
         g.drawOval(x, y, width, height);
+    }
+
+    @Override
+    public void drawSelectedBoundary(Graphics2D g) {
+
     }
 
     @Override

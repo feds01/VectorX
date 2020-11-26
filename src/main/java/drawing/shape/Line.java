@@ -1,5 +1,7 @@
 package drawing.shape;
 
+import drawing.ToolType;
+
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
@@ -41,6 +43,10 @@ public class Line implements Shape {
         this.properties.addProperty(new ShapeProperty<>("thickness", 1, value -> 1 <= value && value <= 16));
     }
 
+    @Override
+    public ToolType getToolType() {
+        return ToolType.LINE;
+    }
 
     @Override
     public int getX() {
@@ -89,6 +95,11 @@ public class Line implements Shape {
 
 
         g.draw(new Line2D.Double(x, y, x2, y2));
+    }
+
+    @Override
+    public void drawSelectedBoundary(Graphics2D g) {
+
     }
 
     @Override

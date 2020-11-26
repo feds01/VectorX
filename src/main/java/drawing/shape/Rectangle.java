@@ -1,5 +1,7 @@
 package drawing.shape;
 
+import drawing.ToolType;
+
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Point;
@@ -33,6 +35,11 @@ public class Rectangle implements Shape {
         this.properties.addProperty(propertyFactory.createColourProperty("fillColour", Color.WHITE));
 
         this.properties.addProperty(new ShapeProperty<>("thickness", 1, value -> 1 <= value && value <= 16));
+    }
+
+    @Override
+    public ToolType getToolType() {
+        return ToolType.RECTANGLE;
     }
 
     @Override
@@ -83,6 +90,11 @@ public class Rectangle implements Shape {
     @Override
     public void setShapeFillColour(Color fill) {
         this.properties.set("fillColour", propertyFactory.createColourProperty("fillColour", fill));
+    }
+
+    @Override
+    public void drawSelectedBoundary(Graphics2D g) {
+
     }
 
 

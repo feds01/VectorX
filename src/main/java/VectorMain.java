@@ -1,6 +1,7 @@
 import common.FontLoader;
 import drawing.ToolType;
 import ui.controllers.ToolController;
+import ui.controllers.WidgetController;
 import ui.widget.CanvasWidget;
 import ui.widget.PropertiesMenu;
 import ui.widget.ToolMenu;
@@ -41,12 +42,12 @@ public class VectorMain extends JFrame {
 
     /**
      *
-     * */
+     */
     private JScrollPane scrollPane;
 
     /**
      *
-     * */
+     */
     private CanvasWidget canvasWidget;
 
     /**
@@ -96,10 +97,12 @@ public class VectorMain extends JFrame {
             // is currently under selection.
             var toolController = new ToolController();
 
+            var widgetController = new WidgetController(frame);
+
             // create the toolbar
             this.toolbar = new ToolMenu(frame, toolController);
-            this.canvasWidget = new CanvasWidget(toolController);
-            this.propertiesPanel = new PropertiesMenu(toolController);
+            this.canvasWidget = new CanvasWidget(toolController, widgetController);
+            this.propertiesPanel = new PropertiesMenu(widgetController);
 
             frame.add(toolbar, BorderLayout.WEST);
 
@@ -121,7 +124,6 @@ public class VectorMain extends JFrame {
             // Increase vertical and horizontal scrollbar speeds
             this.scrollPane.getVerticalScrollBar().setUnitIncrement(10);
             this.scrollPane.getHorizontalScrollBar().setUnitIncrement(10);
-
 
 
             frame.add(scrollPane, BorderLayout.CENTER);

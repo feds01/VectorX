@@ -1,6 +1,7 @@
 package ui.widget;
 
 import ui.controllers.ToolController;
+import ui.controllers.WidgetController;
 import ui.tool.BaseToolWidget;
 
 import javax.swing.BorderFactory;
@@ -33,21 +34,18 @@ public class PropertiesMenu {
      */
     private BaseToolWidget toolWidget;
 
-
-//    public JLabel toolTitle;
+    /**
+     *
+     * */
+    private WidgetController widgetController;
 
     /**
      *
      */
-    private ToolController controller;
-
-    /**
-     *
-     */
-    public PropertiesMenu(ToolController controller) {
+    public PropertiesMenu(WidgetController widgetController) {
         this.panel = new JPanel();
 
-        this.setController(controller);
+        this.setWidgetController(widgetController);
 
         panel.setCursor(Cursor.getDefaultCursor());
 
@@ -70,23 +68,17 @@ public class PropertiesMenu {
 //        this.toolTitle.setAlignmentX(Component.CENTER_ALIGNMENT);
 //        this.toolTitle.setFont(fontLoader.getFont("NotoSans"));
 //
-        this.toolWidget = controller.getCurrentToolWidget();
+        this.toolWidget = widgetController.getCurrentToolWidget();
 
 //        panel.add("Object Properties", this.toolTitle);
 //        panel.add(Box.createVerticalStrut(10));
         panel.add(this.toolWidget.getComponent());
     }
 
-    /**
-     *
-     */
-    public void setController(ToolController controller) {
-        this.controller = controller;
-        this.controller.addPropertyChangeListener(new PropertiesMenuListener());
-    }
 
-    public ToolController getController() {
-        return this.controller;
+    public void setWidgetController(WidgetController controller) {
+        this.widgetController = controller;
+        this.widgetController.addPropertyChangeListener(new PropertiesMenuListener());
     }
 
     /**
@@ -96,13 +88,6 @@ public class PropertiesMenu {
 
         @Override
         public void propertyChange(PropertyChangeEvent evt) {
-
-//            if (evt.getPropertyName().equals("titleChange")) {
-//                var currentTool = (DrawingTool) evt.getNewValue();
-//
-//                toolTitle.setText(currentTool.getType().toString());
-//            }
-
             if (evt.getPropertyName().equals("widgetChange")) {
 
                 // remove the old component from the property menu
@@ -110,7 +95,6 @@ public class PropertiesMenu {
 
                 toolWidget = (BaseToolWidget) evt.getNewValue();
 
-//                panel.add(toolTitle);
                 panel.add(toolWidget.getComponent());
             }
 

@@ -1,6 +1,7 @@
 package ui.widget;
 
 import ui.controllers.ToolController;
+import ui.controllers.WidgetController;
 
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
@@ -46,10 +47,10 @@ public class CanvasWidget extends JPanel implements MouseListener, MouseMotionLi
     private final double MIN_SCALE_ZOOM = 0.25;
 
 
-    public CanvasWidget(ToolController controller) {
+    public CanvasWidget(ToolController controller, WidgetController widgetController) {
         this.setLayout(new GridBagLayout());
 
-        this.canvas = new Canvas(controller);
+        this.canvas = new Canvas(controller, widgetController);
 
         canvas.setPreferredSize(new Dimension(600, 700));
         canvas.setMaximumSize(new Dimension(600, 700));

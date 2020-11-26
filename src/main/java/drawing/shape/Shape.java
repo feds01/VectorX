@@ -1,41 +1,47 @@
 package drawing.shape;
 
+import drawing.ToolType;
+
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Point;
 
 public interface Shape {
-    public static final Color SELECTOR_COLOUR = new Color(0x3399FF);
+    Color SELECTOR_COLOUR = new Color(0x3399FF);
 
-    public int getX();
+    ToolType getToolType();
 
-    public void setX(int x);
+    int getX();
 
-    public int getY();
+    void setX(int x);
 
-    public void setY(int y);
+    int getY();
 
-    public ShapeProperties getProperties();
+    void setY(int y);
 
-    public void setProperties(ShapeProperties properties);
+    ShapeProperties getProperties();
 
-    public Color getShapeStrokeColour();
+    void setProperties(ShapeProperties properties);
 
-    public void setShapeStrokeColour(Color color);
+    Color getShapeStrokeColour();
 
-    public default Color getShapeFillColour() {
+    void setShapeStrokeColour(Color color);
+
+    default Color getShapeFillColour() {
         return null;
     }
 
-    public default void setShapeFillColour(Color color) {
-    }
+    default void setShapeFillColour(Color color) { }
 
 
-    public void drawBoundary(Graphics2D g);
+    void drawBoundary(Graphics2D g);
 
-    public void draw(Graphics2D g, boolean isResizing);
+    void drawSelectedBoundary(Graphics2D g);
 
-    public boolean isFillable();
+    void draw(Graphics2D g, boolean isResizing);
+
+    boolean isFillable();
 
     boolean isPointWithinBounds(Point point);
+
 }
