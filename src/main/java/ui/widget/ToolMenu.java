@@ -188,46 +188,46 @@ public class ToolMenu extends JToolBar {
                 // update the current tool the user selected tool
                 setCurrentTool(tool.getType());
 
-                // TODO: temporary!
-                switch (tool.getType()) {
-                    case SELECTOR:
-                        break;
-                    case FILL:
-                        var fillObj = new Rectangle(10, 20, 40, 50);
-
-                        controller.setCurrentWidget(new FillToolWidget(fillObj, frame));
-                        break;
-                    case LINE:
-                        var line = new Line(10, 20, 40, 50);
-
-                        controller.setCurrentWidget(new LineToolWidget(line, frame));
-                        break;
-                    case TRIANGLE:
-                        var triangle = new Triangle(10, 20, 40, 50);
-
-                        controller.setCurrentWidget(new TriangleToolWidget(triangle, frame));
-                        break;
-                    case RECTANGLE:
-                        var rect = new Rectangle(10, 20, 40, 50);
-
-                        controller.setCurrentWidget(new RectangleToolWidget(rect, frame));
-                        break;
-                    case ELLIPSIS:
-                        var ellipsis = new Ellipses(10, 20, 40, 50);
-
-                        controller.setCurrentWidget(new EllipsisToolWidget(ellipsis, frame));
-                        break;
-                    case IMAGE:
-                        var image = new ImageShape(10, 20, 40, 50);
-
-                        controller.setCurrentWidget(new ImageToolWidget(image, frame));
-                        break;
-                    case TEXT:
-                        var text = new TextShape(10, 20, 40, 50);
-
-                        controller.setCurrentWidget(new TextToolWidget(text, frame));
-                        break;
-                }
+//                // TODO: temporary!
+//                switch (tool.getType()) {
+//                    case SELECTOR:
+//                        break;
+//                    case FILL:
+//                        var fillObj = new Rectangle(10, 20, 40, 50);
+//
+//                        controller.setCurrentWidget(new FillToolWidget(fillObj, frame));
+//                        break;
+//                    case LINE:
+//                        var line = new Line(10, 20, 40, 50);
+//
+//                        controller.setCurrentWidget(new LineToolWidget(line, frame));
+//                        break;
+//                    case TRIANGLE:
+//                        var triangle = new Triangle(10, 20, 40, 50);
+//
+//                        controller.setCurrentWidget(new TriangleToolWidget(triangle, frame));
+//                        break;
+//                    case RECTANGLE:
+//                        var rect = new Rectangle(10, 20, 40, 50);
+//
+//                        controller.setCurrentWidget(new RectangleToolWidget(rect, frame));
+//                        break;
+//                    case ELLIPSIS:
+//                        var ellipsis = new Ellipses(10, 20, 40, 50);
+//
+//                        controller.setCurrentWidget(new EllipsisToolWidget(ellipsis, frame));
+//                        break;
+//                    case IMAGE:
+//                        var image = new ImageShape(10, 20, 40, 50);
+//
+//                        controller.setCurrentWidget(new ImageToolWidget(image, frame));
+//                        break;
+//                    case TEXT:
+//                        var text = new TextShape(10, 20, 40, 50);
+//
+//                        controller.setCurrentWidget(new TextToolWidget(text, frame));
+//                        break;
+//                }
             }
         }, tool);
     }

@@ -1,6 +1,8 @@
 package ui.widget;
 
+import drawing.ToolType;
 import drawing.shape.Ellipses;
+import drawing.shape.ImageShape;
 import drawing.shape.Line;
 import drawing.shape.Rectangle;
 import drawing.shape.Shape;
@@ -8,15 +10,22 @@ import drawing.shape.TextShape;
 import drawing.shape.Triangle;
 import ui.controllers.ToolController;
 
+import javax.imageio.ImageIO;
+import javax.swing.JFileChooser;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import javax.swing.event.MouseInputListener;
+import javax.swing.filechooser.FileFilter;
+import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.swing.filechooser.FileSystemView;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,7 +45,7 @@ public class Canvas extends JPanel implements MouseMotionListener, MouseInputLis
     /**
      * The temporary object that is being used to display a pre-emptive shape that
      * will be drawn when the user let's go of the mouse.
-     * */
+     */
     private Shape currentObject = null;
 
 
@@ -81,33 +90,69 @@ public class Canvas extends JPanel implements MouseMotionListener, MouseInputLis
     }
 
 
+    /**
+     *
+     */
     public double getZoomFactor() {
         return zoomFactor;
     }
 
+    /**
+     *
+     */
     public void setZoomFactor(double zoomFactor) {
         this.zoomFactor = zoomFactor;
     }
 
+    /**
+     *
+     */
     @Override
     public void mouseClicked(MouseEvent e) {
+        var currentTool = this.toolController.getCurrentTool();
 
+        if (currentTool.getType() == ToolType.IMAGE) {
+
+            // don't re-create the image if it's already created.
+            if (this.currentObject == null) {
+                this.currentObject = createNewObject(mouseX1, mouseY1, 0, 0);
+            } else {
+                this.objects.add(currentObject);
+                this.repaint();
+
+                currentObject = null;
+            }
+
+        }
     }
 
+    /**
+     *
+     */
     @Override
     public void mousePressed(MouseEvent e) {
         if (SwingUtilities.isLeftMouseButton(e)) {
             mouseX1 = e.getX();
             mouseY1 = e.getY();
+
             System.out.println("x1 = " + mouseX1 + ", y1 = " + mouseY1);
         } else {
             this.getParent().dispatchEvent(e);
         }
     }
 
+    /**
+     *
+     */
     @Override
     public void mouseReleased(MouseEvent e) {
-        if (SwingUtilities.isLeftMouseButton(e)) {
+        var currentTool = toolController.getCurrentTool();
+
+        if (SwingUtilities.isLeftMouseButton(e)
+                && currentTool.getType() != ToolType.SELECTOR
+                && currentTool.getType() != ToolType.FILL
+                && currentTool.getType() != ToolType.IMAGE
+        ) {
             mouseX2 = e.getX();
             mouseY2 = e.getY();
             System.out.println("x2 = " + mouseX2 + ", y2 = " + mouseY2);
@@ -123,20 +168,34 @@ public class Canvas extends JPanel implements MouseMotionListener, MouseInputLis
         }
     }
 
+    /**
+     *
+     */
     @Override
     public void mouseEntered(MouseEvent e) {
 
     }
 
+    /**
+     *
+     */
     @Override
     public void mouseExited(MouseEvent e) {
 
     }
 
+    /**
+     *
+     */
     @Override
     public void mouseDragged(MouseEvent e) {
+        var currentTool = toolController.getCurrentTool();
 
-        if (SwingUtilities.isLeftMouseButton(e)) {
+        if (SwingUtilities.isLeftMouseButton(e)
+                && currentTool.getType() != ToolType.SELECTOR
+                && currentTool.getType() != ToolType.FILL
+                && currentTool.getType() != ToolType.IMAGE
+        ) {
             var endX = e.getX();
             var endY = e.getY();
 
@@ -152,16 +211,83 @@ public class Canvas extends JPanel implements MouseMotionListener, MouseInputLis
         }
     }
 
+    /**
+     *
+     */
     @Override
     public void mouseMoved(MouseEvent e) {
+        var currentTool = toolController.getCurrentTool();
+
+        // If the image tool is selected, and already created. The x and y
+        // coordinates of the shape should be updated so it can be re-drawn.
+        if (currentTool.getType() == ToolType.IMAGE && currentObject != null) {
+            currentObject.setX(e.getX());
+            currentObject.setY(e.getY());
+
+            this.repaint();
+        }
 
     }
 
+    /**
+     *
+     */
     private Shape createNewObject(int x1, int y1, int x2, int y2) {
+        var currentTool = toolController.getCurrentTool();
+
         try {
-            return new TextShape(x1, y1, x2, y2);
+
+            // This should never happen...
+            if (currentTool.getType() == ToolType.FILL ||
+                    currentTool.getType() == ToolType.SELECTOR
+            ) {
+                throw new IllegalStateException("Can't create new object for a selection tool");
+            }
+
+            // we need to boot up JFileChooser to select the item that
+            // will be drawn on the canvas.
+            if (currentTool.getType() == ToolType.IMAGE) {
+                var jfc = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory());
+
+                // filter for image files only
+                FileFilter imageFilter = new FileNameExtensionFilter(
+                        "Image files", "jpg", "png");
+
+                jfc.setFileFilter(imageFilter);
+
+                int result = jfc.showOpenDialog(null);
+
+                if (result == JFileChooser.APPROVE_OPTION) {
+                    BufferedImage selectedImage;
+
+                    try {
+                        selectedImage = ImageIO.read(jfc.getSelectedFile());
+
+
+                        return new ImageShape(x1, y1, selectedImage);
+                    } catch (IOException e) {
+                        System.out.println("Failed to read selected image.");
+                    }
+                }
+            }
+
+            switch (currentTool.getType()) {
+                case LINE:
+                    return new Line(x1, y1, x2, y2);
+                case TRIANGLE:
+                    return new Triangle(x1, y1, x2, y2);
+                case RECTANGLE:
+                    return new Rectangle(x1, y1, x2, y2);
+                case ELLIPSIS:
+                    return new Ellipses(x1, y1, x2, y2);
+                case TEXT:
+                    return new TextShape(x1, y1, x2, y2);
+            }
+
         } catch (IllegalArgumentException ignored) {
             return null;
         }
+
+        return null;
     }
 }
