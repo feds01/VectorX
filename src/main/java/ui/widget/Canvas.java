@@ -33,16 +33,8 @@ public class Canvas extends JPanel {
 
         // get hold of rectangle and coords from model component
         if (rect != null) {
-            int x1 = rect.getX();
-            int width = (int) rect.getProperties().get("width").getValue();
-            int y1 = rect.getY();
-            int height = (int) rect.getProperties().get("height").getValue();
-
-            // draw the rectangle
-            g.setColor(DEFAULT_FG_COLOUR);
-            g.fillRect(x1, y1, width, height);
+            rect.draw(g);
         }
-
     }
 
 

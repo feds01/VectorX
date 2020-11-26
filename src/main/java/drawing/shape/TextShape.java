@@ -1,6 +1,7 @@
 package drawing.shape;
 
 import java.awt.Color;
+import java.awt.Graphics;
 
 public class TextShape implements Shape {
     private int x;
@@ -80,8 +81,7 @@ public class TextShape implements Shape {
     }
 
     @Override
-    public void draw() {
-
+    public void draw(Graphics g) {
     }
 
     @Override

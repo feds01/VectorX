@@ -1,6 +1,7 @@
 package drawing.shape;
 
 import java.awt.Color;
+import java.awt.Graphics;
 
 public interface Shape {
     public int getX();
@@ -20,7 +21,7 @@ public interface Shape {
     }
     public default void setShapeFill(Color color) {}
 
-    public void draw();
+    public void draw(Graphics g);
 
     public boolean isFillable();
 }

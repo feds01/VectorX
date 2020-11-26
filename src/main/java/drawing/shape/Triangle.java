@@ -1,6 +1,7 @@
 package drawing.shape;
 
 import java.awt.Color;
+import java.awt.Graphics;
 
 public class Triangle implements Shape {
     private int x;
@@ -79,8 +80,7 @@ public class Triangle implements Shape {
     }
 
     @Override
-    public void draw() {
-
+    public void draw(Graphics g) {
     }
 
     @Override

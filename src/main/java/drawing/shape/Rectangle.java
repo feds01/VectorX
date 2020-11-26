@@ -1,6 +1,7 @@
 package drawing.shape;
 
 import java.awt.Color;
+import java.awt.Graphics;
 import java.awt.Point;
 
 public class Rectangle implements Shape {
@@ -91,8 +92,16 @@ public class Rectangle implements Shape {
     }
 
     @Override
-    public void draw() {
+    public void draw(Graphics g) {
+        int width = (int) this.properties.get("width").getValue();
+        int height = (int) this.properties.get("height").getValue();
 
+        // draw the rectangle
+        g.setColor(this.getShapeFill());
+        g.fillRect(x, y, width, height);
+
+        g.setColor(this.getShapeStroke());
+        g.drawRect(x, y, width, height);
     }
 
     @Override
