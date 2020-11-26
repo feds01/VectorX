@@ -16,6 +16,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.EventQueue;
+import java.awt.Graphics;
 import java.awt.KeyboardFocusManager;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseWheelEvent;
@@ -110,6 +111,11 @@ public class VectorMain extends JFrame {
             this.scrollPane = new JScrollPane(canvasWidget,
                     JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
                     JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS) {
+
+                @Override
+                protected void paintBorder(Graphics g) {
+                    // Don't paint the border
+                }
 
                 @Override
                 protected void processMouseWheelEvent(MouseWheelEvent e) {

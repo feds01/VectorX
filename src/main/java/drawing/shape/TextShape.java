@@ -18,7 +18,7 @@ public class TextShape implements Shape {
     /**
      *
      */
-    private final ShapeProperties properties = new ShapeProperties();
+    private ShapeProperties properties = new ShapeProperties();
 
     /**
      *
@@ -86,7 +86,7 @@ public class TextShape implements Shape {
 
     @Override
     public void setProperties(ShapeProperties properties) {
-
+        this.properties = properties;
     }
 
     @Override
@@ -122,7 +122,12 @@ public class TextShape implements Shape {
 
     @Override
     public void drawSelectedBoundary(Graphics2D g) {
+        int width = (int) this.properties.get("width").getValue();
+        int height = (int) this.properties.get("height").getValue();
 
+        // highlight the line, we can use draw boundary
+        // here because it is the same as the highlighting border
+        ShapeUtility.drawSelectorRect(g, x, y, width, height);
     }
 
     @Override
@@ -169,7 +174,7 @@ public class TextShape implements Shape {
 
         return (
                 point.getX() >= this.x && point.getX() <= this.x + width &&
-                point.getY() >= this.y && point.getY() <= this.y + height
+                        point.getY() >= this.y && point.getY() <= this.y + height
         );
     }
 

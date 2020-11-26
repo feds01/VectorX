@@ -44,7 +44,7 @@ public class Canvas extends JPanel implements MouseMotionListener, MouseInputLis
     /**
      *
      */
-    private List<Shape> objects = new ArrayList<>();
+    private final List<Shape> objects = new ArrayList<>();
 
     /**
      * The temporary object that is being used to display a pre-emptive shape that
@@ -62,8 +62,6 @@ public class Canvas extends JPanel implements MouseMotionListener, MouseInputLis
 
     private int mouseX1;
     private int mouseY1;
-    private int mouseX2;
-    private int mouseY2;
 
     /**
      *
@@ -75,6 +73,7 @@ public class Canvas extends JPanel implements MouseMotionListener, MouseInputLis
         this.addMouseListener(this);
         this.addMouseMotionListener(this);
     }
+
 
     /**
      * This overridden paint method will be called by Swing when Canvas.repaint() is called from SimpleGuiDelegate.propertyChange().
@@ -138,9 +137,13 @@ public class Canvas extends JPanel implements MouseMotionListener, MouseInputLis
                 this.currentObject = createNewObject(mouseX1, mouseY1, 0, 0);
             } else {
                 this.objects.add(currentObject);
+
+                this.selectedShape = this.currentObject;
+                this.currentObject = null;
+
                 this.repaint();
 
-                currentObject = null;
+                this.widgetController.setCurrentWidgetFromShape(selectedShape);
             }
         }
 
@@ -148,11 +151,11 @@ public class Canvas extends JPanel implements MouseMotionListener, MouseInputLis
         if (currentTool.getType() == ToolType.SELECTOR) {
             var selectedShape = getShapeIfHoveringShape(e.getPoint());
 
-            if (!Objects.equals(selectedShape, this.selectedShape)) {
+            if (selectedShape != null && !Objects.equals(selectedShape, this.selectedShape)) {
                 this.selectedShape = selectedShape;
+
                 this.repaint();
 
-                // Update the tool widget
                 this.widgetController.setCurrentWidgetFromShape(selectedShape);
             }
 
@@ -167,8 +170,6 @@ public class Canvas extends JPanel implements MouseMotionListener, MouseInputLis
         if (SwingUtilities.isLeftMouseButton(e)) {
             mouseX1 = e.getX();
             mouseY1 = e.getY();
-
-            System.out.println("x1 = " + mouseX1 + ", y1 = " + mouseY1);
         } else {
             this.getParent().dispatchEvent(e);
         }
@@ -186,12 +187,13 @@ public class Canvas extends JPanel implements MouseMotionListener, MouseInputLis
                 && currentTool.getType() != ToolType.FILL
                 && currentTool.getType() != ToolType.IMAGE
         ) {
-            mouseX2 = e.getX();
-            mouseY2 = e.getY();
-            System.out.println("x2 = " + mouseX2 + ", y2 = " + mouseY2);
-
             if (currentObject != null) {
                 objects.add(currentObject);
+
+                // Update the widget controller to our newest shape on the canvas
+                this.selectedShape = currentObject;
+                this.widgetController.setCurrentWidgetFromShape(selectedShape);
+
                 this.repaint();
 
                 currentObject = null;
@@ -263,9 +265,10 @@ public class Canvas extends JPanel implements MouseMotionListener, MouseInputLis
         if (currentTool.getType() == ToolType.SELECTOR) {
             Shape newHighlightedShape = this.getShapeIfHoveringShape(e.getPoint());
 
-            // Don't re-draw the selected object if they are the same or null
+            // Don't re-draw the selected object if they are the same or null, or equal
+            // to the currently selected object...
             if (!Objects.equals(newHighlightedShape, this.highlightedShape) &&
-                !Objects.equals(this.selectedShape, this.highlightedShape)) {
+                    !Objects.equals(this.selectedShape, newHighlightedShape)) {
 
                 // set the 'new' shape to the currently highlighted one...
                 this.highlightedShape = newHighlightedShape;
@@ -277,7 +280,7 @@ public class Canvas extends JPanel implements MouseMotionListener, MouseInputLis
 
     /**
      *
-     * */
+     */
     public Shape getShapeIfHoveringShape(Point point) {
         List<Shape> shapes = this.objects;
 

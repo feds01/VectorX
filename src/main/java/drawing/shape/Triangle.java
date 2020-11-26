@@ -115,7 +115,12 @@ public class Triangle implements Shape {
 
     @Override
     public void drawSelectedBoundary(Graphics2D g) {
+        int width = (int) this.properties.get("width").getValue();
+        int height = (int) this.properties.get("height").getValue();
 
+        // highlight the line, we can use draw boundary
+        // here because it is the same as the highlighting border
+        ShapeUtility.drawSelectorRect(g, x, y, width, height);
     }
 
     @Override

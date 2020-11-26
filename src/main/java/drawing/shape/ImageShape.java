@@ -34,7 +34,7 @@ public class ImageShape implements Shape {
 
         this.properties.addProperty(new ShapeProperty<>("rotation", 0, value -> value >= 0 && value <= 360));
 
-        this.properties.addProperty(new ShapeProperty<>("grayScale", true, value -> true));
+        this.properties.addProperty(new ShapeProperty<>("grayScale", false, value -> true));
 
 
         this.properties.addProperty(propertyFactory.createColourProperty("strokeColour", Color.BLACK));
@@ -110,7 +110,15 @@ public class ImageShape implements Shape {
 
     @Override
     public void drawSelectedBoundary(Graphics2D g) {
+        int width = (int) this.properties.get("width").getValue();
+        int height = (int) this.properties.get("height").getValue();
 
+        int xPos = x - image.getWidth() / 2;
+        int yPos = y - image.getHeight() / 2;
+
+        // highlight the line, we can use draw boundary
+        // here because it is the same as the highlighting border
+        ShapeUtility.drawSelectorRect(g, xPos, yPos, width, height);
     }
 
     @Override

@@ -7,7 +7,6 @@ import ui.input.CoordinateInput;
 import ui.input.TextFieldInput;
 
 import javax.swing.JFrame;
-import javax.swing.JPanel;
 import java.awt.Point;
 
 public class ImageToolWidget extends BaseToolWidget {
@@ -23,12 +22,12 @@ public class ImageToolWidget extends BaseToolWidget {
         var endPosition = new CoordinateInput("end", new Point(shape.getX(), shape.getY()), "W", "H");
         this.tools.add(endPosition);
 
-        int rotationValue =  (Integer) shape.getProperties().get("rotation").getValue();
+        int rotationValue = (Integer) shape.getProperties().get("rotation").getValue();
         var rotation = new TextFieldInput("rotation", String.valueOf(rotationValue), "rotation", true);
         this.tools.add(rotation);
 
-        var monochromeValue = (Boolean) shape.getProperties().get("monochrome").getValue();
-        var monochrome = new CheckBoxInput("monochrome", monochromeValue, "monochrome");
+        var monochromeValue = (Boolean) shape.getProperties().get("grayScale").getValue();
+        var monochrome = new CheckBoxInput("grayScale", monochromeValue, "Grayscale");
 
 
         this.panel.add(WidgetFactory.createTitleWidget("TRANSFORM"));

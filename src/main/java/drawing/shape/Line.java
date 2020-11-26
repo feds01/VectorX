@@ -6,6 +6,7 @@ import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Point;
+import java.awt.geom.Ellipse2D;
 import java.awt.geom.Line2D;
 import java.util.Objects;
 
@@ -100,6 +101,16 @@ public class Line implements Shape {
     @Override
     public void drawSelectedBoundary(Graphics2D g) {
 
+        // highlight the line, we can use draw boundary
+        // here because it is the same as the highlighting border
+        this.drawBoundary(g);
+
+        // draw modifying circle at the start
+        ShapeUtility.drawSelectorPoint(g, x, y);
+
+        // draw modifying circle at the end of line
+        ShapeUtility.drawSelectorPoint(g, x2, y2);
+
     }
 
     @Override
@@ -118,10 +129,9 @@ public class Line implements Shape {
 
     @Override
     public boolean isPointWithinBounds(Point point) {
-        double m = (y2 - y) / (x2 - x);  // find line gradient
-        double c = y - m * x; // find offset for c
+        double distance = Line2D.ptSegDist(x, y, x2, y2, point.getX(), point.getY());
 
-        return point.getY() == point.getX() * m + c;
+        return distance < 4;
     }
 
     @Override
