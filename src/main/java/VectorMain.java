@@ -7,6 +7,7 @@ import ui.widget.ToolMenu;
 import ui.widget.TopMenu;
 
 import javax.swing.JFrame;
+import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
@@ -16,6 +17,7 @@ import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.KeyboardFocusManager;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseWheelEvent;
 
 /**
  *
@@ -36,6 +38,11 @@ public class VectorMain extends JFrame {
      *
      */
     private final FontLoader fontLoader = FontLoader.getInstance();
+
+    /**
+     *
+     * */
+    private JScrollPane scrollPane;
 
     /**
      *
@@ -95,7 +102,29 @@ public class VectorMain extends JFrame {
             this.propertiesPanel = new PropertiesMenu(toolController);
 
             frame.add(toolbar, BorderLayout.WEST);
-            frame.add(canvasWidget, BorderLayout.CENTER);
+
+            // Setup the editor scroll pane.
+            this.scrollPane = new JScrollPane(canvasWidget,
+                    JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
+                    JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS) {
+
+                @Override
+                protected void processMouseWheelEvent(MouseWheelEvent e) {
+                    if (e.isControlDown()) {
+                        canvasWidget.handleScroll(e);
+                    } else {
+                        super.processMouseWheelEvent(e);
+                    }
+                }
+            };
+
+            // Increase vertical and horizontal scrollbar speeds
+            this.scrollPane.getVerticalScrollBar().setUnitIncrement(10);
+            this.scrollPane.getHorizontalScrollBar().setUnitIncrement(10);
+
+
+
+            frame.add(scrollPane, BorderLayout.CENTER);
             frame.add(propertiesPanel.panel, BorderLayout.EAST);
 
             // setup toolbar shortcuts on the frame
