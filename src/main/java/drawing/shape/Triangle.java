@@ -2,33 +2,33 @@ package drawing.shape;
 
 import drawing.ToolType;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Polygon;
 import java.util.Arrays;
+import java.util.Map;
 import java.util.Objects;
 
 public class Triangle implements Shape {
     private int[] yPoints;
     private int[] xPoints;
-    private int x;
-    private int y;
 
     private final ShapeProperties properties = new ShapeProperties();
 
     private final ShapePropertyFactory propertyFactory = new ShapePropertyFactory();
 
     public Triangle(int x, int y, int x2, int y2) {
-        this.x = Math.min(x, x2);
-        this.y = Math.min(y, y2);
+        int xMin = Math.min(x, x2);
+        int yMin = Math.min(y, y2);
 
         int width = Math.abs(x - x2);
         int height = Math.abs(y - y2);
 
-        this.properties.addProperty(new ShapeProperty<>("width", width, value -> value > 0));
+        this.properties.addProperty(new ShapeProperty<>("start", new Point(xMin, yMin), value -> value.getX() >= 0 && value.getY() >= 0));
 
-        this.properties.addProperty(new ShapeProperty<>("height", height, value -> value > 0));
+        this.properties.addProperty(new ShapeProperty<>("end", new Point(width, height),  value -> value.getX() >= 0 && value.getY() >= 0));
 
         this.properties.addProperty(new ShapeProperty<>("rotation", 0, value -> value >= 0 && value <= 360));
 
@@ -48,27 +48,53 @@ public class Triangle implements Shape {
 
     @Override
     public int getX() {
-        return x;
+        var start = this.properties.get("start");
+
+        var point = (Point) (start.getValue());
+
+        return point.x;
     }
 
     @Override
     public void setX(int x) {
-        this.x = x;
+        var start = this.properties.get("start");
+
+        var point = (Point) (start.getValue());
+        var newPoint = new Point(x, point.y);
+
+        start.setValue(newPoint);
     }
 
     @Override
     public int getY() {
-        return y;
+        var start = this.properties.get("start");
+
+        var point = (Point) (start.getValue());
+
+        return point.y;
     }
 
     @Override
     public void setY(int y) {
-        this.y = y;
+        var start = this.properties.get("start");
+
+        var point = (Point) (start.getValue());
+        var newPoint = new Point(point.x, y);
+
+        start.setValue(newPoint);
     }
 
     @Override
-    public ShapeProperties getProperties() {
-        return this.properties;
+    public Map<String, ShapeProperty<?>> getProperties() {
+        return this.properties.getProperties();
+    }
+
+    @Override
+    public void setProperty(String name, Object value) {
+        // get the old property and insert the new value
+
+        var oldProperty = this.properties.get(name);
+        oldProperty.setValue(value);
     }
 
     @Override
@@ -96,31 +122,33 @@ public class Triangle implements Shape {
     }
 
     private void setPoints() {
-        int width = (int) this.properties.get("width").getValue();
-        int height = (int) this.properties.get("height").getValue();
+        int width = (int) ((Point) this.properties.get("end").getValue()).getX();
+        int height = (int) ((Point) this.properties.get("end").getValue()).getY();
 
-        int x2 = this.x + width;
-        int y2 = this.y + height;
+        int x2 = this.getX() + width;
+        int y2 = this.getY() + height;
 
         // build triangle points using our algorithm
-        this.xPoints = new int[]{x, x + width / 2, x2};
-        this.yPoints = new int[]{y2, y, y2};
+        this.xPoints = new int[]{getX(), getX() + width / 2, x2};
+        this.yPoints = new int[]{y2, getY(), y2};
     }
 
     @Override
     public void drawBoundary(Graphics2D g) {
         g.setColor(Shape.SELECTOR_COLOUR);
+        g.setStroke(new BasicStroke(2));
+
         g.drawPolygon(xPoints, yPoints, 3);
     }
 
     @Override
     public void drawSelectedBoundary(Graphics2D g) {
-        int width = (int) this.properties.get("width").getValue();
-        int height = (int) this.properties.get("height").getValue();
+        int width = (int) ((Point) this.properties.get("end").getValue()).getX();
+        int height = (int) ((Point) this.properties.get("end").getValue()).getY();
 
         // highlight the line, we can use draw boundary
         // here because it is the same as the highlighting border
-        ShapeUtility.drawSelectorRect(g, x, y, width, height);
+        ShapeUtility.drawSelectorRect(g, getX(), getY(), width, height);
     }
 
     @Override
@@ -153,8 +181,8 @@ public class Triangle implements Shape {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Triangle triangle = (Triangle) o;
-        return x == triangle.x &&
-                y == triangle.y &&
+        return getX() == triangle.getX() &&
+                getY() == triangle.getY() &&
                 Arrays.equals(yPoints, triangle.yPoints) &&
                 Arrays.equals(xPoints, triangle.xPoints) &&
                 Objects.equals(properties, triangle.properties) &&
@@ -163,7 +191,7 @@ public class Triangle implements Shape {
 
     @Override
     public int hashCode() {
-        int result = Objects.hash(x, y, properties, propertyFactory);
+        int result = Objects.hash(getX(), getY(), properties, propertyFactory);
         result = 31 * result + Arrays.hashCode(yPoints);
         result = 31 * result + Arrays.hashCode(xPoints);
         return result;

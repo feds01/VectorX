@@ -4,8 +4,8 @@ import drawing.shape.Triangle;
 import ui.common.WidgetFactory;
 import ui.input.ColourPickerInput;
 import ui.input.CoordinateInput;
+import ui.input.NumberFieldInput;
 import ui.input.SliderInput;
-import ui.input.TextFieldInput;
 
 import javax.swing.JFrame;
 import java.awt.Color;
@@ -18,12 +18,14 @@ public class TriangleToolWidget extends BaseToolWidget {
         var startPosition = new CoordinateInput("start", new Point(shape.getX(), shape.getY()), "X", "Y");
         this.tools.add(startPosition);
 
-        // TODO: replace with endX and endY properties.
-        var endPosition = new CoordinateInput("end", new Point(shape.getX(), shape.getY()), "W", "H");
+        int width = (int) ((Point) shape.getProperties().get("end").getValue()).getX();
+        int height = (int) ((Point) shape.getProperties().get("end").getValue()).getY();
+
+        var endPosition = new CoordinateInput("end", new Point(width, height), "W", "H");
         this.tools.add(endPosition);
 
-        int rotationValue =  (Integer) shape.getProperties().get("rotation").getValue();
-        var rotation = new TextFieldInput("rotation", String.valueOf(rotationValue), "rotation", true);
+        int rotationValue = (Integer) shape.getProperties().get("rotation").getValue();
+        var rotation = new NumberFieldInput("rotation", rotationValue, "rotation", true);
         this.tools.add(rotation);
 
 
@@ -41,16 +43,20 @@ public class TriangleToolWidget extends BaseToolWidget {
         Color fillValue = (Color) shape.getProperties().get("fillColour").getValue();
         var fillColour = new ColourPickerInput("fillColour", fillValue, "FILL", frame);
 
-        this.tools.add(strokeColour);
+        this.tools.add(fillColour);
 
         this.panel.add(WidgetFactory.createTitleWidget("TRANSFORM"));
         this.panel.add(startPosition.getComponent());
         this.panel.add(endPosition.getComponent());
         this.panel.add(rotation.getComponent());
+        this.panel.add(WidgetFactory.createSeparator());
 
         this.panel.add(WidgetFactory.createTitleWidget("APPEARANCE"));
         this.panel.add(lineThickness.getComponent());
         this.panel.add(strokeColour.getComponent());
         this.panel.add(fillColour.getComponent());
+
+        // setup listeners for tools
+        this.setupInputListeners();
     }
 }

@@ -17,7 +17,7 @@ public abstract class BaseInput<T> {
     /**
      *
      * */
-    protected PropertyChangeSupport changes = new PropertyChangeSupport(this);
+    public final PropertyChangeSupport changes = new PropertyChangeSupport(this);
 
     /**
      *

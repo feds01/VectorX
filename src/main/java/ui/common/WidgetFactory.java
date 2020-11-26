@@ -66,15 +66,22 @@ public class WidgetFactory {
 
         box.add(title);
 
-        var separator = new JSeparator();
-        separator.setPreferredSize(new Dimension(240, 1));
-        separator.setOrientation(SwingConstants.HORIZONTAL);
-        separator.setBackground(Color.GRAY);
+        var separator = createSeparator();
 
         box.add(separator);
         box.add(Box.createVerticalStrut(5));
 
         return box;
+    }
+
+    public static JSeparator createSeparator() {
+        var separator = new JSeparator();
+        separator.setPreferredSize(new Dimension(240, 1));
+        separator.setMaximumSize(new Dimension(240, 1));
+        separator.setOrientation(SwingConstants.HORIZONTAL);
+        separator.setBackground(Color.GRAY);
+
+        return separator;
     }
 
     public static BaseToolWidget createWidgetFromShape(Shape shape, JFrame frame) {

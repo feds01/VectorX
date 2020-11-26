@@ -6,33 +6,19 @@ import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Point;
-import java.awt.geom.Ellipse2D;
 import java.awt.geom.Line2D;
+import java.util.Map;
 import java.util.Objects;
 
 public class Line implements Shape {
-    private double x;
-    private double y;
-    private double x2;
-    private double y2;
-
     private ShapeProperties properties = new ShapeProperties();
 
     private final ShapePropertyFactory propertyFactory = new ShapePropertyFactory();
 
     public Line(int x, int y, int x2, int y2) {
-        this.x = x;
-        this.y = y;
-        this.x2 = x2;
-        this.y2 = y2;
+        this.properties.addProperty(new ShapeProperty<>("start", new Point(x, y), value -> value.getX() >= 0 && value.getY() >= 0));
 
-        int width = Math.abs(x - x2);
-        int height = Math.abs(y - y2);
-
-        // TODO: when width or height increases, transform point 2, and not point 1
-        this.properties.addProperty(new ShapeProperty<>("x2", width, value -> value > 0));
-
-        this.properties.addProperty(new ShapeProperty<>("y2", height, value -> value > 0));
+        this.properties.addProperty(new ShapeProperty<>("end", new Point(x2, y2), value -> value.getX() >= 0 && value.getY() >= 0));
 
         this.properties.addProperty(new ShapeProperty<>("rotation", 0, value -> value >= 0 && value <= 360));
 
@@ -51,27 +37,69 @@ public class Line implements Shape {
 
     @Override
     public int getX() {
-        return (int) x;
+        var start = this.properties.get("start");
+
+        var point = (Point) (start.getValue());
+
+        return point.x;
+    }
+
+    public int getEndX() {
+        var start = this.properties.get("end");
+
+        var point = (Point) (start.getValue());
+
+        return point.x;
     }
 
     @Override
     public void setX(int x) {
-        this.x = x;
+        var start = this.properties.get("start");
+
+        var point = (Point) (start.getValue());
+        var newPoint = new Point(x, point.y);
+
+        start.setValue(newPoint);
     }
 
     @Override
     public int getY() {
-        return (int) y;
+        var start = this.properties.get("start");
+
+        var point = (Point) (start.getValue());
+
+        return point.y;
+    }
+
+    public int getEndY() {
+        var start = this.properties.get("end");
+
+        var point = (Point) (start.getValue());
+
+        return point.y;
     }
 
     @Override
     public void setY(int y) {
-        this.y = y;
+        var start = this.properties.get("start");
+
+        var point = (Point) (start.getValue());
+        var newPoint = new Point(point.x, y);
+
+        start.setValue(newPoint);
     }
 
     @Override
-    public ShapeProperties getProperties() {
-        return this.properties;
+    public Map<String, ShapeProperty<?>> getProperties() {
+        return this.properties.getProperties();
+    }
+
+    @Override
+    public void setProperty(String name, Object value) {
+        // get the old property and insert the new value
+
+        var oldProperty = this.properties.get(name);
+        oldProperty.setValue(value);
     }
 
     @Override
@@ -92,10 +120,11 @@ public class Line implements Shape {
 
     @Override
     public void drawBoundary(Graphics2D g) {
+        g.setStroke(new BasicStroke(2));
         g.setColor(Shape.SELECTOR_COLOUR);
 
 
-        g.draw(new Line2D.Double(x, y, x2, y2));
+        g.draw(new Line2D.Double(getX(), getY(), getEndX(), getEndY()));
     }
 
     @Override
@@ -106,20 +135,20 @@ public class Line implements Shape {
         this.drawBoundary(g);
 
         // draw modifying circle at the start
-        ShapeUtility.drawSelectorPoint(g, x, y);
+        ShapeUtility.drawSelectorPoint(g, getX(), getY());
 
         // draw modifying circle at the end of line
-        ShapeUtility.drawSelectorPoint(g, x2, y2);
+        ShapeUtility.drawSelectorPoint(g, getEndX(), getEndY());
 
     }
 
     @Override
     public void draw(Graphics2D g, boolean isResizing) {
         int thickness = (int) this.properties.get("thickness").getValue();
+        g.setStroke(new BasicStroke(thickness));
 
         g.setColor(this.getShapeStrokeColour());
-        g.setStroke(new BasicStroke(thickness));
-        g.draw(new Line2D.Double(x, y, x2, y2));
+        g.draw(new Line2D.Double(getX(), getY(), getEndX(), getEndY()));
     }
 
     @Override
@@ -129,7 +158,7 @@ public class Line implements Shape {
 
     @Override
     public boolean isPointWithinBounds(Point point) {
-        double distance = Line2D.ptSegDist(x, y, x2, y2, point.getX(), point.getY());
+        double distance = Line2D.ptSegDist(getX(), getY(), getEndX(), getEndY(), point.getX(), point.getY());
 
         return distance < 4;
     }
@@ -139,16 +168,16 @@ public class Line implements Shape {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Line line = (Line) o;
-        return Double.compare(line.x, x) == 0 &&
-                Double.compare(line.y, y) == 0 &&
-                Double.compare(line.x2, x2) == 0 &&
-                Double.compare(line.y2, y2) == 0 &&
+        return Double.compare(line.getX(), getX()) == 0 &&
+                Double.compare(line.getY(), getY()) == 0 &&
+                Double.compare(line.getEndX(), getEndX()) == 0 &&
+                Double.compare(line.getEndY(), getEndY()) == 0 &&
                 Objects.equals(properties, line.properties) &&
                 Objects.equals(propertyFactory, line.propertyFactory);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(x, y, x2, y2, properties, propertyFactory);
+        return Objects.hash(getX(), getY(), getEndX(), getEndY(), properties, propertyFactory);
     }
 }

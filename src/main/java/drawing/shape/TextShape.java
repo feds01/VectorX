@@ -2,19 +2,18 @@ package drawing.shape;
 
 import drawing.ToolType;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Point;
+import java.util.Map;
 import java.util.Objects;
 
 /**
  *
  */
 public class TextShape implements Shape {
-    private int x;
-    private int y;
-
     /**
      *
      */
@@ -29,23 +28,19 @@ public class TextShape implements Shape {
      *
      */
     public TextShape(int x, int y, int x2, int y2) {
-        this.x = x;
-        this.y = y;
-
-        this.x = Math.min(x, x2);
-        this.y = Math.min(y, y2);
+        int xMin = Math.min(x, x2);
+        int yMin = Math.min(y, y2);
 
         int width = Math.abs(x - x2);
         int height = Math.abs(y - y2);
 
         this.properties.addProperty(new ShapeProperty<>("value", "text", value -> true));
 
-        this.properties.addProperty(new ShapeProperty<>("width", width, value -> value > 0));
+        this.properties.addProperty(new ShapeProperty<>("start", new Point(xMin, yMin), value -> value.getX() >= 0 && value.getY() >= 0));
 
-        this.properties.addProperty(new ShapeProperty<>("height", height, value -> value > 0));
+        this.properties.addProperty(new ShapeProperty<>("end", new Point(width, height), value -> value.getX() >= 0 && value.getY() >= 0));
 
         this.properties.addProperty(new ShapeProperty<>("rotation", 0, value -> value >= 0 && value <= 360));
-
 
         this.properties.addProperty(propertyFactory.createColourProperty("strokeColour", Color.BLACK));
 
@@ -61,27 +56,53 @@ public class TextShape implements Shape {
 
     @Override
     public int getX() {
-        return x;
+        var start = this.properties.get("start");
+
+        var point = (Point) (start.getValue());
+
+        return point.x;
     }
 
     @Override
     public void setX(int x) {
-        this.x = x;
+        var start = this.properties.get("start");
+
+        var point = (Point) (start.getValue());
+        var newPoint = new Point(x, point.y);
+
+        start.setValue(newPoint);
     }
 
     @Override
     public int getY() {
-        return y;
+        var start = this.properties.get("start");
+
+        var point = (Point) (start.getValue());
+
+        return point.y;
     }
 
     @Override
     public void setY(int y) {
-        this.y = y;
+        var start = this.properties.get("start");
+
+        var point = (Point) (start.getValue());
+        var newPoint = new Point(point.x, y);
+
+        start.setValue(newPoint);
     }
 
     @Override
-    public ShapeProperties getProperties() {
-        return this.properties;
+    public Map<String, ShapeProperty<?>> getProperties() {
+        return this.properties.getProperties();
+    }
+
+    @Override
+    public void setProperty(String name, Object value) {
+        // get the old property and insert the new value
+        var oldProperty = this.properties.get(name);
+
+        oldProperty.setValue(value);
     }
 
     @Override
@@ -113,40 +134,44 @@ public class TextShape implements Shape {
 
     @Override
     public void drawBoundary(Graphics2D g) {
-        int width = (int) this.properties.get("width").getValue();
-        int height = (int) this.properties.get("height").getValue();
+        int width = (int) ((Point) this.properties.get("end").getValue()).getX();
+        int height = (int) ((Point) this.properties.get("end").getValue()).getY();
 
         g.setColor(Shape.SELECTOR_COLOUR);
-        g.drawRect(x, y, width, height);
+        g.setStroke(new BasicStroke(2));
+
+        g.drawRect(getX(), getY(), width, height);
     }
 
     @Override
     public void drawSelectedBoundary(Graphics2D g) {
-        int width = (int) this.properties.get("width").getValue();
-        int height = (int) this.properties.get("height").getValue();
+        int width = (int) ((Point) this.properties.get("end").getValue()).getX();
+        int height = (int) ((Point) this.properties.get("end").getValue()).getY();
 
         // highlight the line, we can use draw boundary
         // here because it is the same as the highlighting border
-        ShapeUtility.drawSelectorRect(g, x, y, width, height);
+        ShapeUtility.drawSelectorRect(g, getX(), getY(), width, height);
     }
 
     @Override
     public void draw(Graphics2D g, boolean isResizing) {
-        int width = (int) this.properties.get("width").getValue();
-        int height = (int) this.properties.get("height").getValue();
+        int width = (int) ((Point) this.properties.get("end").getValue()).getX();
+        int height = (int) ((Point) this.properties.get("end").getValue()).getY();
 
         String value = (String) this.properties.get("value").getValue();
 
         int fontSize = (int) this.properties.get("fontSize").getValue();
         g.setFont(new Font(Font.SERIF, Font.PLAIN, fontSize));
 
+        g.setStroke(new BasicStroke(2));
+
         // draw the font background if any...
         g.setColor(this.getShapeFillColour());
-        g.fillRect(x, y, width, height);
+        g.fillRect(getX(), getY(), width, height);
 
         if (isResizing) {
             g.setColor(Shape.SELECTOR_COLOUR);
-            g.drawRect(x, y, width, height);
+            g.drawRect(getX(), getY(), width, height);
         } else {
             // TODO: dynamically update box size based on font metrics
             var fm = g.getFontMetrics();
@@ -157,7 +182,7 @@ public class TextShape implements Shape {
 
             // draw the string
             g.setColor(this.getShapeStrokeColour());
-            g.drawString(value, x, y + fm.getHeight());
+            g.drawString(value, getX(), getY() + fm.getHeight());
         }
     }
 
@@ -169,12 +194,12 @@ public class TextShape implements Shape {
     // TODO: replace with simple rect box function
     @Override
     public boolean isPointWithinBounds(Point point) {
-        int width = (int) this.properties.get("width").getValue();
-        int height = (int) this.properties.get("height").getValue();
+        int width = (int) ((Point) this.properties.get("end").getValue()).getX();
+        int height = (int) ((Point) this.properties.get("end").getValue()).getY();
 
         return (
-                point.getX() >= this.x && point.getX() <= this.x + width &&
-                        point.getY() >= this.y && point.getY() <= this.y + height
+                point.getX() >= this.getX() && point.getX() <= this.getX() + width &&
+                        point.getY() >= this.getY() && point.getY() <= this.getY() + height
         );
     }
 
@@ -183,14 +208,14 @@ public class TextShape implements Shape {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         TextShape textShape = (TextShape) o;
-        return x == textShape.x &&
-                y == textShape.y &&
+        return getX() == textShape.getX() &&
+                getY() == textShape.getY() &&
                 Objects.equals(properties, textShape.properties) &&
                 Objects.equals(propertyFactory, textShape.propertyFactory);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(x, y, properties, propertyFactory);
+        return Objects.hash(getX(), getY(), properties, propertyFactory);
     }
 }

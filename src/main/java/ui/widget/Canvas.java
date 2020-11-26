@@ -27,18 +27,21 @@ import java.awt.RenderingHints;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
 import java.awt.image.BufferedImage;
+import java.beans.PropertyChangeEvent;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 /**
  *
  */
 public class Canvas extends JPanel implements MouseMotionListener, MouseInputListener {
-    private static final Color DEFAULT_BG_COLOUR = Color.WHITE;
-
+    /**
+     *
+     */
     private double zoomFactor = 1;
 
     /**
@@ -70,8 +73,48 @@ public class Canvas extends JPanel implements MouseMotionListener, MouseInputLis
         this.toolController = toolController;
         this.widgetController = widgetController;
 
+        // Default canvas background
+        this.setBackground(Color.WHITE);
+
         this.addMouseListener(this);
         this.addMouseMotionListener(this);
+
+        // setup widget property change listener
+        this.toolController.addPropertyChangeListener(this::toolChangeListener);
+        this.widgetController.addPropertyChangeListener(this::widgetPropertiesChangeListener);
+    }
+
+    /**
+     *
+     * */
+    private void toolChangeListener(PropertyChangeEvent event) {
+        this.selectedShape = null;
+        this.repaint();
+    }
+
+    /**
+     *
+     */
+    private void widgetPropertiesChangeListener(PropertyChangeEvent event) {
+        if (event.getPropertyName().equals("widgetPropertyChange")) {
+
+            var shapeProperties = this.selectedShape.getProperties();
+
+            var updatedProperties = (Map<String, Object>) event.getNewValue();
+
+            // check if the properties have changed, and if they have set the shape properties
+            // of the current object
+            for (String name : updatedProperties.keySet()) {
+                var newProperty = updatedProperties.get(name);
+
+                if (shapeProperties.get(name) != null) {
+                    this.selectedShape.setProperty(name, newProperty);
+                }
+            }
+
+            this.revalidate();
+            this.repaint();
+        }
     }
 
 
@@ -79,7 +122,7 @@ public class Canvas extends JPanel implements MouseMotionListener, MouseInputLis
      * This overridden paint method will be called by Swing when Canvas.repaint() is called from SimpleGuiDelegate.propertyChange().
      */
     public void paint(Graphics g) {
-        g.setColor(DEFAULT_BG_COLOUR);
+        g.setColor(this.getBackground());
         g.fillRect(0, 0, getWidth(), getHeight());
 
         var g2 = (Graphics2D) g;
@@ -147,6 +190,24 @@ public class Canvas extends JPanel implements MouseMotionListener, MouseInputLis
             }
         }
 
+        if (currentTool.getType() == ToolType.FILL) {
+            this.selectedShape = null;
+
+            var selectedShape = getShapeIfHoveringShape(e.getPoint());
+
+            // get the current colour from the FillWidget
+            var fillValue = (Color) this.widgetController.getCurrentToolWidget().getValue("fill");
+
+            // Fill the canvas if no shape is clicked on...
+            if (selectedShape == null) {
+                this.setBackground(fillValue);
+            } else {
+                selectedShape.setShapeFillColour(fillValue);
+            }
+
+            this.repaint();
+        }
+
 
         if (currentTool.getType() == ToolType.SELECTOR) {
             var selectedShape = getShapeIfHoveringShape(e.getPoint());
@@ -158,7 +219,6 @@ public class Canvas extends JPanel implements MouseMotionListener, MouseInputLis
 
                 this.widgetController.setCurrentWidgetFromShape(selectedShape);
             }
-
         }
     }
 

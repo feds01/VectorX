@@ -17,10 +17,13 @@ public class ColourPickerInput extends BaseInput<Color> {
         // create the picker component
         this.picker = new ColourPicker(value, frame);
 
-        this.picker.addActionListener(e -> {
+        this.picker.addPropertyChangeListener(e -> {
             var colourPicker = (ColourPicker) e.getSource();
 
-            changes.firePropertyChange(name, value, colourPicker.getColour());
+            var oldValue = this.value;
+            this.value = colourPicker.getColour();
+
+            changes.firePropertyChange(name, oldValue, value);
         });
 
         // create the label for the picker component

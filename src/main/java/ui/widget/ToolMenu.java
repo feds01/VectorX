@@ -6,6 +6,8 @@ import drawing.tool.DrawingTool;
 import drawing.tool.FillTool;
 import drawing.tool.GenericTool;
 import ui.controllers.ToolController;
+import ui.controllers.WidgetController;
+import ui.tool.FillToolWidget;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
@@ -98,12 +100,14 @@ public class ToolMenu extends JToolBar {
      *
      */
     private final ToolController controller;
+    private final WidgetController widgetController;
 
-    public ToolMenu(JFrame frame, ToolController controller) {
+    public ToolMenu(JFrame frame, ToolController controller, WidgetController widgetController) {
         super(SwingConstants.VERTICAL);
 
         this.frame = frame;
         this.controller = controller;
+        this.widgetController = widgetController;
 
         this.controller.addPropertyChangeListener(l -> {
             if (l.getPropertyName().equals("toolChange")) {
@@ -112,7 +116,13 @@ public class ToolMenu extends JToolBar {
                 var oldTool = (DrawingTool) l.getOldValue();
 
                 var icon = tool.getImageIcon(true);
-                
+
+                // special case for Fill Tool, fill tool should invoke
+                // that a widget change occurs to the 'FillWidget'
+                if (tool.getType() == ToolType.FILL) {
+                    this.widgetController.setCurrentWidget(new FillToolWidget(frame));
+                }
+
                 frame.setCursor(tool.getCursor());
 
                 // resize the icon to 20x20

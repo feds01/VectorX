@@ -5,9 +5,12 @@ import drawing.ToolType;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Point;
+import java.util.Map;
 
 public interface Shape {
     Color SELECTOR_COLOUR = new Color(0x3399FF);
+
+    Map<String, ShapeProperty<?>> properties = null;
 
     ToolType getToolType();
 
@@ -19,7 +22,7 @@ public interface Shape {
 
     void setY(int y);
 
-    ShapeProperties getProperties();
+    Map<String, ShapeProperty<?>> getProperties();
 
     void setProperties(ShapeProperties properties);
 
@@ -31,7 +34,8 @@ public interface Shape {
         return null;
     }
 
-    default void setShapeFillColour(Color color) { }
+    default void setShapeFillColour(Color color) {
+    }
 
 
     void drawBoundary(Graphics2D g);
@@ -44,4 +48,5 @@ public interface Shape {
 
     boolean isPointWithinBounds(Point point);
 
+    void setProperty(String name, Object value);
 }

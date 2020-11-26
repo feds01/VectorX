@@ -101,7 +101,7 @@ public class VectorMain extends JFrame {
             var widgetController = new WidgetController(frame);
 
             // create the toolbar
-            this.toolbar = new ToolMenu(frame, toolController);
+            this.toolbar = new ToolMenu(frame, toolController, widgetController);
             this.canvasWidget = new CanvasWidget(toolController, widgetController);
             this.propertiesPanel = new PropertiesMenu(widgetController);
 

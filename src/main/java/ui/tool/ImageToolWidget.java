@@ -4,6 +4,7 @@ import drawing.shape.ImageShape;
 import ui.common.WidgetFactory;
 import ui.input.CheckBoxInput;
 import ui.input.CoordinateInput;
+import ui.input.NumberFieldInput;
 import ui.input.TextFieldInput;
 
 import javax.swing.JFrame;
@@ -18,12 +19,14 @@ public class ImageToolWidget extends BaseToolWidget {
         var startPosition = new CoordinateInput("start", new Point(shape.getX(), shape.getY()), "X", "Y");
         this.tools.add(startPosition);
 
-        // TODO: replace with endX and endY properties.
-        var endPosition = new CoordinateInput("end", new Point(shape.getX(), shape.getY()), "W", "H");
+        int width = (int) ((Point) shape.getProperties().get("end").getValue()).getX();
+        int height = (int) ((Point) shape.getProperties().get("end").getValue()).getY();
+
+        var endPosition = new CoordinateInput("end", new Point(width, height), "W", "H");
         this.tools.add(endPosition);
 
         int rotationValue = (Integer) shape.getProperties().get("rotation").getValue();
-        var rotation = new TextFieldInput("rotation", String.valueOf(rotationValue), "rotation", true);
+        var rotation = new NumberFieldInput("rotation", rotationValue, "rotation", true);
         this.tools.add(rotation);
 
         var monochromeValue = (Boolean) shape.getProperties().get("grayScale").getValue();
@@ -34,8 +37,12 @@ public class ImageToolWidget extends BaseToolWidget {
         this.panel.add(startPosition.getComponent());
         this.panel.add(endPosition.getComponent());
         this.panel.add(rotation.getComponent());
+        this.panel.add(WidgetFactory.createSeparator());
 
         this.panel.add(WidgetFactory.createTitleWidget("APPEARANCE"));
         this.panel.add(monochrome.getComponent());
+
+        // setup listeners for tools
+        this.setupInputListeners();
     }
 }

@@ -5,10 +5,10 @@ import javax.swing.JTextField;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+
 
 public class CoordinateInput extends BaseInput<Point> {
-
-
     private final TextFieldInput xField;
 
     private final TextFieldInput yField;
@@ -51,7 +51,11 @@ public class CoordinateInput extends BaseInput<Point> {
             this.value.y = Integer.parseInt(input.getText());
         }
 
-        changes.firePropertyChange(name, oldPoint, this.value);
+        // @Workaround: Weird bug where if multiple listeners are registered within lambdas,
+        // events aren't being detected.
+        for (PropertyChangeListener l : this.changes.getPropertyChangeListeners()) {
+            l.propertyChange(new PropertyChangeEvent(this, name, oldPoint, this.value));
+        }
     }
 
     public TextFieldInput getXField() {

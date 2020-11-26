@@ -46,7 +46,7 @@ public class ColourPicker extends JToggleButton {
 
     /**
      *
-     * */
+     */
     AWTEventListener listener = new AWTEventListener() {
         @Override
         public void eventDispatched(AWTEvent event) {
@@ -113,13 +113,16 @@ public class ColourPicker extends JToggleButton {
         });
 
         this.picker.addPropertyChangeListener(evt -> {
-            colour = (Color) evt.getNewValue();
+            var oldColour = this.colour;
+
+            this.colour = (Color) evt.getNewValue();
+
+            this.firePropertyChange("colour", oldColour, this.colour);
 
             this.setBackground(colour);
             this.repaint();
         });
     }
-
 
     @Override
     public void setBackground(Color bg) {
@@ -142,7 +145,7 @@ public class ColourPicker extends JToggleButton {
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
         g2.setColor(Color.GRAY);
-        Shape b = new RoundRectangle2D.Float(0, 0, getWidth() , getHeight(), 6, 6);
+        Shape b = new RoundRectangle2D.Float(0, 0, getWidth(), getHeight(), 6, 6);
         g2.fill(b);
 
         g2.setColor(this.colour);
