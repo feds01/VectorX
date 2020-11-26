@@ -27,7 +27,9 @@ import java.awt.event.MouseMotionListener;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 /**
  *
@@ -48,6 +50,7 @@ public class Canvas extends JPanel implements MouseMotionListener, MouseInputLis
      */
     private Shape currentObject = null;
 
+    private Shape highlightedShape = null;
 
     private final ToolController toolController;
 
@@ -84,6 +87,12 @@ public class Canvas extends JPanel implements MouseMotionListener, MouseInputLis
         // can see what they are about to draw.
         if (currentObject != null) {
             currentObject.draw(g2, true);
+        }
+
+
+        // Draw any highlighted shape
+        if (highlightedShape != null) {
+            highlightedShape.drawBoundary(g2);
         }
 
         g.dispose();
@@ -225,6 +234,35 @@ public class Canvas extends JPanel implements MouseMotionListener, MouseInputLis
             currentObject.setY(e.getY());
 
             this.repaint();
+        }
+
+        if (currentTool.getType() == ToolType.SELECTOR) {
+            List<Shape> shapes = this.objects;
+
+            // Because we care about the items that are on the top
+            // of the stack first, we will inspect items that are on
+            // top first and then move to the bottom.
+            Collections.reverse(shapes);
+
+            Shape newHighlightedShape = null;
+
+            for (Shape shape : shapes) {
+                if (shape.isPointWithinBounds(e.getPoint())) {
+
+                    System.out.println(shape);
+                    newHighlightedShape = shape;
+                    break;
+                }
+            }
+
+            // Don't re-draw the selected object if they are the same or null
+            if (!Objects.equals(newHighlightedShape, this.highlightedShape)) {
+
+                // set the 'new' shape to the currently highlighted one...
+                this.highlightedShape = newHighlightedShape;
+
+                this.repaint();
+            }
         }
 
     }

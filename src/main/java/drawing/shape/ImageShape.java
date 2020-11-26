@@ -3,11 +3,13 @@ package drawing.shape;
 import javax.swing.GrayFilter;
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.Point;
 import java.awt.Toolkit;
 import java.awt.image.BufferedImage;
 import java.awt.image.FilteredImageSource;
 import java.awt.image.ImageFilter;
 import java.awt.image.ImageProducer;
+import java.util.Objects;
 
 public class ImageShape implements Shape {
     private int x;
@@ -91,6 +93,15 @@ public class ImageShape implements Shape {
     }
 
     @Override
+    public void drawBoundary(Graphics2D g) {
+        int xPos = x - image.getWidth() / 2;
+        int yPos = y - image.getHeight() / 2;
+
+        g.setColor(Shape.SELECTOR_COLOUR);
+        g.drawRect(xPos, yPos, image.getWidth(), image.getHeight());
+    }
+
+    @Override
     public void draw(Graphics2D g, boolean isResizing) {
         var image = this.image;
 
@@ -118,5 +129,36 @@ public class ImageShape implements Shape {
     @Override
     public boolean isFillable() {
         return false;
+    }
+
+    @Override
+    public boolean isPointWithinBounds(Point point) {
+        int width = (int) this.properties.get("width").getValue();
+        int height = (int) this.properties.get("height").getValue();
+
+        int xPos = x - image.getWidth() / 2;
+        int yPos = y - image.getHeight() / 2;
+
+        return (
+                point.getX() >= xPos && point.getX() <= xPos + width &&
+                        point.getY() >= yPos && point.getY() <= yPos + height
+        );
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ImageShape that = (ImageShape) o;
+        return x == that.x &&
+                y == that.y &&
+                Objects.equals(image, that.image) &&
+                Objects.equals(properties, that.properties) &&
+                Objects.equals(propertyFactory, that.propertyFactory);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(x, y, image, properties, propertyFactory);
     }
 }

@@ -1,7 +1,12 @@
 package drawing.shape;
 
+import javafx.scene.shape.Ellipse;
+
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.Point;
+import java.awt.geom.Ellipse2D;
+import java.util.Objects;
 
 public class Ellipses implements Shape {
     private int x;
@@ -100,6 +105,15 @@ public class Ellipses implements Shape {
     }
 
     @Override
+    public void drawBoundary(Graphics2D g) {
+        int width = (int) this.properties.get("width").getValue();
+        int height = (int) this.properties.get("height").getValue();
+
+        g.setColor(Shape.SELECTOR_COLOUR);
+        g.drawOval(x, y, width, height);
+    }
+
+    @Override
     public void draw(Graphics2D g, boolean isResizing) {
         int width = (int) this.properties.get("width").getValue();
         int height = (int) this.properties.get("height").getValue();
@@ -115,5 +129,31 @@ public class Ellipses implements Shape {
     @Override
     public boolean isFillable() {
         return true;
+    }
+
+    @Override
+    public boolean isPointWithinBounds(Point point) {
+        int width = (int) this.properties.get("width").getValue();
+        int height = (int) this.properties.get("height").getValue();
+
+        var ellipse = new Ellipse2D.Double(x, y, width, height);
+
+        return ellipse.contains(point);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Ellipses ellipses = (Ellipses) o;
+        return x == ellipses.x &&
+                y == ellipses.y &&
+                Objects.equals(properties, ellipses.properties) &&
+                Objects.equals(propertyFactory, ellipses.propertyFactory);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(x, y, properties, propertyFactory);
     }
 }

@@ -2,6 +2,8 @@ package drawing.shape;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.Point;
+import java.util.Objects;
 
 public class Rectangle implements Shape {
     private int x;
@@ -83,6 +85,16 @@ public class Rectangle implements Shape {
         this.properties.set("fillColour", propertyFactory.createColourProperty("fillColour", fill));
     }
 
+
+    @Override
+    public void drawBoundary(Graphics2D g) {
+        int width = (int) this.properties.get("width").getValue();
+        int height = (int) this.properties.get("height").getValue();
+
+        g.setColor(Shape.SELECTOR_COLOUR);
+        g.drawRect(x, y, width, height);
+    }
+
     @Override
     public void draw(Graphics2D g, boolean isResizing) {
         int width = (int) this.properties.get("width").getValue();
@@ -99,5 +111,32 @@ public class Rectangle implements Shape {
     @Override
     public boolean isFillable() {
         return true;
+    }
+
+    @Override
+    public boolean isPointWithinBounds(Point point) {
+        int width = (int) this.properties.get("width").getValue();
+        int height = (int) this.properties.get("height").getValue();
+
+        return (
+                point.getX() >= this.x && point.getX() <= this.x + width &&
+                point.getY() >= this.y && point.getY() <= this.y + height
+        );
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Rectangle rectangle = (Rectangle) o;
+        return x == rectangle.x &&
+                y == rectangle.y &&
+                Objects.equals(properties, rectangle.properties) &&
+                Objects.equals(propertyFactory, rectangle.propertyFactory);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(x, y, properties, propertyFactory);
     }
 }

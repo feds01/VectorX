@@ -3,6 +3,8 @@ package drawing.shape;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
+import java.awt.Point;
+import java.util.Objects;
 
 /**
  *
@@ -101,6 +103,16 @@ public class TextShape implements Shape {
         this.properties.set("fillColour", propertyFactory.createColourProperty("fillColour", fill));
     }
 
+
+    @Override
+    public void drawBoundary(Graphics2D g) {
+        int width = (int) this.properties.get("width").getValue();
+        int height = (int) this.properties.get("height").getValue();
+
+        g.setColor(Shape.SELECTOR_COLOUR);
+        g.drawRect(x, y, width, height);
+    }
+
     @Override
     public void draw(Graphics2D g, boolean isResizing) {
         int width = (int) this.properties.get("width").getValue();
@@ -116,7 +128,7 @@ public class TextShape implements Shape {
         g.fillRect(x, y, width, height);
 
         if (isResizing) {
-            g.setColor(new Color(0x3399FF));
+            g.setColor(Shape.SELECTOR_COLOUR);
             g.drawRect(x, y, width, height);
         } else {
             // TODO: dynamically update box size based on font metrics
@@ -135,5 +147,33 @@ public class TextShape implements Shape {
     @Override
     public boolean isFillable() {
         return true;
+    }
+
+    // TODO: replace with simple rect box function
+    @Override
+    public boolean isPointWithinBounds(Point point) {
+        int width = (int) this.properties.get("width").getValue();
+        int height = (int) this.properties.get("height").getValue();
+
+        return (
+                point.getX() >= this.x && point.getX() <= this.x + width &&
+                point.getY() >= this.y && point.getY() <= this.y + height
+        );
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        TextShape textShape = (TextShape) o;
+        return x == textShape.x &&
+                y == textShape.y &&
+                Objects.equals(properties, textShape.properties) &&
+                Objects.equals(propertyFactory, textShape.propertyFactory);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(x, y, properties, propertyFactory);
     }
 }

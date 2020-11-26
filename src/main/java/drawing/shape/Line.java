@@ -3,12 +3,15 @@ package drawing.shape;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.Point;
+import java.awt.geom.Line2D;
+import java.util.Objects;
 
 public class Line implements Shape {
-    private int x;
-    private int y;
-    private int x2;
-    private int y2;
+    private double x;
+    private double y;
+    private double x2;
+    private double y2;
 
     private ShapeProperties properties = new ShapeProperties();
 
@@ -41,7 +44,7 @@ public class Line implements Shape {
 
     @Override
     public int getX() {
-        return x;
+        return (int) x;
     }
 
     @Override
@@ -51,7 +54,7 @@ public class Line implements Shape {
 
     @Override
     public int getY() {
-        return y;
+        return (int) y;
     }
 
     @Override
@@ -79,17 +82,52 @@ public class Line implements Shape {
         this.properties.set("fillColour", propertyFactory.createColourProperty("strokeColour", stroke));
     }
 
+
+    @Override
+    public void drawBoundary(Graphics2D g) {
+        g.setColor(Shape.SELECTOR_COLOUR);
+
+
+        g.draw(new Line2D.Double(x, y, x2, y2));
+    }
+
     @Override
     public void draw(Graphics2D g, boolean isResizing) {
         int thickness = (int) this.properties.get("thickness").getValue();
 
         g.setColor(this.getShapeStrokeColour());
         g.setStroke(new BasicStroke(thickness));
-        g.drawLine(x, y, x2, y2);
+        g.draw(new Line2D.Double(x, y, x2, y2));
     }
 
     @Override
     public boolean isFillable() {
         return false;
+    }
+
+    @Override
+    public boolean isPointWithinBounds(Point point) {
+        double m = (y2 - y) / (x2 - x);  // find line gradient
+        double c = y - m * x; // find offset for c
+
+        return point.getY() == point.getX() * m + c;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Line line = (Line) o;
+        return Double.compare(line.x, x) == 0 &&
+                Double.compare(line.y, y) == 0 &&
+                Double.compare(line.x2, x2) == 0 &&
+                Double.compare(line.y2, y2) == 0 &&
+                Objects.equals(properties, line.properties) &&
+                Objects.equals(propertyFactory, line.propertyFactory);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(x, y, x2, y2, properties, propertyFactory);
     }
 }

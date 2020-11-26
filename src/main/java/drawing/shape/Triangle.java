@@ -2,8 +2,14 @@ package drawing.shape;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.Point;
+import java.awt.Polygon;
+import java.util.Arrays;
+import java.util.Objects;
 
 public class Triangle implements Shape {
+    private int[] yPoints;
+    private int[] xPoints;
     private int x;
     private int y;
 
@@ -12,9 +18,6 @@ public class Triangle implements Shape {
     private final ShapePropertyFactory propertyFactory = new ShapePropertyFactory();
 
     public Triangle(int x, int y, int x2, int y2) {
-        this.x = x;
-        this.y = y;
-
         this.x = Math.min(x, x2);
         this.y = Math.min(y, y2);
 
@@ -27,12 +30,13 @@ public class Triangle implements Shape {
 
         this.properties.addProperty(new ShapeProperty<>("rotation", 0, value -> value >= 0 && value <= 360));
 
-
         this.properties.addProperty(propertyFactory.createColourProperty("strokeColour", Color.BLACK));
 
         this.properties.addProperty(propertyFactory.createColourProperty("fillColour", Color.WHITE));
 
         this.properties.addProperty(new ShapeProperty<>("thickness", 1, value -> 1 <= value && value <= 16));
+
+        this.setPoints();
     }
 
     @Override
@@ -62,7 +66,6 @@ public class Triangle implements Shape {
 
     @Override
     public void setProperties(ShapeProperties properties) {
-
     }
 
     @Override
@@ -85,8 +88,7 @@ public class Triangle implements Shape {
         this.properties.set("fillColour", propertyFactory.createColourProperty("fillColour", fill));
     }
 
-    @Override
-    public void draw(Graphics2D g, boolean isResizing) {
+    private void setPoints() {
         int width = (int) this.properties.get("width").getValue();
         int height = (int) this.properties.get("height").getValue();
 
@@ -94,9 +96,18 @@ public class Triangle implements Shape {
         int y2 = this.y + height;
 
         // build triangle points using our algorithm
-        int[] xPoints = new int[]{x, x + width / 2, x2};
-        int[] yPoints = new int[]{y2, y, y2};
+        this.xPoints = new int[]{x, x + width / 2, x2};
+        this.yPoints = new int[]{y2, y, y2};
+    }
 
+    @Override
+    public void drawBoundary(Graphics2D g) {
+        g.setColor(Shape.SELECTOR_COLOUR);
+        g.drawPolygon(xPoints, yPoints, 3);
+    }
+
+    @Override
+    public void draw(Graphics2D g, boolean isResizing) {
         // draw the rectangle
         g.setColor(this.getShapeFillColour());
         g.fillPolygon(xPoints, yPoints, 3);
@@ -109,5 +120,35 @@ public class Triangle implements Shape {
     @Override
     public boolean isFillable() {
         return true;
+    }
+
+    @Override
+    public boolean isPointWithinBounds(Point point) {
+
+        // create a new polygon class with xPoints and yPoints
+        var triangle = new Polygon(xPoints, yPoints, 3);
+
+        return triangle.contains(point);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Triangle triangle = (Triangle) o;
+        return x == triangle.x &&
+                y == triangle.y &&
+                Arrays.equals(yPoints, triangle.yPoints) &&
+                Arrays.equals(xPoints, triangle.xPoints) &&
+                Objects.equals(properties, triangle.properties) &&
+                Objects.equals(propertyFactory, triangle.propertyFactory);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = Objects.hash(x, y, properties, propertyFactory);
+        result = 31 * result + Arrays.hashCode(yPoints);
+        result = 31 * result + Arrays.hashCode(xPoints);
+        return result;
     }
 }
