@@ -98,7 +98,7 @@ public class VectorMain extends JFrame {
 
             // create the toolbar
             this.toolbar = new ToolMenu(frame, toolController);
-            this.canvasWidget = new CanvasWidget();
+            this.canvasWidget = new CanvasWidget(toolController);
             this.propertiesPanel = new PropertiesMenu(toolController);
 
             frame.add(toolbar, BorderLayout.WEST);

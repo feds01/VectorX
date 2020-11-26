@@ -1,7 +1,9 @@
 package ui.widget;
 
+import drawing.shape.Line;
 import drawing.shape.Rectangle;
 import drawing.shape.Shape;
+import ui.controllers.ToolController;
 
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
@@ -24,7 +26,16 @@ public class Canvas extends JPanel implements MouseMotionListener, MouseInputLis
     /**
      *
      */
-    List<Shape> objects = new ArrayList<>();
+    private List<Shape> objects = new ArrayList<>();
+
+    /**
+     * The temporary object that is being used to display a pre-emptive shape that
+     * will be drawn when the user let's go of the mouse.
+     * */
+    private Shape currentObject = null;
+
+
+    private final ToolController toolController;
 
     private int mouseX1;
     private int mouseY1;
@@ -34,7 +45,9 @@ public class Canvas extends JPanel implements MouseMotionListener, MouseInputLis
     /**
      *
      */
-    public Canvas() {
+    public Canvas(ToolController toolController) {
+        this.toolController = toolController;
+
         this.addMouseListener(this);
         this.addMouseMotionListener(this);
     }
@@ -48,6 +61,13 @@ public class Canvas extends JPanel implements MouseMotionListener, MouseInputLis
 
         // Draw all of the components on the canvas
         this.objects.forEach(shape -> shape.draw(g));
+
+        // Draw the current shape to add interactivity to the canvas. The user
+        // can see what they are about to draw.
+        if (currentObject != null) {
+            currentObject.draw(g);
+        }
+
         g.dispose();
     }
 
@@ -83,8 +103,12 @@ public class Canvas extends JPanel implements MouseMotionListener, MouseInputLis
             mouseY2 = e.getY();
             System.out.println("x2 = " + mouseX2 + ", y2 = " + mouseY2);
 
-            objects.add(new Rectangle(mouseX1, mouseY1, mouseX2, mouseY2));
-            this.repaint();
+            if (currentObject != null) {
+                objects.add(currentObject);
+                this.repaint();
+
+                currentObject = null;
+            }
         } else {
             this.getParent().dispatchEvent(e);
         }
@@ -102,7 +126,19 @@ public class Canvas extends JPanel implements MouseMotionListener, MouseInputLis
 
     @Override
     public void mouseDragged(MouseEvent e) {
-        if (SwingUtilities.isMiddleMouseButton(e)) {
+
+        if (SwingUtilities.isLeftMouseButton(e)) {
+            var endX = e.getX();
+            var endY = e.getY();
+
+            this.currentObject = this.createNewObject(mouseX1, mouseY1, endX, endY);
+
+            if (this.currentObject != null) {
+                this.repaint();
+            }
+
+
+        } else if (SwingUtilities.isMiddleMouseButton(e)) {
             this.getParent().dispatchEvent(e);
         }
     }
@@ -110,5 +146,13 @@ public class Canvas extends JPanel implements MouseMotionListener, MouseInputLis
     @Override
     public void mouseMoved(MouseEvent e) {
 
+    }
+
+    private Shape createNewObject(int x1, int y1, int x2, int y2) {
+        try {
+            return new Line(x1, y1, x2, y2);
+        } catch (IllegalArgumentException ignored) {
+            return null;
+        }
     }
 }

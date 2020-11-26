@@ -1,23 +1,33 @@
 package drawing.shape;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 
 public class Line implements Shape {
     private int x;
     private int y;
+    private int x2;
+    private int y2;
 
     private ShapeProperties properties = new ShapeProperties();
 
     private final ShapePropertyFactory propertyFactory = new ShapePropertyFactory();
 
-    public Line(int x, int y, int width, int height) {
+    public Line(int x, int y, int x2, int y2) {
         this.x = x;
         this.y = y;
+        this.x2 = x2;
+        this.y2 = y2;
 
-        this.properties.addProperty(new ShapeProperty<>("width", width, value -> value > 0));
+        int width = Math.abs(x - x2);
+        int height = Math.abs(y - y2);
 
-        this.properties.addProperty(new ShapeProperty<>("height", height, value -> value > 0));
+        // TODO: when width or height increases, transform point 2, and not point 1
+        this.properties.addProperty(new ShapeProperty<>("x2", width, value -> value > 0));
+
+        this.properties.addProperty(new ShapeProperty<>("y2", height, value -> value > 0));
 
         this.properties.addProperty(new ShapeProperty<>("rotation", 0, value -> value >= 0 && value <= 360));
 
@@ -72,6 +82,13 @@ public class Line implements Shape {
 
     @Override
     public void draw(Graphics g) {
+        int thickness = (int) this.properties.get("thickness").getValue();
+
+        Graphics2D g2 = (Graphics2D) g;
+
+        g2.setColor(this.getShapeStroke());
+        g2.setStroke(new BasicStroke(thickness));
+        g.drawLine(x, y, x2, y2);
     }
 
     @Override
