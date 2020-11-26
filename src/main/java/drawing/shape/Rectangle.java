@@ -1,8 +1,7 @@
 package drawing.shape;
 
 import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.Point;
+import java.awt.Graphics2D;
 
 public class Rectangle implements Shape {
     private int x;
@@ -65,35 +64,35 @@ public class Rectangle implements Shape {
     }
 
     @Override
-    public Color getShapeStroke() {
+    public Color getShapeStrokeColour() {
         return (Color) this.properties.get("strokeColour").getValue();
     }
 
     @Override
-    public void setShapeStroke(Color color) {
+    public void setShapeStrokeColour(Color color) {
 
     }
 
     @Override
-    public Color getShapeFill() {
+    public Color getShapeFillColour() {
         return (Color) this.properties.get("fillColour").getValue();
     }
 
     @Override
-    public void setShapeFill(Color fill) {
+    public void setShapeFillColour(Color fill) {
         this.properties.set("fillColour", propertyFactory.createColourProperty("fillColour", fill));
     }
 
     @Override
-    public void draw(Graphics g) {
+    public void draw(Graphics2D g, boolean isResizing) {
         int width = (int) this.properties.get("width").getValue();
         int height = (int) this.properties.get("height").getValue();
 
         // draw the rectangle
-        g.setColor(this.getShapeFill());
+        g.setColor(this.getShapeFillColour());
         g.fillRect(x, y, width, height);
 
-        g.setColor(this.getShapeStroke());
+        g.setColor(this.getShapeStrokeColour());
         g.drawRect(x, y, width, height);
     }
 

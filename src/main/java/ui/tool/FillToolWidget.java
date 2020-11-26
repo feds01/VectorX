@@ -5,8 +5,6 @@ import ui.common.WidgetFactory;
 import ui.input.ColourPickerInput;
 
 import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
 
 public class FillToolWidget extends BaseToolWidget {
     public FillToolWidget(Shape shape, JFrame frame) {
@@ -16,7 +14,7 @@ public class FillToolWidget extends BaseToolWidget {
             throw new IllegalStateException("Can't fill an un-fillable shape.");
         }
 
-        var fillTool = new ColourPickerInput("fill", shape.getShapeFill(), "FILL", frame);
+        var fillTool = new ColourPickerInput("fill", shape.getShapeFillColour(), "FILL", frame);
 
         this.tools.add(fillTool);
 

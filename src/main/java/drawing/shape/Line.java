@@ -2,7 +2,6 @@ package drawing.shape;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
-import java.awt.Graphics;
 import java.awt.Graphics2D;
 
 public class Line implements Shape {
@@ -71,23 +70,21 @@ public class Line implements Shape {
     }
 
     @Override
-    public Color getShapeStroke() {
+    public Color getShapeStrokeColour() {
         return (Color) this.properties.get("strokeColour").getValue();
     }
 
     @Override
-    public void setShapeStroke(Color stroke) {
+    public void setShapeStrokeColour(Color stroke) {
         this.properties.set("fillColour", propertyFactory.createColourProperty("strokeColour", stroke));
     }
 
     @Override
-    public void draw(Graphics g) {
+    public void draw(Graphics2D g, boolean isResizing) {
         int thickness = (int) this.properties.get("thickness").getValue();
 
-        Graphics2D g2 = (Graphics2D) g;
-
-        g2.setColor(this.getShapeStroke());
-        g2.setStroke(new BasicStroke(thickness));
+        g.setColor(this.getShapeStrokeColour());
+        g.setStroke(new BasicStroke(thickness));
         g.drawLine(x, y, x2, y2);
     }
 

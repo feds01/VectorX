@@ -1,7 +1,7 @@
 package drawing.shape;
 
 import java.awt.Color;
-import java.awt.Graphics;
+import java.awt.Graphics2D;
 
 public class Ellipses implements Shape {
     private int x;
@@ -12,11 +12,14 @@ public class Ellipses implements Shape {
     private final ShapePropertyFactory propertyFactory = new ShapePropertyFactory();
 
 
-    public Ellipses(int x, int y, int base, int height) {
-        this.x = x;
-        this.y = y;
+    public Ellipses(int x, int y, int x2, int y2) {
+        this.x = Math.min(x, x2);
+        this.y = Math.min(y, y2);
 
-        this.properties.addProperty(new ShapeProperty<>("base", base, value -> value > 0));
+        int width = Math.abs(x - x2);
+        int height = Math.abs(y - y2);
+
+        this.properties.addProperty(new ShapeProperty<>("width", width, value -> value > 0));
 
         this.properties.addProperty(new ShapeProperty<>("height", height, value -> value > 0));
 
@@ -76,28 +79,37 @@ public class Ellipses implements Shape {
 //    }
 
     @Override
-    public Color getShapeStroke() {
+    public Color getShapeStrokeColour() {
         return (Color) this.properties.get("strokeColour").getValue();
     }
 
     @Override
-    public void setShapeStroke(Color stroke) {
+    public void setShapeStrokeColour(Color stroke) {
         this.properties.set("fillColour", propertyFactory.createColourProperty("strokeColour", stroke));
 
     }
 
     @Override
-    public Color getShapeFill() {
+    public Color getShapeFillColour() {
         return (Color) this.properties.get("fillColour").getValue();
     }
 
     @Override
-    public void setShapeFill(Color fill) {
+    public void setShapeFillColour(Color fill) {
         this.properties.set("fillColour", propertyFactory.createColourProperty("fillColour", fill));
     }
 
     @Override
-    public void draw(Graphics g) {
+    public void draw(Graphics2D g, boolean isResizing) {
+        int width = (int) this.properties.get("width").getValue();
+        int height = (int) this.properties.get("height").getValue();
+
+        // draw the rectangle
+        g.setColor(this.getShapeFillColour());
+        g.fillOval(x, y, width, height);
+
+        g.setColor(this.getShapeStrokeColour());
+        g.drawOval(x, y, width, height);
     }
 
     @Override

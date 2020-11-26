@@ -2,6 +2,7 @@ package drawing.shape;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 
 public interface Shape {
     public int getX();
@@ -13,15 +14,15 @@ public interface Shape {
     public ShapeProperties getProperties();
     public void setProperties(ShapeProperties properties);
 
-    public Color getShapeStroke();
-    public void setShapeStroke(Color color);
+    public Color getShapeStrokeColour();
+    public void setShapeStrokeColour(Color color);
 
-    public default Color getShapeFill() {
+    public default Color getShapeFillColour() {
         return null;
     }
-    public default void setShapeFill(Color color) {}
+    public default void setShapeFillColour(Color color) {}
 
-    public void draw(Graphics g);
+    public void draw(Graphics2D g, boolean isResizing);
 
     public boolean isFillable();
 }

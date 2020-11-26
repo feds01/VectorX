@@ -1,8 +1,11 @@
 package ui.widget;
 
+import drawing.shape.Ellipses;
 import drawing.shape.Line;
 import drawing.shape.Rectangle;
 import drawing.shape.Shape;
+import drawing.shape.TextShape;
+import drawing.shape.Triangle;
 import ui.controllers.ToolController;
 
 import javax.swing.JPanel;
@@ -10,6 +13,8 @@ import javax.swing.SwingUtilities;
 import javax.swing.event.MouseInputListener;
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
 import java.util.ArrayList;
@@ -59,13 +64,17 @@ public class Canvas extends JPanel implements MouseMotionListener, MouseInputLis
         g.setColor(DEFAULT_BG_COLOUR);
         g.fillRect(0, 0, getWidth(), getHeight());
 
+        var g2 = (Graphics2D) g;
+
+        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
         // Draw all of the components on the canvas
-        this.objects.forEach(shape -> shape.draw(g));
+        this.objects.forEach(shape -> shape.draw(g2, false));
 
         // Draw the current shape to add interactivity to the canvas. The user
         // can see what they are about to draw.
         if (currentObject != null) {
-            currentObject.draw(g);
+            currentObject.draw(g2, true);
         }
 
         g.dispose();
@@ -150,7 +159,7 @@ public class Canvas extends JPanel implements MouseMotionListener, MouseInputLis
 
     private Shape createNewObject(int x1, int y1, int x2, int y2) {
         try {
-            return new Line(x1, y1, x2, y2);
+            return new TextShape(x1, y1, x2, y2);
         } catch (IllegalArgumentException ignored) {
             return null;
         }

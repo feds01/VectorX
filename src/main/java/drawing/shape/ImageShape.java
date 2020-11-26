@@ -2,6 +2,7 @@ package drawing.shape;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 
 public class ImageShape implements Shape {
     private int x;
@@ -62,27 +63,27 @@ public class ImageShape implements Shape {
     }
 
     @Override
-    public Color getShapeStroke() {
+    public Color getShapeStrokeColour() {
         return (Color) this.properties.get("strokeColour").getValue();
     }
 
     @Override
-    public void setShapeStroke(Color stroke) {
+    public void setShapeStrokeColour(Color stroke) {
         this.properties.set("fillColour", propertyFactory.createColourProperty("strokeColour", stroke));
     }
 
     @Override
-    public Color getShapeFill() {
+    public Color getShapeFillColour() {
         return (Color) this.properties.get("fillColour").getValue();
     }
 
     @Override
-    public void setShapeFill(Color fill) {
+    public void setShapeFillColour(Color fill) {
         this.properties.set("fillColour", propertyFactory.createColourProperty("fillColour", fill));
     }
 
     @Override
-    public void draw(Graphics g) {
+    public void draw(Graphics2D g, boolean isResizing) {
     }
 
     @Override
