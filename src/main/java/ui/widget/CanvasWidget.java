@@ -18,6 +18,7 @@ import java.awt.event.MouseWheelEvent;
 import java.awt.geom.AffineTransform;
 
 public class CanvasWidget extends JPanel implements MouseListener, MouseMotionListener {
+    private final Canvas canvas;
     private double zoomFactor = 1;
     private double prevZoomFactor = 1;
 
@@ -46,7 +47,7 @@ public class CanvasWidget extends JPanel implements MouseListener, MouseMotionLi
     public CanvasWidget() {
         this.setLayout(new GridBagLayout());
 
-        JPanel canvas = new Canvas();
+        this.canvas = new Canvas();
 
         canvas.setPreferredSize(new Dimension(600, 700));
         canvas.setMaximumSize(new Dimension(600, 700));
@@ -79,18 +80,19 @@ public class CanvasWidget extends JPanel implements MouseListener, MouseMotionLi
             at.translate(xOffset, yOffset);
             at.scale(zoomFactor, zoomFactor);
 
-            Dimension dim;
+            // TODO: fix buggy scale code
+//            Dimension dim;
 
-            if (this.zoomFactor > 1.0) {
-                dim = new Dimension(
-                        (int) Math.round(getWidth() * this.zoomFactor),
-                        (int) Math.round(getHeight() * this.zoomFactor));
-
-            } else {
-                dim = new Dimension(getParent().getWidth(), getParent().getHeight());
-
-            }
-            this.setPreferredSize(dim);
+//            if (this.zoomFactor > 1.0) {
+//                dim = new Dimension(
+//                        (int) Math.round(getWidth() * this.zoomFactor),
+//                        (int) Math.round(getHeight() * this.zoomFactor));
+//
+//            } else {
+//                dim = new Dimension(getParent().getWidth(), getParent().getHeight());
+//
+//            }
+//            this.setPreferredSize(dim);
             this.revalidate();
 
             prevZoomFactor = zoomFactor;
