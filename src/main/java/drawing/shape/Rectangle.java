@@ -1,6 +1,7 @@
 package drawing.shape;
 
 import java.awt.Color;
+import java.awt.Point;
 
 public class Rectangle implements Shape {
     private int x;
@@ -10,9 +11,20 @@ public class Rectangle implements Shape {
 
     private final ShapePropertyFactory propertyFactory = new ShapePropertyFactory();
 
-    public Rectangle(int x, int y, int width, int height) {
-        this.x = x;
-        this.y = y;
+    public Rectangle(int x, int y, int x2, int y2) {
+        var p1 = new Point(x, y);
+        var p2 = new Point(x2, y2);
+
+        if (p2.distance(0, 0) > p1.distance(0, 0)) {
+            this.x = x;
+            this.y = y;
+        } else {
+            this.x = x2;
+            this.y = y2;
+        }
+
+        int width = Math.abs(x - x2);
+        int height = Math.abs(y - y2);
 
         this.properties.addProperty(new ShapeProperty<>("width", width, value -> value > 0));
 
