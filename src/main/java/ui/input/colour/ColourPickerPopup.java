@@ -145,11 +145,7 @@ public class ColourPickerPopup extends Box {
         try {
             int value = Integer.parseInt(field.getText());
 
-            // TODO: use caller specified validation method to check
-            //       whether the value is valid or not.
-
             // set the text field input value to the slider value
-//            changes.firePropertyChange(event.getPropertyName(), textValue, textValue);
             Color oldColour = this.colourBox.getColour();
             Color newColour;
 

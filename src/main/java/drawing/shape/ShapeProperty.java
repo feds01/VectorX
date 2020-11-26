@@ -1,9 +1,11 @@
 package drawing.shape;
 
-public class ShapeProperty<T> {
-    private final String name;
+import java.io.Serializable;
+
+public class ShapeProperty<T> implements Serializable {
+    private String name;
     private T value;
-    private final ShapePropertyValidator<T> validator;
+    private ShapePropertyValidator<T> validator;
 
     public ShapeProperty(String name, T value, ShapePropertyValidator<T> validator) {
         this.name = name;
@@ -16,12 +18,25 @@ public class ShapeProperty<T> {
         this.value = value;
     }
 
+    protected ShapeProperty<T> copy() {
+
+        return new ShapeProperty<>(this.name, this.value, this.validator);
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public String getName() {
         return name;
     }
 
     public ShapePropertyValidator<T> getValidator() {
         return validator;
+    }
+
+    public void setValidator(ShapePropertyValidator<T> validator) {
+        this.validator = validator;
     }
 
     public T getValue() {

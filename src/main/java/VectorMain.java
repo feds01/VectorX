@@ -160,7 +160,9 @@ public class VectorMain extends JFrame {
             return false;
         }
 
+
         int keyCode = e.getKeyCode();
+
 
         switch (keyCode) {
             case KeyEvent.VK_S: {
@@ -195,6 +197,31 @@ public class VectorMain extends JFrame {
                 toolbar.setCurrentTool(ToolType.TEXT);
                 break;
             }
+
+
+            case KeyEvent.VK_DELETE:
+            case KeyEvent.VK_BACK_SPACE: {
+
+                // Don't do anything if the tool isn't on the selector tool.
+                canvasWidget.getCanvas().deleteSelectedShape();
+
+                break;
+            }
+
+            case KeyEvent.VK_C: {
+                if (!e.isControlDown()) return false;
+
+                canvasWidget.getCanvas().setCopySelectedShape(true);
+                break;
+            }
+
+            case KeyEvent.VK_V: {
+                if (!e.isControlDown()) return false;
+
+                canvasWidget.getCanvas().copySelectedShape();
+                break;
+            }
+
         }
         return false;
     }

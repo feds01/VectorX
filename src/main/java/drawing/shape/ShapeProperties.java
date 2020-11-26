@@ -1,9 +1,10 @@
 package drawing.shape;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ShapeProperties {
+public class ShapeProperties implements Serializable {
     private Map<String, ShapeProperty<?>> properties;
 
     public ShapeProperties(Map<String, ShapeProperty<?>> properties) {

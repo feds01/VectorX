@@ -59,6 +59,8 @@ public class Canvas extends JPanel implements MouseMotionListener, MouseInputLis
 
     private Shape highlightedShape = null;
 
+    private boolean copySelectedShape = false;
+
     private final ToolController toolController;
 
     private final WidgetController widgetController;
@@ -86,8 +88,12 @@ public class Canvas extends JPanel implements MouseMotionListener, MouseInputLis
 
     /**
      *
-     * */
+     */
     private void toolChangeListener(PropertyChangeEvent event) {
+
+        // Propagate the cursor when the tool changes...
+        this.setCursor(toolController.getCurrentTool().getCursor());
+
         this.selectedShape = null;
         this.repaint();
     }
@@ -197,6 +203,8 @@ public class Canvas extends JPanel implements MouseMotionListener, MouseInputLis
 
             // get the current colour from the FillWidget
             var fillValue = (Color) this.widgetController.getCurrentToolWidget().getValue("fill");
+
+            System.out.println("Event " + fillValue);
 
             // Fill the canvas if no shape is clicked on...
             if (selectedShape == null) {
@@ -419,5 +427,59 @@ public class Canvas extends JPanel implements MouseMotionListener, MouseInputLis
         }
 
         return null;
+    }
+
+    private void resetSelectedObject() {
+        this.selectedShape = null;
+        copySelectedShape = false;
+    }
+
+
+    public void setCopySelectedShape(boolean flag) {
+        this.copySelectedShape = flag;
+    }
+
+    public void copySelectedShape() {
+
+        // Don't do anything if 'copy' hasn't been set on the current shape
+        // and if there is no selected shape...
+        if (!this.copySelectedShape || this.selectedShape == null) {
+            return;
+        }
+
+
+        // We want to create a new copy of the current selected shape
+        // To differentiate between the two objects, we'll offset the
+        // new object by 10px down and 10px to the left.
+        //
+        // @Improve: what if the object is at the end of the canvas
+        var newObject = this.selectedShape.copy();
+
+        newObject.setX(newObject.getX() + 10);
+        newObject.setY(newObject.getY() + 10);
+
+        this.selectedShape = null;
+
+        this.repaint();
+
+        this.selectedShape = newObject;
+        this.objects.add(this.selectedShape);
+
+        this.repaint();
+    }
+
+    /**
+     *
+     */
+    public void deleteSelectedShape() {
+        // Don't do anything if there is no selected shape
+        if (selectedShape == null) {
+            return;
+        }
+
+        this.objects.remove(this.selectedShape);
+        selectedShape = null;
+
+        this.repaint();
     }
 }

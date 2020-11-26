@@ -1,5 +1,6 @@
 package drawing.shape;
 
+import common.CopyUtils;
 import drawing.ToolType;
 
 import javax.swing.GrayFilter;
@@ -12,111 +13,32 @@ import java.awt.image.BufferedImage;
 import java.awt.image.FilteredImageSource;
 import java.awt.image.ImageFilter;
 import java.awt.image.ImageProducer;
-import java.util.Map;
 import java.util.Objects;
 
-public class ImageShape implements Shape {
+public class ImageShape extends Shape {
     private final BufferedImage image;
 
-    private final ShapeProperties properties = new ShapeProperties();
-
-    private final ShapePropertyFactory propertyFactory = new ShapePropertyFactory();
 
     public ImageShape(int x, int y, BufferedImage image) {
+        super(x, y, x + image.getWidth(), y + image.getHeight());
+
         this.image = image;
 
-        this.properties.addProperty(new ShapeProperty<>("start", new Point(x, y), value -> value.getX() >= 0 && value.getY() >= 0));
-
-        this.properties.addProperty(new ShapeProperty<>("end", new Point(image.getWidth(), image.getHeight()), value -> value.getX() >= 0 && value.getY() >= 0));
-
-        this.properties.addProperty(new ShapeProperty<>("rotation", 0, value -> value >= 0 && value <= 360));
-
         this.properties.addProperty(new ShapeProperty<>("grayScale", false, value -> true));
-
         this.properties.addProperty(propertyFactory.createColourProperty("strokeColour", Color.BLACK));
-
         this.properties.addProperty(propertyFactory.createColourProperty("fillColour", Color.WHITE));
+    }
+
+    public ImageShape copy()  {
+        var clazz = new ImageShape(this.getX(), this.getY(), image);
+        clazz.setProperties((ShapeProperties) CopyUtils.deepCopy(this.properties));
+
+        return clazz;
     }
 
     @Override
     public ToolType getToolType() {
         return ToolType.IMAGE;
-    }
-
-    @Override
-    public int getX() {
-        var start = this.properties.get("start");
-
-        var point = (Point) (start.getValue());
-
-        return point.x;
-    }
-
-    @Override
-    public void setX(int x) {
-        var start = this.properties.get("start");
-
-        var point = (Point) (start.getValue());
-        var newPoint = new Point(x, point.y);
-
-        start.setValue(newPoint);
-    }
-
-    @Override
-    public int getY() {
-        var start = this.properties.get("start");
-
-        var point = (Point) (start.getValue());
-
-        return point.y;
-    }
-
-    @Override
-    public void setY(int y) {
-        var start = this.properties.get("start");
-
-        var point = (Point) (start.getValue());
-        var newPoint = new Point(point.x, y);
-
-        start.setValue(newPoint);
-    }
-
-    @Override
-    public Map<String, ShapeProperty<?>> getProperties() {
-        return this.properties.getProperties();
-    }
-
-    @Override
-    public void setProperties(ShapeProperties properties) {
-
-    }
-
-    @Override
-    public void setProperty(String name, Object value) {
-        // get the old property and insert the new value
-
-        var oldProperty = this.properties.get(name);
-        oldProperty.setValue(value);
-    }
-
-    @Override
-    public Color getShapeStrokeColour() {
-        return (Color) this.properties.get("strokeColour").getValue();
-    }
-
-    @Override
-    public void setShapeStrokeColour(Color stroke) {
-        this.properties.set("fillColour", propertyFactory.createColourProperty("strokeColour", stroke));
-    }
-
-    @Override
-    public Color getShapeFillColour() {
-        return (Color) this.properties.get("fillColour").getValue();
-    }
-
-    @Override
-    public void setShapeFillColour(Color fill) {
-        this.properties.set("fillColour", propertyFactory.createColourProperty("fillColour", fill));
     }
 
     @Override

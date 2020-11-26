@@ -1,37 +1,31 @@
 package drawing.shape;
 
+import common.CopyUtils;
 import drawing.ToolType;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Point;
-import java.util.Map;
 import java.util.Objects;
 
-public class Rectangle implements Shape {
-    private final ShapeProperties properties = new ShapeProperties();
-
-    private final ShapePropertyFactory propertyFactory = new ShapePropertyFactory();
-
+public class Rectangle extends Shape {
     public Rectangle(int x, int y, int x2, int y2) {
-        int xMin = Math.min(x, x2);
-        int yMin = Math.min(y, y2);
-
-        int width = Math.abs(x - x2);
-        int height = Math.abs(y - y2);
-
-        this.properties.addProperty(new ShapeProperty<>("start", new Point(xMin, yMin), value -> value.getX() >= 0 && value.getY() >= 0));
-
-        this.properties.addProperty(new ShapeProperty<>("end", new Point(width, height),  value -> value.getX() >= 0 && value.getY() >= 0));
-
-        this.properties.addProperty(new ShapeProperty<>("rotation", 0, value -> value >= 0 && value <= 360));
+        super(x, y, x2, y2);
 
         this.properties.addProperty(propertyFactory.createColourProperty("strokeColour", Color.BLACK));
-
         this.properties.addProperty(propertyFactory.createColourProperty("fillColour", Color.WHITE));
-
         this.properties.addProperty(new ShapeProperty<>("thickness", 1, value -> 1 <= value && value <= 16));
+    }
+
+    public Rectangle copy()  {
+        int width = (int) ((Point) this.getProperties().get("end").getValue()).getX();
+        int height = (int) ((Point) this.getProperties().get("end").getValue()).getY();
+
+        var clazz = new Rectangle(this.getX(), this.getY(), this.getX() + width, this.getY() + height);
+        clazz.setProperties((ShapeProperties) CopyUtils.deepCopy(this.properties));
+
+        return clazz;
     }
 
     @Override
@@ -39,81 +33,6 @@ public class Rectangle implements Shape {
         return ToolType.RECTANGLE;
     }
 
-    @Override
-    public int getX() {
-        var start = this.properties.get("start");
-
-        var point = (Point) (start.getValue());
-
-        return point.x;
-    }
-
-    @Override
-    public void setX(int x) {
-        var start = this.properties.get("start");
-
-        var point = (Point) (start.getValue());
-        var newPoint = new Point(x, point.y);
-
-        start.setValue(newPoint);
-    }
-
-    @Override
-    public int getY() {
-        var start = this.properties.get("start");
-
-        var point = (Point) (start.getValue());
-
-        return point.y;
-    }
-
-    @Override
-    public void setY(int y) {
-        var start = this.properties.get("start");
-
-        var point = (Point) (start.getValue());
-        var newPoint = new Point(point.x, y);
-
-        start.setValue(newPoint);
-    }
-
-    @Override
-    public Map<String, ShapeProperty<?>> getProperties() {
-        return this.properties.getProperties();
-    }
-
-    @Override
-    public void setProperty(String name, Object value) {
-        // get the old property and insert the new value
-
-        var oldProperty = this.properties.get(name);
-        oldProperty.setValue(value);
-    }
-
-    @Override
-    public void setProperties(ShapeProperties properties) {
-
-    }
-
-    @Override
-    public Color getShapeStrokeColour() {
-        return (Color) this.properties.get("strokeColour").getValue();
-    }
-
-    @Override
-    public void setShapeStrokeColour(Color color) {
-
-    }
-
-    @Override
-    public Color getShapeFillColour() {
-        return (Color) this.properties.get("fillColour").getValue();
-    }
-
-    @Override
-    public void setShapeFillColour(Color fill) {
-        this.properties.set("fillColour", propertyFactory.createColourProperty("fillColour", fill));
-    }
 
     @Override
     public void drawSelectedBoundary(Graphics2D g) {
@@ -121,6 +40,7 @@ public class Rectangle implements Shape {
         int y = (int) ((Point) this.getProperties().get("start").getValue()).getY();
         int width = (int) ((Point) this.getProperties().get("end").getValue()).getX();
         int height = (int) ((Point) this.getProperties().get("end").getValue()).getY();
+
         // highlight the line, we can use draw boundary
         // here because it is the same as the highlighting border
         ShapeUtility.drawSelectorRect(g, x, y, width, height);
@@ -172,7 +92,7 @@ public class Rectangle implements Shape {
 
         return (
                 point.getX() >= x && point.getX() <= x + width &&
-                point.getY() >= y && point.getY() <= y + height
+                        point.getY() >= y && point.getY() <= y + height
         );
     }
 
