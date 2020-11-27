@@ -8,6 +8,7 @@ import drawing.shape.Rectangle;
 import drawing.shape.Shape;
 import drawing.shape.TextShape;
 import drawing.shape.Triangle;
+import history.HistoryManager;
 import ui.controllers.ToolController;
 import ui.controllers.WidgetController;
 import ui.tool.EmptyToolWidget;
@@ -42,7 +43,14 @@ import java.util.Objects;
 /**
  *
  */
-public class Canvas extends JPanel implements MouseMotionListener, MouseInputListener {
+public class CanvasContainer extends JPanel implements MouseMotionListener, MouseInputListener {
+
+    /**
+     *
+     * */
+    private final HistoryManager historyManager;
+
+
     /**
      *
      */
@@ -77,7 +85,7 @@ public class Canvas extends JPanel implements MouseMotionListener, MouseInputLis
     /**
      *
      */
-    public Canvas(ToolController toolController, WidgetController widgetController) {
+    public CanvasContainer(ToolController toolController, WidgetController widgetController) {
         this.toolController = toolController;
         this.widgetController = widgetController;
 
@@ -86,6 +94,8 @@ public class Canvas extends JPanel implements MouseMotionListener, MouseInputLis
 
         this.addMouseListener(this);
         this.addMouseMotionListener(this);
+
+        this.historyManager = new HistoryManager();
 
         // setup widget property change listener
         this.toolController.addPropertyChangeListener(this::toolChangeListener);

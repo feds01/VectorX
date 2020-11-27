@@ -21,7 +21,7 @@ import java.awt.event.MouseWheelEvent;
 import java.awt.geom.AffineTransform;
 
 public class CanvasWidget extends JPanel implements MouseListener, MouseMotionListener {
-    private final Canvas canvas;
+    private final CanvasContainer canvas;
     private double zoomFactor = 1;
     private double prevZoomFactor = 1;
 
@@ -50,7 +50,7 @@ public class CanvasWidget extends JPanel implements MouseListener, MouseMotionLi
     public CanvasWidget(ToolController controller, WidgetController widgetController) {
         this.setLayout(new GridBagLayout());
 
-        this.canvas = new Canvas(controller, widgetController);
+        this.canvas = new CanvasContainer(controller, widgetController);
 
         canvas.setPreferredSize(new Dimension(600, 700));
         canvas.setMaximumSize(new Dimension(600, 700));
@@ -186,7 +186,7 @@ public class CanvasWidget extends JPanel implements MouseListener, MouseMotionLi
     /**
      *
      * */
-    public Canvas getCanvas() {
+    public CanvasContainer getCanvas() {
         return this.canvas;
     }
 
