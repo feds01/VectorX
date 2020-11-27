@@ -56,9 +56,10 @@ public class CheckBoxInput extends BaseInput<Boolean> {
 
     /**
      *
-     * */
-    public void setValue(Boolean value) {
-        this.checkbox.setSelected(value);
+     *
+     * @param value*/
+    public void setValue(Object value) {
+        this.checkbox.setSelected((Boolean) value);
     }
 
     /**

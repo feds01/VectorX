@@ -58,6 +58,14 @@ public class CoordinateInput extends BaseInput<Point> {
         }
     }
 
+    @Override
+    public void setValue(Object value) {
+        Point p = (Point) value;
+
+        this.xField.setValue(String.valueOf(p.x));
+        this.yField.setValue(String.valueOf(p.y));
+    }
+
     public TextFieldInput getXField() {
         return xField;
     }

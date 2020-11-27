@@ -14,7 +14,7 @@ import java.awt.Point;
 
 public class RectangleToolWidget extends BaseToolWidget {
     public RectangleToolWidget(Rectangle shape, JFrame frame) {
-        super();
+        super(shape);
 
         var startPosition = new CoordinateInput("start", new Point(shape.getX(), shape.getY()), "X", "Y");
         this.tools.add(startPosition);
@@ -46,18 +46,21 @@ public class RectangleToolWidget extends BaseToolWidget {
 
         this.tools.add(fillColour);
 
+        // setup listeners for tools
+        this.setupInputListeners();
+        this.constructUI();
+    }
+
+    public void constructUI() {
         this.panel.add(WidgetFactory.createTitleWidget("TRANSFORM"));
-        this.panel.add(startPosition.getComponent());
-        this.panel.add(endPosition.getComponent());
-        this.panel.add(rotation.getComponent());
+        this.panel.add(this.tools.get(0).getComponent());
+        this.panel.add(this.tools.get(1).getComponent());
+        this.panel.add(this.tools.get(2).getComponent());
         this.panel.add(WidgetFactory.createSeparator());
 
         this.panel.add(WidgetFactory.createTitleWidget("APPEARANCE"));
-        this.panel.add(lineThickness.getComponent());
-        this.panel.add(strokeColour.getComponent());
-        this.panel.add(fillColour.getComponent());
-
-        // setup listeners for tools
-        this.setupInputListeners();
+        this.panel.add(this.tools.get(3).getComponent());
+        this.panel.add(this.tools.get(4).getComponent());
+        this.panel.add(this.tools.get(5).getComponent());
     }
 }

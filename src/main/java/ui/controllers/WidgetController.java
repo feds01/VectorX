@@ -49,6 +49,9 @@ public class WidgetController {
         this.pcs.removePropertyChangeListener(listener);
     }
 
+    public void updateWidget() {
+        this.widget.update();
+    }
 
     /**
      *

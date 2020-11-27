@@ -73,11 +73,12 @@ public abstract class BaseInput<T> {
         return this.value;
     }
 
+
     /**
      *
      * */
-    public void setValue(T value) {
-        this.value = value;
+    public void setValue(Object value) {
+        this.value = (T) value;
     }
 
     /**

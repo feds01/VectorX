@@ -5,16 +5,12 @@ import ui.common.WidgetFactory;
 import ui.input.CheckBoxInput;
 import ui.input.CoordinateInput;
 import ui.input.NumberFieldInput;
-import ui.input.TextFieldInput;
 
-import javax.swing.JFrame;
 import java.awt.Point;
 
 public class ImageToolWidget extends BaseToolWidget {
-    private ImageShape shape;
-
-    public ImageToolWidget(ImageShape shape, JFrame frame) {
-        super();
+    public ImageToolWidget(ImageShape shape) {
+        super(shape);
 
         var startPosition = new CoordinateInput("start", new Point(shape.getX(), shape.getY()), "X", "Y");
         this.tools.add(startPosition);
@@ -32,17 +28,18 @@ public class ImageToolWidget extends BaseToolWidget {
         var monochromeValue = (Boolean) shape.getProperties().get("grayScale").getValue();
         var monochrome = new CheckBoxInput("grayScale", monochromeValue, "Grayscale");
 
+        // setup listeners for tools
+        this.setupInputListeners();
+    }
 
+    public void constructUI() {
         this.panel.add(WidgetFactory.createTitleWidget("TRANSFORM"));
-        this.panel.add(startPosition.getComponent());
-        this.panel.add(endPosition.getComponent());
-        this.panel.add(rotation.getComponent());
+        this.panel.add(this.tools.get(0).getComponent());
+        this.panel.add(this.tools.get(1).getComponent());
+        this.panel.add(this.tools.get(2).getComponent());
         this.panel.add(WidgetFactory.createSeparator());
 
         this.panel.add(WidgetFactory.createTitleWidget("APPEARANCE"));
-        this.panel.add(monochrome.getComponent());
-
-        // setup listeners for tools
-        this.setupInputListeners();
+        this.panel.add(this.tools.get(3).getComponent());
     }
 }

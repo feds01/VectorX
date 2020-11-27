@@ -20,6 +20,7 @@ import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.filechooser.FileSystemView;
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
@@ -28,6 +29,8 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
 import java.awt.image.BufferedImage;
 import java.beans.PropertyChangeEvent;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -67,6 +70,8 @@ public class Canvas extends JPanel implements MouseMotionListener, MouseInputLis
 
     private int mouseX1;
     private int mouseY1;
+    private boolean isDragging;
+    private boolean additionalOverlay;
 
     /**
      *
@@ -104,6 +109,12 @@ public class Canvas extends JPanel implements MouseMotionListener, MouseInputLis
     private void widgetPropertiesChangeListener(PropertyChangeEvent event) {
         if (event.getPropertyName().equals("widgetPropertyChange")) {
 
+
+            // don't do anything if no selected shape
+            if (this.selectedShape == null) {
+                return;
+            }
+
             var shapeProperties = this.selectedShape.getProperties();
 
             var updatedProperties = (Map<String, Object>) event.getNewValue();
@@ -140,17 +151,17 @@ public class Canvas extends JPanel implements MouseMotionListener, MouseInputLis
 
         // Draw the current shape to add interactivity to the canvas. The user
         // can see what they are about to draw.
-        if (currentObject != null) {
+        if (additionalOverlay && currentObject != null) {
             currentObject.draw(g2, true);
         }
 
         // Draw any highlighted shape...
-        if (highlightedShape != null) {
+        if (additionalOverlay && highlightedShape != null) {
             highlightedShape.drawBoundary(g2);
         }
 
         // Draw a selected bounding box if a shape has been selected...
-        if (selectedShape != null) {
+        if (additionalOverlay && selectedShape != null) {
             selectedShape.drawSelectedBoundary(g2);
         }
 
@@ -220,7 +231,10 @@ public class Canvas extends JPanel implements MouseMotionListener, MouseInputLis
         if (currentTool.getType() == ToolType.SELECTOR) {
             var selectedShape = getShapeIfHoveringShape(e.getPoint());
 
-            if (selectedShape != null && !Objects.equals(selectedShape, this.selectedShape)) {
+            this.isDragging = true;
+
+            // update the cursor to represent the movement of the object
+            if (!Objects.equals(selectedShape, this.selectedShape) && selectedShape != null) {
                 this.selectedShape = selectedShape;
 
                 this.repaint();
@@ -250,21 +264,32 @@ public class Canvas extends JPanel implements MouseMotionListener, MouseInputLis
     public void mouseReleased(MouseEvent e) {
         var currentTool = toolController.getCurrentTool();
 
-        if (SwingUtilities.isLeftMouseButton(e)
-                && currentTool.getType() != ToolType.SELECTOR
-                && currentTool.getType() != ToolType.FILL
-                && currentTool.getType() != ToolType.IMAGE
-        ) {
-            if (currentObject != null) {
-                objects.add(currentObject);
+        if (SwingUtilities.isLeftMouseButton(e)) {
 
-                // Update the widget controller to our newest shape on the canvas
-                this.selectedShape = currentObject;
-                this.widgetController.setCurrentWidgetFromShape(selectedShape);
+            // Reset the isDragging flag since the user let go of the mouse
+            if (currentTool.getType() == ToolType.SELECTOR) {
+                this.setCursor(currentTool.getCursor());
+                this.isDragging = false;
 
-                this.repaint();
+                // update the panel widget to reflect the newest values
+                this.widgetController.updateWidget();
+            }
 
-                currentObject = null;
+
+            if (currentTool.getType() != ToolType.SELECTOR
+                    && currentTool.getType() != ToolType.FILL
+                    && currentTool.getType() != ToolType.IMAGE
+            ) {
+                if (currentObject != null) {
+                    objects.add(currentObject);
+
+                    // Update the widget controller to our newest shape on the canvas
+                    this.selectedShape = currentObject;
+                    this.widgetController.setCurrentWidgetFromShape(selectedShape);
+
+                    this.repaint();
+                    currentObject = null;
+                }
             }
         } else {
             this.getParent().dispatchEvent(e);
@@ -294,20 +319,32 @@ public class Canvas extends JPanel implements MouseMotionListener, MouseInputLis
     public void mouseDragged(MouseEvent e) {
         var currentTool = toolController.getCurrentTool();
 
-        if (SwingUtilities.isLeftMouseButton(e)
-                && currentTool.getType() != ToolType.SELECTOR
-                && currentTool.getType() != ToolType.FILL
-                && currentTool.getType() != ToolType.IMAGE
-        ) {
-            var endX = e.getX();
-            var endY = e.getY();
+        if (SwingUtilities.isLeftMouseButton(e)) {
+            if (currentTool.getType() == ToolType.SELECTOR && this.isDragging) {
+                this.selectedShape.setX(this.selectedShape.getX() + (e.getX() - mouseX1));
+                this.selectedShape.setY(this.selectedShape.getY() + (e.getY() - mouseY1));
 
-            this.currentObject = this.createNewObject(mouseX1, mouseY1, endX, endY);
+                mouseX1 = e.getX();
+                mouseY1 = e.getY();
 
-            if (this.currentObject != null) {
                 this.repaint();
             }
 
+
+            // Perform a drawing action if the current tool is not the selector, fill
+            // or an image inserter.
+            if (currentTool.getType() != ToolType.SELECTOR
+                    && currentTool.getType() != ToolType.FILL
+                    && currentTool.getType() != ToolType.IMAGE) {
+                var endX = e.getX();
+                var endY = e.getY();
+
+                this.currentObject = this.createNewObject(mouseX1, mouseY1, endX, endY);
+
+                if (this.currentObject != null) {
+                    this.repaint();
+                }
+            }
 
         } else if (SwingUtilities.isMiddleMouseButton(e)) {
             this.getParent().dispatchEvent(e);
@@ -333,10 +370,17 @@ public class Canvas extends JPanel implements MouseMotionListener, MouseInputLis
         if (currentTool.getType() == ToolType.SELECTOR) {
             Shape newHighlightedShape = this.getShapeIfHoveringShape(e.getPoint());
 
+            // Show a 'move' cursor when hovering over a selected object
+            if (Objects.equals(this.selectedShape, newHighlightedShape)) {
+                this.setCursor(new Cursor(Cursor.MOVE_CURSOR));
+            }
+
             // Don't re-draw the selected object if they are the same or null, or equal
             // to the currently selected object...
             if (!Objects.equals(newHighlightedShape, this.highlightedShape) &&
                     !Objects.equals(this.selectedShape, newHighlightedShape)) {
+
+                this.setCursor(currentTool.getCursor());
 
                 // set the 'new' shape to the currently highlighted one...
                 this.highlightedShape = newHighlightedShape;
@@ -385,21 +429,21 @@ public class Canvas extends JPanel implements MouseMotionListener, MouseInputLis
             // we need to boot up JFileChooser to select the item that
             // will be drawn on the canvas.
             if (currentTool.getType() == ToolType.IMAGE) {
-                var jfc = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory());
+                var fileChooser = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory());
 
                 // filter for image files only
                 FileFilter imageFilter = new FileNameExtensionFilter(
                         "Image files", "jpg", "png");
 
-                jfc.setFileFilter(imageFilter);
+                fileChooser.setFileFilter(imageFilter);
 
-                int result = jfc.showOpenDialog(null);
+                int result = fileChooser.showOpenDialog(null);
 
                 if (result == JFileChooser.APPROVE_OPTION) {
                     BufferedImage selectedImage;
 
                     try {
-                        selectedImage = ImageIO.read(jfc.getSelectedFile());
+                        selectedImage = ImageIO.read(fileChooser.getSelectedFile());
 
 
                         return new ImageShape(x1, y1, selectedImage);
@@ -458,8 +502,7 @@ public class Canvas extends JPanel implements MouseMotionListener, MouseInputLis
         newObject.setX(newObject.getX() + 10);
         newObject.setY(newObject.getY() + 10);
 
-        this.selectedShape = null;
-
+        this.resetSelectedObject();
         this.repaint();
 
         this.selectedShape = newObject;
@@ -481,5 +524,39 @@ public class Canvas extends JPanel implements MouseMotionListener, MouseInputLis
         selectedShape = null;
 
         this.repaint();
+    }
+
+
+    /**
+     *
+     */
+    public void export(File to, String extension) {
+        if (!extension.equals("jpg") || !extension.equals("png")) {
+            throw new UnsupportedOperationException("Can't export to specified extension");
+        }
+
+        var image = new BufferedImage(getWidth(), getHeight(), BufferedImage.TYPE_INT_ARGB);
+        var g = image.createGraphics();
+
+        // we need to temporarily disable any kind of 'currentObject', 'selectedObject', and
+        // 'highlighted' shape. We can disable the additionalOverlay flag to prevent the
+        // paint method from paint those additional components. Once the graphic is pained,
+        // we can re-enable the painting of the additional components.
+        this.additionalOverlay = false;
+        this.paint(g);
+        this.additionalOverlay = true;
+
+        g.dispose();
+
+        try (
+                var out = new FileOutputStream(to)
+        ) {
+            if (to.createNewFile()) {
+                System.out.println("LOG: Exporting image to " + to.toString());
+                ImageIO.write(image, extension, out);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

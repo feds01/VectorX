@@ -127,8 +127,8 @@ public class TextFieldInput extends BaseInput<String> {
         this.field.removePropertyChangeListener(listener);
     }
 
-    public void setValue(String value) {
-        this.field.setText(value);
+    public void setValue(Object value) {
+        this.field.setText((String) value);
     }
 
     public String getValue() {

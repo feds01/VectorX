@@ -12,7 +12,7 @@ public abstract class Shape {
 
     protected ShapeProperties properties = new ShapeProperties();
 
-    protected final ShapePropertyFactory propertyFactory = new ShapePropertyFactory();
+    protected ShapePropertyFactory propertyFactory = new ShapePropertyFactory();
 
 
     public Shape(int x, int y, int x2, int y2) {
@@ -119,5 +119,9 @@ public abstract class Shape {
 
         var oldProperty = this.properties.get(name);
         oldProperty.setValue(value);
+    }
+
+    public Object getProperty(String name) {
+        return this.properties.get(name).getValue();
     }
 }

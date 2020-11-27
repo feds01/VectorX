@@ -107,7 +107,7 @@ public class WidgetFactory {
             case IMAGE:
                 var image = (ImageShape) shape;
 
-                return new ImageToolWidget(image, frame);
+                return new ImageToolWidget(image);
             case TEXT:
                 var text = (TextShape) shape;
                 return new TextToolWidget(text, frame);

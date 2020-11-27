@@ -6,7 +6,6 @@ import ui.input.ColourPickerInput;
 import ui.input.CoordinateInput;
 import ui.input.NumberFieldInput;
 import ui.input.SliderInput;
-import ui.input.TextFieldInput;
 
 import javax.swing.JFrame;
 import java.awt.Color;
@@ -15,7 +14,7 @@ import java.awt.Point;
 public class LineToolWidget extends BaseToolWidget {
 
     public LineToolWidget(Line shape, JFrame frame) {
-        super();
+        super(shape);
 
         var startPosition = new CoordinateInput("start", new Point(shape.getX(), shape.getY()), "X", "Y");
         this.tools.add(startPosition);
@@ -42,17 +41,21 @@ public class LineToolWidget extends BaseToolWidget {
 
         this.tools.add(strokeColour);
 
+        // setup listeners for tools
+        this.setupInputListeners();
+    }
+
+    @Override
+    protected void constructUI() {
         this.panel.add(WidgetFactory.createTitleWidget("TRANSFORM"));
-        this.panel.add(startPosition.getComponent());
-        this.panel.add(endPosition.getComponent());
-        this.panel.add(rotation.getComponent());
+        this.panel.add(this.tools.get(0).getComponent());
+        this.panel.add(this.tools.get(1).getComponent());
+        this.panel.add(this.tools.get(2).getComponent());
         this.panel.add(WidgetFactory.createSeparator());
 
         this.panel.add(WidgetFactory.createTitleWidget("APPEARANCE"));
-        this.panel.add(lineThickness.getComponent());
-        this.panel.add(strokeColour.getComponent());
+        this.panel.add(this.tools.get(3).getComponent());
+        this.panel.add(this.tools.get(4).getComponent());
 
-        // setup listeners for tools
-        this.setupInputListeners();
     }
 }
