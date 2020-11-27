@@ -37,6 +37,8 @@ public class ImageShape extends Shape {
 
         this.image = image;
 
+        this.properties.set("start", propertyFactory.createPointProperty("start", new Point(x, y)));
+
         this.properties.addProperty(new ShapeProperty<>("grayScale", false, value -> true));
         this.properties.addProperty(propertyFactory.createColourProperty("strokeColour", Color.BLACK));
         this.properties.addProperty(propertyFactory.createColourProperty("fillColour", Color.WHITE));
@@ -111,8 +113,8 @@ public class ImageShape extends Shape {
      */
     @Override
     public void drawSelectedBoundary(Graphics2D g) {
-        int width = (int) ((Point) this.properties.get("end").getValue()).getX();
-        int height = (int) ((Point) this.properties.get("end").getValue()).getY();
+        int width =  image.getWidth();
+        int height = image.getHeight();
 
         int xPos = getX() - image.getWidth() / 2;
         int yPos = getY() - image.getHeight() / 2;
@@ -166,8 +168,8 @@ public class ImageShape extends Shape {
      */
     @Override
     public boolean isPointWithinBounds(Point point) {
-        int width = (int) ((Point) this.properties.get("end").getValue()).getX();
-        int height = (int) ((Point) this.properties.get("end").getValue()).getY();
+        int width =  image.getWidth();
+        int height = image.getHeight();
 
         int xPos = getX() - image.getWidth() / 2;
         int yPos = getY() - image.getHeight() / 2;

@@ -125,6 +125,9 @@ public class TopMenu extends JMenuBar {
 
         newItem.addActionListener(e -> {
             widget.getCanvas().clear();
+
+            // reset the title to null
+            frame.setTitle("Vector X - Editing New File");
         });
 
 
@@ -141,7 +144,7 @@ public class TopMenu extends JMenuBar {
             if (data != null) {
                 assert file != null;
 
-                frame.setTitle("Editing " + file.getName());
+                frame.setTitle("VectorX - Editing " + file.getName());
                 widget.getCanvas().setShapes(data);
             }
 

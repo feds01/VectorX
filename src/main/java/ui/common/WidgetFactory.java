@@ -97,7 +97,6 @@ public class WidgetFactory {
     public static BaseToolWidget createWidgetFromShape(Shape shape, JFrame frame) {
 
         switch (shape.getToolType()) {
-
             case LINE:
                 var line = (Line) shape;
 

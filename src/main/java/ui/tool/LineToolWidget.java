@@ -48,6 +48,7 @@ public class LineToolWidget extends BaseToolWidget {
 
         // setup listeners for tools
         this.setupInputListeners();
+        this.constructUI();
     }
 
     /**

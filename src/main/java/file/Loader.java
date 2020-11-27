@@ -56,8 +56,6 @@ public class Loader {
 
         } catch (IOException | ClassNotFoundException e) {
             JOptionPane.showMessageDialog(this.frame, "File is corrupted.");
-
-            e.printStackTrace();
         }
 
         return shapes;

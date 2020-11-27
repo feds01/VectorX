@@ -47,11 +47,30 @@ public class Line extends Shape {
     }
 
     public int getEndX() {
-        var start = this.properties.get("end");
+        var end = this.properties.get("end");
 
-        var point = (Point) (start.getValue());
+        var point = (Point) (end.getValue());
 
         return point.x;
+    }
+
+    public void setEndX(int x) {
+        var end = this.properties.get("end");
+
+        var point = (Point) (end.getValue());
+        var newPoint = new Point(x, point.y);
+
+        end.setValue(newPoint);
+    }
+
+
+    public void setEndY(int y) {
+        var end = this.properties.get("end");
+
+        var point = (Point) (end.getValue());
+        var newPoint = new Point(point.x, y);
+
+        end.setValue(newPoint);
     }
 
 
@@ -59,9 +78,9 @@ public class Line extends Shape {
      *
      */
     public int getEndY() {
-        var start = this.properties.get("end");
+        var end = this.properties.get("end");
 
-        var point = (Point) (start.getValue());
+        var point = (Point) (end.getValue());
 
         return point.y;
     }

@@ -76,15 +76,12 @@ public class PropertiesMenu {
         @Override
         public void propertyChange(PropertyChangeEvent evt) {
             if (evt.getPropertyName().equals("widgetChange")) {
-
                 // remove the old component from the property menu
                 panel.removeAll();
-
                 toolWidget = (BaseToolWidget) evt.getNewValue();
 
                 panel.add(toolWidget.getComponent());
             }
-
 
             panel.revalidate();
             panel.repaint();

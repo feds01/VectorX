@@ -48,7 +48,7 @@ public class CanvasContainer extends JPanel implements MouseMotionListener, Mous
     /**
      *
      * */
-    private final HistoryManager historyManager;
+//    private final HistoryManager historyManager;
 
 
     /**
@@ -125,7 +125,7 @@ public class CanvasContainer extends JPanel implements MouseMotionListener, Mous
         this.addMouseListener(this);
         this.addMouseMotionListener(this);
 
-        this.historyManager = new HistoryManager();
+//        this.historyManager = new HistoryManager();
 
         // setup widget property change listener
         this.toolController.addPropertyChangeListener(this::toolChangeListener);
@@ -274,22 +274,24 @@ public class CanvasContainer extends JPanel implements MouseMotionListener, Mous
     public void mousePressed(MouseEvent e) {
         var currentTool = this.toolController.getCurrentTool();
 
-        if (SwingUtilities.isLeftMouseButton(e)) {
-            mouseX1 = e.getX();
-            mouseY1 = e.getY();
+        mouseX1 = e.getX();
+        mouseY1 = e.getY();
 
+        if (SwingUtilities.isLeftMouseButton(e)) {
             if (currentTool.getType() == ToolType.SELECTOR) {
                 var selectedShape = getShapeIfHoveringShape(e.getPoint());
 
                 this.isDragging = true;
 
                 // update the cursor to represent the movement of the object
-                if (!Objects.equals(selectedShape, this.selectedShape) && selectedShape != null) {
+                if (!Objects.equals(selectedShape, this.selectedShape)) {
                     this.selectedShape = selectedShape;
 
                     this.repaint();
 
-                    this.widgetController.setCurrentWidgetFromShape(selectedShape);
+                    if (selectedShape != null) {
+                        this.widgetController.setCurrentWidgetFromShape(this.selectedShape);
+                    }
                 }
             }
 
@@ -362,7 +364,6 @@ public class CanvasContainer extends JPanel implements MouseMotionListener, Mous
 
         if (SwingUtilities.isLeftMouseButton(e)) {
             if (currentTool.getType() == ToolType.SELECTOR && this.isDragging && this.selectedShape != null) {
-
                 var oldX = this.selectedShape.getX();
                 var oldY = this.selectedShape.getY();
 
@@ -371,8 +372,14 @@ public class CanvasContainer extends JPanel implements MouseMotionListener, Mous
                     this.selectedShape.setX(oldX + (e.getX() - mouseX1));
                     this.selectedShape.setY(oldY + (e.getY() - mouseY1));
 
-                    mouseX1 = e.getX();
-                    mouseY1 = e.getY();
+                    // only do this for line objects
+                    if (this.selectedShape instanceof Line) {
+                        var oldEndX = ((Line) this.selectedShape).getEndX();
+                        var oldEndY = ((Line) this.selectedShape).getEndY();
+
+                        ((Line) (this.selectedShape)).setEndX(oldEndX + (e.getX() - mouseX1));
+                        ((Line) (this.selectedShape)).setEndY(oldEndY + (e.getY() - mouseY1));
+                    }
 
                     this.repaint();
                 } catch (IllegalArgumentException ignored) {
@@ -381,7 +388,6 @@ public class CanvasContainer extends JPanel implements MouseMotionListener, Mous
                 }
 
             }
-
 
             // Perform a drawing action if the current tool is not the selector, fill
             // or an image inserter.
@@ -557,7 +563,6 @@ public class CanvasContainer extends JPanel implements MouseMotionListener, Mous
             }
 
         } catch (IllegalArgumentException ignored) {
-            System.out.println(ignored);
             return null;
         }
 

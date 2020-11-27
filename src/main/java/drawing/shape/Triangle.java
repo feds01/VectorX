@@ -104,6 +104,10 @@ public class Triangle extends Shape {
     @Override
     public void draw(Graphics2D g, boolean isResizing) {
         // draw the rectangle
+
+        int thicknessValue = (Integer) this.getPropertyMap().get("thickness").getValue();
+        g.setStroke(new BasicStroke(thicknessValue));
+
         g.setColor(this.getShapeFillColour());
         g.fillPolygon(xPoints, yPoints, 3);
 

@@ -7,10 +7,20 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ *
+ * */
 public class FontLoader {
+
+    /**
+     *
+     * */
     private static final FontLoader instance = new FontLoader();
 
 
+    /**
+     *
+     * */
     private final Map<String, Font> fontMap = new HashMap<>();
 
     private FontLoader() {
@@ -23,11 +33,17 @@ public class FontLoader {
         }
     }
 
+    /**
+     *
+     * */
     public static FontLoader getInstance() {
         return instance;
     }
 
 
+    /**
+     *
+     * */
     public Font getFont(String name) throws IllegalArgumentException {
         if (!fontMap.containsKey(name)) {
             throw new IllegalArgumentException("Invalid font name.");
