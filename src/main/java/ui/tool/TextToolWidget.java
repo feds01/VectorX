@@ -50,6 +50,7 @@ public class TextToolWidget extends BaseToolWidget {
 
         // setup listeners for tools
         this.setupInputListeners();
+        this.constructUI();
     }
 
     /**

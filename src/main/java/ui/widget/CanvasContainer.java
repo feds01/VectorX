@@ -202,7 +202,7 @@ public class CanvasContainer extends JPanel implements MouseMotionListener, Mous
         }
 
         // Draw a selected bounding box if a shape has been selected...
-        if (additionalOverlay && selectedShape != null) {
+        if (additionalOverlay && selectedShape != null && !isDragging) {
             selectedShape.drawSelectedBoundary(g2);
         }
 
@@ -274,10 +274,10 @@ public class CanvasContainer extends JPanel implements MouseMotionListener, Mous
     public void mousePressed(MouseEvent e) {
         var currentTool = this.toolController.getCurrentTool();
 
-        mouseX1 = e.getX();
-        mouseY1 = e.getY();
-
         if (SwingUtilities.isLeftMouseButton(e)) {
+            mouseX1 = e.getX();
+            mouseY1 = e.getY();
+
             if (currentTool.getType() == ToolType.SELECTOR) {
                 var selectedShape = getShapeIfHoveringShape(e.getPoint());
 
@@ -380,6 +380,9 @@ public class CanvasContainer extends JPanel implements MouseMotionListener, Mous
                         ((Line) (this.selectedShape)).setEndX(oldEndX + (e.getX() - mouseX1));
                         ((Line) (this.selectedShape)).setEndY(oldEndY + (e.getY() - mouseY1));
                     }
+
+                    mouseX1 = e.getX();
+                    mouseY1 = e.getY();
 
                     this.repaint();
                 } catch (IllegalArgumentException ignored) {

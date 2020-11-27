@@ -18,11 +18,10 @@ public class FillToolWidget extends BaseToolWidget {
         super(null);
 
         var fillTool = new ColourPickerInput("fill", Color.WHITE, "FILL", frame);
-
         this.tools.add(fillTool);
 
-        this.panel.add(WidgetFactory.createTitleWidget("APPEARANCE"));
-        this.panel.add(fillTool.getComponent());
+        this.constructUI();
+
     }
 
     /**
