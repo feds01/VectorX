@@ -1,5 +1,6 @@
 package drawing.shape;
 
+import java.awt.AlphaComposite;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
@@ -68,5 +69,15 @@ public class ShapeUtility {
 
         // draw modifying circle at the end of line
         ShapeUtility.drawSelectorPoint(g, x + width, y + height);
+    }
+
+
+    public static void setAlpha(Graphics2D g, int alpha) {
+        float a = (float) alpha / 255.0f;
+
+        var alphaComposite = AlphaComposite.getInstance(
+                AlphaComposite.SRC_OVER, a);
+
+        g.setComposite(alphaComposite);
     }
 }

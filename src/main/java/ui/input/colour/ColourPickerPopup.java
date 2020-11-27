@@ -163,7 +163,6 @@ public class ColourPickerPopup extends Box {
      * */
     private void alphaSliderListener(PropertyChangeEvent propertyChangeEvent) {
         var oldColour = colourBox.getColour();
-
         colourBox.setAlpha((Integer) propertyChangeEvent.getNewValue());
 
         changes.firePropertyChange("colour", oldColour, colourBox.getColour());

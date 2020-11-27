@@ -6,6 +6,7 @@ import drawing.shape.ShapeProperties;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Stack;
@@ -58,13 +59,15 @@ public class HistoryManager {
      *
      * */
     public void addHistoryEntry(Shape shape) {
-        var copy = Map.copyOf(currentFrame);
+        var copy = new LinkedHashMap<>(currentFrame);
 
         var propertyCopy = (ShapeProperties) CopyUtils.deepCopy(shape.getProperties());
 
         copy.put(addedCanvasShapes.indexOf(shape), propertyCopy);
-
         this.historyFrames.push(copy);
+        this.currentFrame = copy;
+
+        currentFrameId++;
     }
 
     /**
