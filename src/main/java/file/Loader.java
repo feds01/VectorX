@@ -10,15 +10,31 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.util.List;
 
+/**
+ *
+ */
 public class Loader {
+    /**
+     *
+     */
     private final File file;
+
+    /**
+     *
+     */
     private final JFrame frame;
 
+    /**
+     *
+     */
     public Loader(File file, JFrame frame) {
         this.file = file;
         this.frame = frame;
     }
 
+    /**
+     *
+     */
     public List<Shape> load() {
         List<Shape> shapes = null;
 
@@ -27,10 +43,11 @@ public class Loader {
                 JOptionPane.showMessageDialog(this.frame, "File doesn't exist.");
             }
 
+            // Read the VEX file and close the stream
             FileInputStream fileInputStream = new FileInputStream(file);
             ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
 
-            // Write the VEX file and close the stream
+
             shapes = (List<Shape>) objectInputStream.readObject();
 
             System.out.println("LOG: Loaded file " + file.toString());

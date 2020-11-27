@@ -10,8 +10,14 @@ import java.awt.Point;
 import java.awt.geom.Ellipse2D;
 import java.util.Objects;
 
+/**
+ *
+ */
 public class Ellipses extends Shape {
 
+    /**
+     *
+     */
     public Ellipses(int x, int y, int x2, int y2) {
         super(x, y, x2, y2);
 
@@ -20,6 +26,9 @@ public class Ellipses extends Shape {
         this.properties.addProperty(new ShapeProperty<>("thickness", 1, value -> 1 <= value && value <= 16));
     }
 
+    /**
+     *
+     */
     public Ellipses copy()  {
         int width = (int) ((Point) this.getPropertyMap().get("end").getValue()).getX();
         int height = (int) ((Point) this.getPropertyMap().get("end").getValue()).getY();
@@ -30,12 +39,17 @@ public class Ellipses extends Shape {
         return clazz;
     }
 
-
+    /**
+     *
+     */
     @Override
     public ToolType getToolType() {
         return ToolType.ELLIPSIS;
     }
 
+    /**
+     *
+     */
     @Override
     public void drawBoundary(Graphics2D g) {
         int width = (int) ((Point) this.properties.get("end").getValue()).getX();
@@ -46,6 +60,9 @@ public class Ellipses extends Shape {
         g.drawOval(getX(), getY(), width, height);
     }
 
+    /**
+     *
+     */
     @Override
     public void drawSelectedBoundary(Graphics2D g) {
         int width = (int) ((Point) this.properties.get("end").getValue()).getX();
@@ -56,6 +73,9 @@ public class Ellipses extends Shape {
         ShapeUtility.drawSelectorRect(g, getX(), getY(), width, height);
     }
 
+    /**
+     *
+     */
     @Override
     public void draw(Graphics2D g, boolean isResizing) {
         int width = (int) ((Point) this.properties.get("end").getValue()).getX();
@@ -72,11 +92,17 @@ public class Ellipses extends Shape {
         g.drawOval(getX(), getY(), width, height);
     }
 
+    /**
+     *
+     */
     @Override
     public boolean isFillable() {
         return true;
     }
 
+    /**
+     *
+     */
     @Override
     public boolean isPointWithinBounds(Point point) {
         int width = (int) ((Point) this.properties.get("end").getValue()).getX();
@@ -87,6 +113,9 @@ public class Ellipses extends Shape {
         return ellipse.contains(point);
     }
 
+    /**
+     *
+     */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -98,6 +127,9 @@ public class Ellipses extends Shape {
                 Objects.equals(propertyFactory, ellipses.propertyFactory);
     }
 
+    /**
+     *
+     */
     @Override
     public int hashCode() {
         return Objects.hash(getX(), getY(), properties, propertyFactory);

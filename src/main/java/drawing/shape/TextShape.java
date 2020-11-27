@@ -28,6 +28,9 @@ public class TextShape extends Shape {
         this.properties.addProperty(new ShapeProperty<>("fontSize", 10, value -> 4 <= value && value <= 20));
     }
 
+    /**
+     *
+     */
     public TextShape copy() {
         int width = (int) ((Point) this.getPropertyMap().get("end").getValue()).getX();
         int height = (int) ((Point) this.getPropertyMap().get("end").getValue()).getY();
@@ -38,11 +41,17 @@ public class TextShape extends Shape {
         return clazz;
     }
 
+    /**
+     *
+     */
     @Override
     public ToolType getToolType() {
         return ToolType.TEXT;
     }
 
+    /**
+     *
+     */
     @Override
     public void drawBoundary(Graphics2D g) {
         int width = (int) ((Point) this.properties.get("end").getValue()).getX();
@@ -54,6 +63,9 @@ public class TextShape extends Shape {
         g.drawRect(getX(), getY(), width, height);
     }
 
+    /**
+     *
+     */
     @Override
     public void drawSelectedBoundary(Graphics2D g) {
         int width = (int) ((Point) this.properties.get("end").getValue()).getX();
@@ -64,6 +76,9 @@ public class TextShape extends Shape {
         ShapeUtility.drawSelectorRect(g, getX(), getY(), width, height);
     }
 
+    /**
+     *
+     */
     @Override
     public void draw(Graphics2D g, boolean isResizing) {
         int width = (int) ((Point) this.properties.get("end").getValue()).getX();
@@ -97,11 +112,17 @@ public class TextShape extends Shape {
         }
     }
 
+    /**
+     *
+     */
     @Override
     public boolean isFillable() {
         return true;
     }
 
+    /**
+     *
+     */
     @Override
     public boolean isPointWithinBounds(Point point) {
         int width = (int) ((Point) this.properties.get("end").getValue()).getX();
@@ -112,6 +133,9 @@ public class TextShape extends Shape {
         return shape.contains(point);
     }
 
+    /**
+     *
+     */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -123,6 +147,9 @@ public class TextShape extends Shape {
                 Objects.equals(propertyFactory, textShape.propertyFactory);
     }
 
+    /**
+     *
+     */
     @Override
     public int hashCode() {
         return Objects.hash(getX(), getY(), properties, propertyFactory);

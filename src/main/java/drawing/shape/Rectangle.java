@@ -9,7 +9,13 @@ import java.awt.Graphics2D;
 import java.awt.Point;
 import java.util.Objects;
 
+/**
+ *
+ */
 public class Rectangle extends Shape {
+    /**
+     *
+     */
     public Rectangle(int x, int y, int x2, int y2) {
         super(x, y, x2, y2);
 
@@ -18,6 +24,9 @@ public class Rectangle extends Shape {
         this.properties.addProperty(new ShapeProperty<>("thickness", 1, value -> 1 <= value && value <= 16));
     }
 
+    /**
+     *
+     */
     public Rectangle copy()  {
         int width = (int) ((Point) this.getPropertyMap().get("end").getValue()).getX();
         int height = (int) ((Point) this.getPropertyMap().get("end").getValue()).getY();
@@ -28,12 +37,18 @@ public class Rectangle extends Shape {
         return clazz;
     }
 
+    /**
+     *
+     */
     @Override
     public ToolType getToolType() {
         return ToolType.RECTANGLE;
     }
 
 
+    /**
+     *
+     */
     @Override
     public void drawSelectedBoundary(Graphics2D g) {
         int x = (int) ((Point) this.getPropertyMap().get("start").getValue()).getX();
@@ -48,6 +63,9 @@ public class Rectangle extends Shape {
     }
 
 
+    /**
+     *
+     */
     @Override
     public void drawBoundary(Graphics2D g) {
         int x = (int) ((Point) this.getPropertyMap().get("start").getValue()).getX();
@@ -65,6 +83,9 @@ public class Rectangle extends Shape {
         g.drawRect(x, y, width, height);
     }
 
+    /**
+     *
+     */
     @Override
     public void draw(Graphics2D g, boolean isResizing) {
         int x = (int) ((Point) this.getPropertyMap().get("start").getValue()).getX();
@@ -87,11 +108,17 @@ public class Rectangle extends Shape {
         g.drawRect(x, y, width, height);
     }
 
+    /**
+     *
+     */
     @Override
     public boolean isFillable() {
         return true;
     }
 
+    /**
+     *
+     */
     @Override
     public boolean isPointWithinBounds(Point point) {
         int x = (int) ((Point) this.getPropertyMap().get("start").getValue()).getX();
@@ -105,6 +132,9 @@ public class Rectangle extends Shape {
         );
     }
 
+    /**
+     *
+     */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -116,6 +146,9 @@ public class Rectangle extends Shape {
                 Objects.equals(propertyFactory, rectangle.propertyFactory);
     }
 
+    /**
+     *
+     */
     @Override
     public int hashCode() {
         return Objects.hash(getX(), getY(), properties, propertyFactory);

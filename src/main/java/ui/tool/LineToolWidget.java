@@ -11,8 +11,13 @@ import javax.swing.JFrame;
 import java.awt.Color;
 import java.awt.Point;
 
+/**
+ *
+ */
 public class LineToolWidget extends BaseToolWidget {
-
+    /**
+     *
+     */
     public LineToolWidget(Line shape, JFrame frame) {
         super(shape);
 
@@ -45,6 +50,9 @@ public class LineToolWidget extends BaseToolWidget {
         this.setupInputListeners();
     }
 
+    /**
+     *
+     */
     @Override
     protected void constructUI() {
         this.panel.add(WidgetFactory.createTitleWidget("TRANSFORM"));

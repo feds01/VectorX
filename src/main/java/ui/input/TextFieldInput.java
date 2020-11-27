@@ -27,6 +27,9 @@ public class TextFieldInput extends BaseInput<String> {
      * */
     private JLabel label = null;
 
+    /**
+     *
+     */
     private String oldValue;
 
     /**
@@ -127,18 +130,30 @@ public class TextFieldInput extends BaseInput<String> {
         this.field.removePropertyChangeListener(listener);
     }
 
+    /**
+     *
+     */
     public void setValue(Object value) {
         this.field.setText((String) value);
     }
 
+    /**
+     *
+     */
     public String getValue() {
         return this.field.getText();
     }
 
+    /**
+     *
+     */
     public JLabel getLabel() {
         return this.label;
     }
 
+    /**
+     *
+     */
     public JTextField getField() {
         return this.field;
     }

@@ -8,15 +8,31 @@ import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.util.List;
 
+/**
+ *
+ */
 public class Saver {
+    /**
+     *
+     */
     private final File file;
+
+    /**
+     *
+     */
     private final List<Shape> data;
 
+    /**
+     *
+     */
     public Saver(File file, List<Shape> data) {
         this.file = file;
         this.data = data;
     }
 
+    /**
+     *
+     */
     public void save() {
         try {
             if (!file.exists()) {

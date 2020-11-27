@@ -1,5 +1,8 @@
 package drawing;
 
+/**
+ *
+ */
 public enum ToolType {
     SELECTOR,
     FILL,

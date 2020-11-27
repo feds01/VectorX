@@ -19,10 +19,19 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.Objects;
 
+/**
+ *
+ */
 public class ImageShape extends Shape {
+
+    /**
+     *
+     */
     private transient BufferedImage image;
 
-
+    /**
+     *
+     */
     public ImageShape(int x, int y, BufferedImage image) {
         super(x, y, x + image.getWidth(), y + image.getHeight());
 
@@ -33,6 +42,9 @@ public class ImageShape extends Shape {
         this.properties.addProperty(propertyFactory.createColourProperty("fillColour", Color.WHITE));
     }
 
+    /**
+     *
+     */
     public ImageShape copy()  {
         var clazz = new ImageShape(this.getX(), this.getY(), image);
         clazz.setProperties((ShapeProperties) CopyUtils.deepCopy(this.properties));
@@ -40,19 +52,31 @@ public class ImageShape extends Shape {
         return clazz;
     }
 
+    /**
+     *
+     */
     public BufferedImage getImage() {
         return this.image;
     }
 
+    /**
+     *
+     */
     public void setImage(BufferedImage image) {
         this.image = image;
     }
 
+    /**
+     *
+     */
     @Override
     public ToolType getToolType() {
         return ToolType.IMAGE;
     }
 
+    /**
+     *
+     */
     @Override
     public void drawBoundary(Graphics2D g) {
         int xPos = getX() - image.getWidth() / 2;
@@ -63,6 +87,9 @@ public class ImageShape extends Shape {
         g.drawRect(xPos, yPos, image.getWidth(), image.getHeight());
     }
 
+    /**
+     *
+     */
     private void writeObject(ObjectOutputStream outputStream) throws IOException {
         outputStream.defaultWriteObject();
 
@@ -70,12 +97,18 @@ public class ImageShape extends Shape {
         ImageIO.write(this.image, "png", outputStream);
     }
 
+    /**
+     *
+     */
     private void readObject(ObjectInputStream inputStream) throws IOException, ClassNotFoundException {
         inputStream.defaultReadObject();
 
         this.image = ImageIO.read(inputStream);
     }
 
+    /**
+     *
+     */
     @Override
     public void drawSelectedBoundary(Graphics2D g) {
         int width = (int) ((Point) this.properties.get("end").getValue()).getX();
@@ -89,6 +122,9 @@ public class ImageShape extends Shape {
         ShapeUtility.drawSelectorRect(g, xPos, yPos, width, height);
     }
 
+    /**
+     *
+     */
     @Override
     public void draw(Graphics2D g, boolean isResizing) {
         var image = this.image;
@@ -117,11 +153,17 @@ public class ImageShape extends Shape {
         }
     }
 
+    /**
+     *
+     */
     @Override
     public boolean isFillable() {
         return false;
     }
 
+    /**
+     *
+     */
     @Override
     public boolean isPointWithinBounds(Point point) {
         int width = (int) ((Point) this.properties.get("end").getValue()).getX();
@@ -136,6 +178,9 @@ public class ImageShape extends Shape {
         );
     }
 
+    /**
+     *
+     */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -148,6 +193,9 @@ public class ImageShape extends Shape {
                 Objects.equals(propertyFactory, that.propertyFactory);
     }
 
+    /**
+     *
+     */
     @Override
     public int hashCode() {
         return Objects.hash(getX(), getY(), image, properties, propertyFactory);

@@ -11,6 +11,9 @@ import javax.swing.JFrame;
 import java.awt.Color;
 import java.awt.Point;
 
+/**
+ *
+ * */
 public class TextToolWidget extends BaseToolWidget {
     public TextToolWidget(TextShape shape, JFrame frame) {
         super(shape);
@@ -49,6 +52,9 @@ public class TextToolWidget extends BaseToolWidget {
         this.setupInputListeners();
     }
 
+    /**
+     *
+     * */
     public void constructUI() {
         this.panel.add(WidgetFactory.createTitleWidget("TRANSFORM"));
         this.panel.add(this.tools.get(0).getComponent());

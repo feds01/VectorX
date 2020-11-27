@@ -9,13 +9,11 @@ import drawing.shape.Shape;
 import drawing.shape.TextShape;
 import drawing.shape.Triangle;
 import ui.tool.BaseToolWidget;
-import ui.tool.EllipsisToolWidget;
 import ui.tool.EmptyToolWidget;
 import ui.tool.ImageToolWidget;
 import ui.tool.LineToolWidget;
-import ui.tool.RectangleToolWidget;
+import ui.tool.ShapeToolWidget;
 import ui.tool.TextToolWidget;
-import ui.tool.TriangleToolWidget;
 
 import javax.swing.Box;
 import javax.swing.JFrame;
@@ -31,6 +29,9 @@ import java.awt.font.TextAttribute;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ *
+ */
 public class WidgetFactory {
 
     /**
@@ -38,6 +39,9 @@ public class WidgetFactory {
      */
     protected static final FontLoader fontLoader = FontLoader.getInstance();
 
+    /**
+     *
+     */
     public static JPanel createTitleWidget(String name) {
         JPanel box = new JPanel();
 
@@ -74,6 +78,9 @@ public class WidgetFactory {
         return box;
     }
 
+    /**
+     *
+     */
     public static JSeparator createSeparator() {
         var separator = new JSeparator();
         separator.setPreferredSize(new Dimension(240, 1));
@@ -84,6 +91,9 @@ public class WidgetFactory {
         return separator;
     }
 
+    /**
+     *
+     */
     public static BaseToolWidget createWidgetFromShape(Shape shape, JFrame frame) {
 
         switch (shape.getToolType()) {
@@ -95,15 +105,15 @@ public class WidgetFactory {
             case TRIANGLE:
                 var triangle = (Triangle) shape;
 
-                return new TriangleToolWidget(triangle, frame);
+                return new ShapeToolWidget(triangle, frame);
             case RECTANGLE:
                 var rectangle = (Rectangle) shape;
 
-                return new RectangleToolWidget(rectangle, frame);
+                return new ShapeToolWidget(rectangle, frame);
             case ELLIPSIS:
                 var ellipsis = (Ellipses) shape;
 
-                return new EllipsisToolWidget(ellipsis, frame);
+                return new ShapeToolWidget(ellipsis, frame);
             case IMAGE:
                 var image = (ImageShape) shape;
 

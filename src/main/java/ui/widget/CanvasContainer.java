@@ -67,19 +67,49 @@ public class CanvasContainer extends JPanel implements MouseMotionListener, Mous
      */
     private Shape currentObject = null;
 
+    /**
+     *
+     * */
     private Shape selectedShape = null;
 
+    /**
+     *
+     * */
     private Shape highlightedShape = null;
 
+    /**
+     *
+     * */
     private boolean copySelectedShape = false;
 
+    /**
+     *
+     * */
     private final ToolController toolController;
 
+    /**
+     *
+     * */
     private final WidgetController widgetController;
 
+    /**
+     *
+     * */
     private int mouseX1;
+
+    /**
+     *
+     * */
     private int mouseY1;
+
+    /**
+     *
+     * */
     private boolean isDragging;
+
+    /**
+     *
+     * */
     private boolean additionalOverlay = true;
 
     /**
@@ -527,6 +557,7 @@ public class CanvasContainer extends JPanel implements MouseMotionListener, Mous
             }
 
         } catch (IllegalArgumentException ignored) {
+            System.out.println(ignored);
             return null;
         }
 

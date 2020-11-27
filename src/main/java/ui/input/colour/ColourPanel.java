@@ -24,21 +24,60 @@ import java.beans.PropertyChangeSupport;
  */
 public class ColourPanel extends JPanel {
 
+    /**
+     *
+     */
     private final transient BufferedImage image;
+
+    /**
+     *
+     */
     private PropertyChangeSupport changes = new PropertyChangeSupport(this);
 
+    /**
+     *
+     */
     private int x1 = 5;
+
+    /**
+     *
+     */
     private int y1 = 7;
 
+
+    /**
+     *
+     */
     protected Point slider;
 
+    /**
+     *
+     */
     private Color colour;
 
+    /**
+     *
+     */
     private int red;
+
+    /**
+     *
+     */
     private int green;
+
+    /**
+     *
+     */
     private int blue;
+
+    /**
+     *
+     */
     private int alpha;
 
+    /**
+     *
+     */
     private static final int SIZE = 130;
 
 
@@ -78,6 +117,9 @@ public class ColourPanel extends JPanel {
     }
 
 
+    /**
+     *
+     */
     private BufferedImage updateImage() {
 
         BufferedImage image = new BufferedImage(SIZE, SIZE, BufferedImage.TYPE_INT_ARGB);
@@ -188,6 +230,9 @@ public class ColourPanel extends JPanel {
         });
     }
 
+    /**
+     *
+     */
     private void handleColourChange(MouseEvent event) {
         int x = event.getX();
         int y = event.getY();
@@ -260,22 +305,37 @@ public class ColourPanel extends JPanel {
         this.colour = new Color(colour.getRed(), colour.getGreen(), colour.getBlue(), alpha);
     }
 
+    /**
+     *
+     */
     public Color getColour() {
         return colour;
     }
 
+    /**
+     *
+     */
     public int getRed() {
         return red;
     }
 
+    /**
+     *
+     */
     public int getGreen() {
         return green;
     }
 
+    /**
+     *
+     */
     public int getBlue() {
         return blue;
     }
 
+    /**
+     *
+     */
     public void setColour(Color newColour) {
         this.colour = newColour;
 

@@ -70,6 +70,9 @@ public abstract class BaseToolWidget {
         return values;
     }
 
+    /**
+     *
+     */
     public Object getValue(String name) {
         for (BaseInput<?> tool : tools) {
 
@@ -102,6 +105,9 @@ public abstract class BaseToolWidget {
         return this.panel;
     }
 
+    /**
+     *
+     */
     protected void constructUI() {}
 
     /**

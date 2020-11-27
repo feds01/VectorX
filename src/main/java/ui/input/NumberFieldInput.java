@@ -13,6 +13,9 @@ import java.awt.event.FocusListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
+/**
+ *
+ */
 public class NumberFieldInput extends BaseInput<Integer> {
     /**
      *
@@ -24,6 +27,9 @@ public class NumberFieldInput extends BaseInput<Integer> {
      * */
     private JLabel label;
 
+    /**
+     *
+     */
     private Integer oldValue;
 
     /**
@@ -124,18 +130,30 @@ public class NumberFieldInput extends BaseInput<Integer> {
         this.field.removePropertyChangeListener(listener);
     }
 
+    /**
+     *
+     */
     public void setValue(String value) {
         this.field.setText(value);
     }
 
+    /**
+     *
+     */
     public Integer getValue() {
         return Integer.parseInt(this.field.getText());
     }
 
+    /**
+     *
+     */
     public JLabel getLabel() {
         return this.label;
     }
 
+    /**
+     *
+     */
     public JTextField getField() {
         return this.field;
     }

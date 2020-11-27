@@ -7,10 +7,19 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import java.awt.Color;
 
+/**
+ *
+ */
 public class ColourPickerInput extends BaseInput<Color> {
 
+    /**
+     *
+     */
     private final ColourPicker picker;
 
+    /**
+     *
+     */
     public ColourPickerInput(String name, Color value, String labelText, JFrame frame) {
         super(name, value);
 

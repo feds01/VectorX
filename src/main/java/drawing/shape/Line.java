@@ -10,7 +10,13 @@ import java.awt.Point;
 import java.awt.geom.Line2D;
 import java.util.Objects;
 
+/**
+ *
+ */
 public class Line extends Shape {
+    /**
+     *
+     */
     public Line(int x, int y, int x2, int y2) {
         super(x, y, x2, y2);
 
@@ -22,6 +28,9 @@ public class Line extends Shape {
         this.properties.addProperty(new ShapeProperty<>("thickness", 1, value -> 1 <= value && value <= 16));
     }
 
+    /**
+     *
+     */
     public Line copy()  {
         var clazz = new Line(this.getX(), this.getY(), this.getEndX(), this.getEndY());
         clazz.setProperties((ShapeProperties) CopyUtils.deepCopy(this.properties));
@@ -29,6 +38,9 @@ public class Line extends Shape {
         return clazz;
     }
 
+    /**
+     *
+     */
     @Override
     public ToolType getToolType() {
         return ToolType.LINE;
@@ -43,6 +55,9 @@ public class Line extends Shape {
     }
 
 
+    /**
+     *
+     */
     public int getEndY() {
         var start = this.properties.get("end");
 
@@ -52,6 +67,9 @@ public class Line extends Shape {
     }
 
 
+    /**
+     *
+     */
     @Override
     public void drawBoundary(Graphics2D g) {
         g.setStroke(new BasicStroke(2));
@@ -61,6 +79,9 @@ public class Line extends Shape {
         g.draw(new Line2D.Double(getX(), getY(), getEndX(), getEndY()));
     }
 
+    /**
+     *
+     */
     @Override
     public void drawSelectedBoundary(Graphics2D g) {
 
@@ -76,6 +97,9 @@ public class Line extends Shape {
 
     }
 
+    /**
+     *
+     */
     @Override
     public void draw(Graphics2D g, boolean isResizing) {
         int thickness = (int) this.properties.get("thickness").getValue();
@@ -85,11 +109,17 @@ public class Line extends Shape {
         g.draw(new Line2D.Double(getX(), getY(), getEndX(), getEndY()));
     }
 
+    /**
+     *
+     */
     @Override
     public boolean isFillable() {
         return false;
     }
 
+    /**
+     *
+     */
     @Override
     public boolean isPointWithinBounds(Point point) {
         double distance = Line2D.ptSegDist(getX(), getY(), getEndX(), getEndY(), point.getX(), point.getY());
@@ -97,6 +127,9 @@ public class Line extends Shape {
         return distance < 4;
     }
 
+    /**
+     *
+     */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -110,6 +143,9 @@ public class Line extends Shape {
                 Objects.equals(propertyFactory, line.propertyFactory);
     }
 
+    /**
+     *
+     */
     @Override
     public int hashCode() {
         return Objects.hash(getX(), getY(), getEndX(), getEndY(), properties, propertyFactory);

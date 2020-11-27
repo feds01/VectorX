@@ -9,15 +9,30 @@ import java.awt.Point;
 import java.awt.Toolkit;
 import java.util.Objects;
 
+/**
+ *
+ */
 public class FillTool implements DrawingTool {
+    /**
+     *
+     */
     private final Toolkit toolkit = Toolkit.getDefaultToolkit();
+
+    /**
+     *
+     */
     private final ToolType type;
 
-
+    /**
+     *
+     */
     public FillTool() {
         this.type = ToolType.FILL;
     }
 
+    /**
+     *
+     */
     @Override
     public Cursor getCursor() {
         var icon = new ImageIcon(FillTool.class.getResource("/icons/fill.png"));
@@ -30,16 +45,25 @@ public class FillTool implements DrawingTool {
         return toolkit.createCustomCursor(icon.getImage(), new Point(0, 0), "");
     }
 
+    /**
+     *
+     */
     @Override
     public String getToolTip() {
         return "Fill (F)";
     }
 
+    /**
+     *
+     */
     @Override
     public ToolType getType() {
         return this.type;
     }
 
+    /**
+     *
+     */
     @Override
     public ImageIcon getImageIcon(boolean selected) {
         ImageIcon icon;
@@ -53,6 +77,9 @@ public class FillTool implements DrawingTool {
         return ImageUtils.resizeIcon(icon, 20, 20);
     }
 
+    /**
+     *
+     */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -62,6 +89,9 @@ public class FillTool implements DrawingTool {
                 type == fillTool.type;
     }
 
+    /**
+     *
+     */
     @Override
     public int hashCode() {
         return Objects.hash(toolkit, type);

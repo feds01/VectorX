@@ -8,7 +8,14 @@ import ui.input.NumberFieldInput;
 
 import java.awt.Point;
 
+/**
+ *
+ */
 public class ImageToolWidget extends BaseToolWidget {
+
+    /**
+     *
+     */
     public ImageToolWidget(ImageShape shape) {
         super(shape);
 
@@ -33,6 +40,9 @@ public class ImageToolWidget extends BaseToolWidget {
         this.setupInputListeners();
     }
 
+    /**
+     *
+     */
     public void constructUI() {
         this.panel.add(WidgetFactory.createTitleWidget("TRANSFORM"));
         this.panel.add(this.tools.get(0).getComponent());

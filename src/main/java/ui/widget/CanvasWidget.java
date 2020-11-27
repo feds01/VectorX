@@ -20,20 +20,64 @@ import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseWheelEvent;
 import java.awt.geom.AffineTransform;
 
+/**
+ *
+ * */
 public class CanvasWidget extends JPanel implements MouseListener, MouseMotionListener {
+
+    /**
+     *
+     * */
     private final CanvasContainer canvas;
+
+    /**
+     *
+     * */
     private double zoomFactor = 1;
+
+    /**
+     *
+     * */
     private double prevZoomFactor = 1;
 
+    /**
+     *
+     * */
     private boolean isZooming;
+
+    /**
+     *
+     * */
     private boolean released;
+
+    /**
+     *
+     * */
     private boolean isDragging;
 
+    /**
+     *
+     * */
     private double xOffset = 0;
+
+    /**
+     *
+     * */
     private double yOffset = 0;
 
+    /**
+     *
+     * */
     private int xDiff;
+
+    /**
+     *
+     * */
     private int yDiff;
+
+    /**
+     *
+     * */
     private Point startPoint;
 
     /**
@@ -46,7 +90,9 @@ public class CanvasWidget extends JPanel implements MouseListener, MouseMotionLi
      */
     private final double MIN_SCALE_ZOOM = 0.25;
 
-
+    /**
+     *
+     * */
     public CanvasWidget(ToolController controller, WidgetController widgetController) {
         this.setLayout(new GridBagLayout());
 
@@ -63,6 +109,9 @@ public class CanvasWidget extends JPanel implements MouseListener, MouseMotionLi
         this.addMouseMotionListener(this);
     }
 
+    /**
+     *
+     * */
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
@@ -120,6 +169,9 @@ public class CanvasWidget extends JPanel implements MouseListener, MouseMotionLi
         }
     }
 
+    /**
+     *
+     * */
     public void handleScroll(MouseWheelEvent event) {
         if (event.isControlDown()) {
             this.isZooming = true;
@@ -138,6 +190,9 @@ public class CanvasWidget extends JPanel implements MouseListener, MouseMotionLi
         }
     }
 
+    /**
+     *
+     * */
     @Override
     public void mouseDragged(MouseEvent e) {
         Point curPoint = e.getLocationOnScreen();
@@ -152,21 +207,36 @@ public class CanvasWidget extends JPanel implements MouseListener, MouseMotionLi
         }
     }
 
+    /**
+     *
+     * */
     @Override
     public void mouseMoved(MouseEvent e) {
     }
 
+
+    /**
+     *
+     * */
     @Override
     public void mouseClicked(MouseEvent e) {
 
     }
 
+
+    /**
+     *
+     * */
     @Override
     public void mousePressed(MouseEvent e) {
         released = false;
         startPoint = MouseInfo.getPointerInfo().getLocation();
     }
 
+
+    /**
+     *
+     * */
     @Override
     public void mouseReleased(MouseEvent e) {
         this.setCursor(Cursor.getDefaultCursor());
@@ -174,10 +244,16 @@ public class CanvasWidget extends JPanel implements MouseListener, MouseMotionLi
         repaint();
     }
 
+    /**
+     *
+     * */
     @Override
     public void mouseEntered(MouseEvent e) {
     }
 
+    /**
+     *
+     * */
     @Override
     public void mouseExited(MouseEvent e) {
     }

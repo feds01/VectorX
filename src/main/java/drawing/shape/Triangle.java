@@ -11,10 +11,23 @@ import java.awt.Polygon;
 import java.util.Arrays;
 import java.util.Objects;
 
+/**
+ *
+ */
 public class Triangle extends Shape {
+    /**
+     *
+     */
     private int[] yPoints;
+
+    /**
+     *
+     */
     private int[] xPoints;
 
+    /**
+     *
+     */
     public Triangle(int x, int y, int x2, int y2) {
         super(x, y, x2, y2);
 
@@ -25,6 +38,9 @@ public class Triangle extends Shape {
         this.setPoints();
     }
 
+    /**
+     *
+     */
     public Triangle copy() {
         int width = (int) ((Point) this.getPropertyMap().get("end").getValue()).getX();
         int height = (int) ((Point) this.getPropertyMap().get("end").getValue()).getY();
@@ -35,6 +51,9 @@ public class Triangle extends Shape {
         return clazz;
     }
 
+    /**
+     *
+     */
     private void setPoints() {
         int width = (int) ((Point) this.properties.get("end").getValue()).getX();
         int height = (int) ((Point) this.properties.get("end").getValue()).getY();
@@ -47,11 +66,17 @@ public class Triangle extends Shape {
         this.yPoints = new int[]{y2, getY(), y2};
     }
 
+    /**
+     *
+     */
     @Override
     public ToolType getToolType() {
         return ToolType.TRIANGLE;
     }
 
+    /**
+     *
+     */
     @Override
     public void drawBoundary(Graphics2D g) {
         g.setColor(Shape.SELECTOR_COLOUR);
@@ -60,6 +85,9 @@ public class Triangle extends Shape {
         g.drawPolygon(xPoints, yPoints, 3);
     }
 
+    /**
+     *
+     */
     @Override
     public void drawSelectedBoundary(Graphics2D g) {
         int width = (int) ((Point) this.properties.get("end").getValue()).getX();
@@ -70,6 +98,9 @@ public class Triangle extends Shape {
         ShapeUtility.drawSelectorRect(g, getX(), getY(), width, height);
     }
 
+    /**
+     *
+     */
     @Override
     public void draw(Graphics2D g, boolean isResizing) {
         // draw the rectangle
@@ -81,11 +112,17 @@ public class Triangle extends Shape {
 
     }
 
+    /**
+     *
+     */
     @Override
     public boolean isFillable() {
         return true;
     }
 
+    /**
+     *
+     */
     @Override
     public boolean isPointWithinBounds(Point point) {
 
@@ -95,6 +132,9 @@ public class Triangle extends Shape {
         return triangle.contains(point);
     }
 
+    /**
+     *
+     */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -108,6 +148,9 @@ public class Triangle extends Shape {
                 Objects.equals(propertyFactory, triangle.propertyFactory);
     }
 
+    /**
+     *
+     */
     @Override
     public int hashCode() {
         int result = Objects.hash(getX(), getY(), properties, propertyFactory);

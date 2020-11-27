@@ -7,12 +7,24 @@ import java.awt.Point;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
-
+/**
+ *
+ */
 public class CoordinateInput extends BaseInput<Point> {
+
+    /**
+     *
+     */
     private final TextFieldInput xField;
 
+    /**
+     *
+     */
     private final TextFieldInput yField;
 
+    /**
+     *
+     */
     public CoordinateInput(String name, Point point, String xLabel, String yLabel) {
         super(name, point);
 
@@ -40,6 +52,9 @@ public class CoordinateInput extends BaseInput<Point> {
         this.panel.add(yField.getComponent());
     }
 
+    /**
+     *
+     */
     private void valueChangeListener(PropertyChangeEvent event) {
         JTextField input = (JTextField) event.getSource();
 
@@ -58,6 +73,9 @@ public class CoordinateInput extends BaseInput<Point> {
         }
     }
 
+    /**
+     *
+     */
     @Override
     public void setValue(Object value) {
         Point p = (Point) value;
@@ -66,10 +84,16 @@ public class CoordinateInput extends BaseInput<Point> {
         this.yField.setValue(String.valueOf(p.y));
     }
 
+    /**
+     *
+     */
     public TextFieldInput getXField() {
         return xField;
     }
 
+    /**
+     *
+     */
     public TextFieldInput getYField() {
         return yField;
     }

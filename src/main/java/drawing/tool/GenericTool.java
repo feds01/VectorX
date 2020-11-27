@@ -7,13 +7,33 @@ import javax.swing.ImageIcon;
 import java.awt.Cursor;
 import java.util.Objects;
 
+/**
+ *
+ */
 public class GenericTool implements DrawingTool {
+    /**
+     *
+     */
     private final ToolType type;
+
+    /**
+     *
+     */
     private final Cursor cursor;
 
+    /**
+     *
+     */
     private final String tooltip;
+
+    /**
+     *
+     */
     private final String resourceUri;
 
+    /**
+     *
+     */
     public GenericTool(ToolType type, Cursor cursor, String tooltip, String resourceUri) {
         this.type = type;
         this.cursor = cursor;
@@ -22,23 +42,33 @@ public class GenericTool implements DrawingTool {
         this.resourceUri = resourceUri;
     }
 
+    /**
+     *
+     */
     @Override
     public Cursor getCursor() {
         return this.cursor;
     }
 
+    /**
+     *
+     */
     @Override
     public String getToolTip() {
         return tooltip;
     }
 
+    /**
+     *
+     */
     @Override
     public ToolType getType() {
         return this.type;
     }
 
-
-
+    /**
+     *
+     */
     @Override
     public ImageIcon getImageIcon(boolean selected) {
         ImageIcon icon;
@@ -52,7 +82,9 @@ public class GenericTool implements DrawingTool {
         return ImageUtils.resizeIcon(icon, 20, 20);
     }
 
-
+    /**
+     *
+     */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -63,6 +95,9 @@ public class GenericTool implements DrawingTool {
                 Objects.equals(resourceUri, that.resourceUri);
     }
 
+    /**
+     *
+     */
     @Override
     public int hashCode() {
         return Objects.hash(type, cursor, resourceUri);

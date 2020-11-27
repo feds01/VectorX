@@ -12,11 +12,21 @@ import java.beans.PropertyChangeListener;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ *
+ */
 public class WidgetController {
 
+    /**
+     *
+     */
     private Map<String, Object> widgetProperties = new HashMap<>();
 
+    /**
+     *
+     */
     private final JFrame frame;
+
     /**
      *
      */
@@ -49,6 +59,9 @@ public class WidgetController {
         this.pcs.removePropertyChangeListener(listener);
     }
 
+    /**
+     *
+     */
     public void updateWidget() {
         this.widget.update();
     }
@@ -78,6 +91,9 @@ public class WidgetController {
         pcs.firePropertyChange("widgetChange", oldWidget, this.widget);
     }
 
+    /**
+     *
+     */
     private void propertyListener(PropertyChangeEvent propertyChangeEvent) {
         var widget = (BaseToolWidget) propertyChangeEvent.getSource();
 
@@ -101,6 +117,9 @@ public class WidgetController {
         pcs.firePropertyChange("widgetChange", oldWidget, this.widget);
     }
 
+    /**
+     *
+     */
     public Map<String, Object> getWidgetProperties() {
         return widgetProperties;
     }

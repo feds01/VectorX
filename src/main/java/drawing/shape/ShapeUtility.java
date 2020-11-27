@@ -5,8 +5,14 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.geom.Ellipse2D;
 
+/**
+ *
+ */
 public class ShapeUtility {
 
+    /**
+     *
+     */
     public static void drawSelectorPoint(Graphics2D g, double x, double y) {
         g.setStroke(new BasicStroke(2));
         g.setColor(Color.WHITE);
@@ -16,6 +22,9 @@ public class ShapeUtility {
         g.draw(new Ellipse2D.Double(x - 4, y - 4, 8, 8));
     }
 
+    /**
+     *
+     */
     public static void drawSelectorPoint(Graphics2D g, int x, int y) {
         g.setStroke(new BasicStroke(2));
         g.setColor(Color.WHITE);
@@ -25,6 +34,9 @@ public class ShapeUtility {
         g.drawOval(x - 4, y - 4, 8, 8);
     }
 
+    /**
+     *
+     */
     public static void drawSelectorRect(Graphics2D g, int x, int y, int width, int height) {
         g.setStroke(new BasicStroke(2));
         g.setColor(Shape.SELECTOR_COLOUR);

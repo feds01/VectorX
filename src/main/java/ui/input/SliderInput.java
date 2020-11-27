@@ -22,6 +22,9 @@ import java.awt.geom.RoundRectangle2D;
 import java.beans.PropertyChangeEvent;
 
 
+/**
+ *
+ */
 public class SliderInput extends BaseInput<Integer> {
 
 
@@ -123,13 +126,16 @@ public class SliderInput extends BaseInput<Integer> {
 
     }
 
+    /**
+     *
+     */
     public SliderInput(String name, int value, int min, int max) {
         this(name, value, "", min, max);
     }
 
     /**
      *
-     * */
+     */
     private void textFieldChangeListener(PropertyChangeEvent event) {
         JTextField field = (JTextField) event.getSource();
 
@@ -189,6 +195,9 @@ public class SliderInput extends BaseInput<Integer> {
         }
     }
 
+    /**
+     *
+     */
     public void disableLabel() {
         if (label != null) {
             this.label.setVisible(false);
@@ -196,6 +205,9 @@ public class SliderInput extends BaseInput<Integer> {
 
     }
 
+    /**
+     *
+     */
     public void disableTextBox() {
         this.panel.remove(this.field.getComponent());
     }
@@ -207,18 +219,46 @@ public class SliderInput extends BaseInput<Integer> {
  */
 class SliderUI extends BasicSliderUI {
 
+    /**
+     *
+     */
     private static final Color sliderColour = new Color(0, 0, 36);
 
+    /**
+     *
+     */
     private static final int TRACK_HEIGHT = 4;
+
+    /**
+     *
+     */
     private static final int TRACK_WIDTH = 8;
+
+    /**
+     *
+     */
     private static final int TRACK_ARC = 5;
+
+    /**
+     *
+     */
     private static final Dimension THUMB_SIZE = new Dimension(12, 12);
+
+    /**
+     *
+     */
     private final RoundRectangle2D.Float trackShape = new RoundRectangle2D.Float();
 
+    /**
+     *
+     */
     public SliderUI(final JSlider b) {
         super(b);
     }
 
+    /**
+     *
+     */
     @Override
     protected void calculateTrackRect() {
         super.calculateTrackRect();
@@ -232,6 +272,9 @@ class SliderUI extends BasicSliderUI {
         trackShape.setRoundRect(trackRect.x, trackRect.y, trackRect.width, trackRect.height, TRACK_ARC, TRACK_ARC);
     }
 
+    /**
+     *
+     */
     @Override
     protected void calculateThumbLocation() {
         super.calculateThumbLocation();
@@ -242,6 +285,9 @@ class SliderUI extends BasicSliderUI {
         }
     }
 
+    /**
+     *
+     */
     @Override
     protected Dimension getThumbSize() {
         return THUMB_SIZE;
@@ -251,12 +297,18 @@ class SliderUI extends BasicSliderUI {
         return slider.getOrientation() == JSlider.HORIZONTAL;
     }
 
+    /**
+     *
+     */
     @Override
     public void paint(final Graphics g, final JComponent c) {
         ((Graphics2D) g).setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         super.paint(g, c);
     }
 
+    /**
+     *
+     */
     @Override
     public void paintTrack(final Graphics g) {
         Graphics2D g2 = (Graphics2D) g;
@@ -302,12 +354,18 @@ class SliderUI extends BasicSliderUI {
         g2.setClip(clip);
     }
 
+    /**
+     *
+     */
     @Override
     public void paintThumb(final Graphics g) {
         g.setColor(sliderColour);
         g.fillOval(thumbRect.x, thumbRect.y, thumbRect.width, thumbRect.height);
     }
 
+    /**
+     *
+     */
     @Override
     public void paintFocus(final Graphics g) {
     }

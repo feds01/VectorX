@@ -21,9 +21,6 @@ import java.beans.PropertyChangeListener;
  *
  */
 public class PropertiesMenu {
-
-//    private final FontLoader fontLoader = FontLoader.getInstance();
-
     /**
      *
      */
@@ -33,11 +30,6 @@ public class PropertiesMenu {
      *
      */
     private BaseToolWidget toolWidget;
-
-    /**
-     *
-     * */
-    private WidgetController widgetController;
 
     /**
      *
@@ -63,22 +55,17 @@ public class PropertiesMenu {
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
         panel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-
-//        this.toolTitle = new JLabel(controller.getCurrentTool().getType().toString());
-//        this.toolTitle.setAlignmentX(Component.CENTER_ALIGNMENT);
-//        this.toolTitle.setFont(fontLoader.getFont("NotoSans"));
-//
         this.toolWidget = widgetController.getCurrentToolWidget();
 
-//        panel.add("Object Properties", this.toolTitle);
-//        panel.add(Box.createVerticalStrut(10));
         panel.add(this.toolWidget.getComponent());
     }
 
 
+    /**
+     *
+     * */
     public void setWidgetController(WidgetController controller) {
-        this.widgetController = controller;
-        this.widgetController.addPropertyChangeListener(new PropertiesMenuListener());
+        controller.addPropertyChangeListener(new PropertiesMenuListener());
     }
 
     /**

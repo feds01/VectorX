@@ -10,6 +10,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Stack;
 
+/**
+ *
+ */
 public class HistoryManager {
 
     /**
@@ -71,10 +74,16 @@ public class HistoryManager {
         return currentFrameId < this.currentFrame.size() - 1;
     }
 
+    /**
+     *
+     */
     public boolean canUndo() {
         return currentFrameId > 0;
     }
 
+    /**
+     *
+     */
     public List<Shape> redo() {
         if (!canRedo()) { return null; }
 
@@ -99,6 +108,9 @@ public class HistoryManager {
         return shapes;
     }
 
+    /**
+     *
+     */
     public List<Shape> undo() {
         if (!canUndo()) { return null; }
 
@@ -123,10 +135,16 @@ public class HistoryManager {
         return shapes;
     }
 
+    /**
+     *
+     */
     public int getCurrentFrameId() {
         return currentFrameId;
     }
 
+    /**
+     *
+     */
     public void setCurrentFrameId(int currentFrameId) {
         this.currentFrameId = currentFrameId;
     }

@@ -41,6 +41,9 @@ public class CheckBoxInput extends BaseInput<Boolean> {
         }
     }
 
+    /**
+     *
+     */
     public CheckBoxInput(String name, boolean initialValue) {
         this(name, initialValue, "");
     }

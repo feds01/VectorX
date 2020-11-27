@@ -1,6 +1,7 @@
 package ui.tool;
 
-import drawing.shape.Triangle;
+import drawing.shape.Rectangle;
+import drawing.shape.Shape;
 import ui.common.WidgetFactory;
 import ui.input.ColourPickerInput;
 import ui.input.CoordinateInput;
@@ -11,8 +12,15 @@ import javax.swing.JFrame;
 import java.awt.Color;
 import java.awt.Point;
 
-public class TriangleToolWidget extends BaseToolWidget {
-    public TriangleToolWidget(Triangle shape, JFrame frame) {
+/**
+ *
+ */
+public class ShapeToolWidget extends BaseToolWidget {
+
+    /**
+     *
+     */
+    public ShapeToolWidget(Shape shape, JFrame frame) {
         super(shape);
 
         var startPosition = new CoordinateInput("start", new Point(shape.getX(), shape.getY()), "X", "Y");
@@ -24,7 +32,7 @@ public class TriangleToolWidget extends BaseToolWidget {
         var endPosition = new CoordinateInput("end", new Point(width, height), "W", "H");
         this.tools.add(endPosition);
 
-        int rotationValue = (Integer) shape.getPropertyMap().get("rotation").getValue();
+        int rotationValue =  (Integer) shape.getPropertyMap().get("rotation").getValue();
         var rotation = new NumberFieldInput("rotation", rotationValue, "rotation", true);
         this.tools.add(rotation);
 
@@ -50,6 +58,9 @@ public class TriangleToolWidget extends BaseToolWidget {
         this.constructUI();
     }
 
+    /**
+     *
+     */
     public void constructUI() {
         this.panel.add(WidgetFactory.createTitleWidget("TRANSFORM"));
         this.panel.add(this.tools.get(0).getComponent());

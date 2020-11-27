@@ -28,24 +28,75 @@ import java.beans.PropertyChangeSupport;
  *
  */
 public class ColourPickerPopup extends Box {
+    /**
+     *
+     */
     private final PropertyChangeSupport changes = new PropertyChangeSupport(this);
 
 
+    /**
+     *
+     */
     private static final int HEIGHT = 210;
+
+    /**
+     *
+     */
     private static final int WIDTH = 210;
 
+    /**
+     *
+     */
     private static final int BORDER_THICKNESS = 1;
+
+    /**
+     *
+     */
     private static final int BORDER_RADII = 8;
+
+    /**
+     *
+     */
     private static final int BORDER_POINTER_SIZE = 7;
+
+    /**
+     *
+     */
     private static final int BORDER_POINTER_PADDING = 6;
 
+    /**
+     *
+     */
     private final Color borderColour = Color.GRAY;
+
+    /**
+     *
+     */
     private final TextFieldInput green;
+
+    /**
+     *
+     */
     private final TextFieldInput red;
+
+    /**
+     *
+     */
     private final TextFieldInput blue;
+
+    /**
+     *
+     */
     private final ColourPanel colourBox;
 
+    /**
+     *
+     */
     private final Insets insets;
+
+    /**
+     *
+     */
     private final SliderInput alphaSlider;
 
     /**

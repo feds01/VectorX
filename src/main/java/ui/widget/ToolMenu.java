@@ -99,8 +99,15 @@ public class ToolMenu extends JToolBar {
      *
      */
     private final ToolController controller;
+
+    /**
+     *
+     * */
     private final WidgetController widgetController;
 
+    /**
+     *
+     * */
     public ToolMenu(JFrame frame, ToolController controller, WidgetController widgetController) {
         super(SwingConstants.VERTICAL);
 
@@ -179,6 +186,9 @@ public class ToolMenu extends JToolBar {
 
     }
 
+    /**
+     *
+     * */
     private JButton setupAction(DrawingTool tool) {
         return this.createButtonFromAction(new AbstractAction(tool.getType().toString(), tool.getImageIcon(false)) {
             @Override

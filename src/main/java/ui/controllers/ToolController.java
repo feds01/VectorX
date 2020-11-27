@@ -50,6 +50,9 @@ public class ToolController {
         this.pcs.removePropertyChangeListener(listener);
     }
 
+    /**
+     *
+     */
     public void setCurrentTool(ToolType type) {
         DrawingTool oldTool = this.currentTool;
         this.currentTool = ToolMenu.toolMap.get(type);

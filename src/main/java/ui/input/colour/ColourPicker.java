@@ -124,20 +124,32 @@ public class ColourPicker extends JToggleButton {
         });
     }
 
+    /**
+     *
+     */
     @Override
     public void setBackground(Color bg) {
         super.setBackground(bg);
     }
 
+    /**
+     *
+     */
     @Override
     protected void paintBorder(Graphics g) {
     }
 
+    /**
+     *
+     */
     @Override
     public boolean isFocusPainted() {
         return false;
     }
 
+    /**
+     *
+     */
     @Override
     protected void paintChildren(Graphics g) {
         Graphics2D g2 = (Graphics2D) g;
@@ -156,6 +168,9 @@ public class ColourPicker extends JToggleButton {
 
     }
 
+    /**
+     *
+     */
     private Popup createColourPickerPopup() {
         PopupFactory pf = PopupFactory.getSharedInstance();
         Point l1 = this.getLocationOnScreen();
@@ -163,10 +178,16 @@ public class ColourPicker extends JToggleButton {
         return pf.getPopup(frame, picker, l1.x - 212, l1.y - 100 + 6);
     }
 
+    /**
+     *
+     */
     public Color getColour() {
         return colour;
     }
 
+    /**
+     *
+     */
     public void setColour(Color colour) {
         this.colour = colour;
     }
