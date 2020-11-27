@@ -1,8 +1,12 @@
 package ui.widget;
 
+import common.FileChooserDialog;
+
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import java.io.File;
+import java.io.IOException;
 
 /**
  *
@@ -13,18 +17,43 @@ public class TopMenu {
      *
      * */
     private JMenu createEditMenu() {
-        JMenu editMenu = new JMenu("Edit");
+        var editMenu = new JMenu("Edit");
+
         JMenuItem undoItem = new JMenuItem("Undo");
         editMenu.add(undoItem);
         JMenuItem redoItem = new JMenuItem("Redo");
         editMenu.add(redoItem);
 
-        JMenuItem cutItem = new JMenuItem("Cut");
-        editMenu.add(cutItem);
         JMenuItem copyItem = new JMenuItem("Copy");
         editMenu.add(copyItem);
         JMenuItem pasteItem = new JMenuItem("Paste");
         editMenu.add(pasteItem);
+        return editMenu;
+    }
+
+    private JMenu createExportMenu(CanvasWidget widget) {
+        var editMenu = new JMenu("Export");
+
+        var exportToPNG = new JMenuItem("Export to PNG");
+
+        exportToPNG.addActionListener(e -> {
+            File file = FileChooserDialog.showSaveFileChooser();
+
+            widget.getCanvas().export(file,"png");
+
+        });
+
+        var exportToJPG = new JMenuItem("Export to JPG");
+
+        exportToJPG.addActionListener(e -> {
+            File file = FileChooserDialog.showSaveFileChooser();
+
+            widget.getCanvas().export(file,"jpg");
+        });
+
+        editMenu.add(exportToPNG);
+        editMenu.add(exportToJPG);
+
         return editMenu;
     }
 
@@ -56,10 +85,11 @@ public class TopMenu {
     /**
      *
      * */
-    public JMenuBar createMenu() {
+    public JMenuBar createMenu(CanvasWidget widget) {
         JMenuBar menuBar = new JMenuBar();
         menuBar.add(createFileMenu());
         menuBar.add(createEditMenu());
+        menuBar.add(createExportMenu(widget));
         menuBar.add(createHelpMenu());
 
         return menuBar;

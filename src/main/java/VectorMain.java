@@ -88,11 +88,6 @@ public class VectorMain extends JFrame {
 
             var menuMaker = new TopMenu();
 
-            // make the menu
-            var menu = menuMaker.createMenu();
-
-            frame.setJMenuBar(menu);
-
             // setup the tool controller so the state can be shared between the tool chooser,
             // the canvas and the property bar. The tool controller is assuming that no tool
             // is currently under selection.
@@ -104,6 +99,12 @@ public class VectorMain extends JFrame {
             this.toolbar = new ToolMenu(frame, toolController, widgetController);
             this.canvasWidget = new CanvasWidget(toolController, widgetController);
             this.propertiesPanel = new PropertiesMenu(widgetController);
+
+            // make the menu
+            var menu = menuMaker.createMenu(canvasWidget);
+
+            frame.setJMenuBar(menu);
+
 
             frame.add(toolbar, BorderLayout.WEST);
 

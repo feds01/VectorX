@@ -71,7 +71,7 @@ public class Canvas extends JPanel implements MouseMotionListener, MouseInputLis
     private int mouseX1;
     private int mouseY1;
     private boolean isDragging;
-    private boolean additionalOverlay;
+    private boolean additionalOverlay = true;
 
     /**
      *
@@ -215,8 +215,6 @@ public class Canvas extends JPanel implements MouseMotionListener, MouseInputLis
             // get the current colour from the FillWidget
             var fillValue = (Color) this.widgetController.getCurrentToolWidget().getValue("fill");
 
-            System.out.println("Event " + fillValue);
-
             // Fill the canvas if no shape is clicked on...
             if (selectedShape == null) {
                 this.setBackground(fillValue);
@@ -226,22 +224,6 @@ public class Canvas extends JPanel implements MouseMotionListener, MouseInputLis
 
             this.repaint();
         }
-
-
-        if (currentTool.getType() == ToolType.SELECTOR) {
-            var selectedShape = getShapeIfHoveringShape(e.getPoint());
-
-            this.isDragging = true;
-
-            // update the cursor to represent the movement of the object
-            if (!Objects.equals(selectedShape, this.selectedShape) && selectedShape != null) {
-                this.selectedShape = selectedShape;
-
-                this.repaint();
-
-                this.widgetController.setCurrentWidgetFromShape(selectedShape);
-            }
-        }
     }
 
     /**
@@ -249,9 +231,29 @@ public class Canvas extends JPanel implements MouseMotionListener, MouseInputLis
      */
     @Override
     public void mousePressed(MouseEvent e) {
+        var currentTool = this.toolController.getCurrentTool();
+
         if (SwingUtilities.isLeftMouseButton(e)) {
             mouseX1 = e.getX();
             mouseY1 = e.getY();
+
+            System.out.println("bing");
+
+            if (currentTool.getType() == ToolType.SELECTOR) {
+                var selectedShape = getShapeIfHoveringShape(e.getPoint());
+
+                this.isDragging = true;
+
+                // update the cursor to represent the movement of the object
+                if (!Objects.equals(selectedShape, this.selectedShape) && selectedShape != null) {
+                    this.selectedShape = selectedShape;
+
+                    this.repaint();
+
+                    this.widgetController.setCurrentWidgetFromShape(selectedShape);
+                }
+            }
+
         } else {
             this.getParent().dispatchEvent(e);
         }
@@ -473,16 +475,24 @@ public class Canvas extends JPanel implements MouseMotionListener, MouseInputLis
         return null;
     }
 
+    /**
+     *
+     */
     private void resetSelectedObject() {
         this.selectedShape = null;
         copySelectedShape = false;
     }
 
-
+    /**
+     *
+     */
     public void setCopySelectedShape(boolean flag) {
         this.copySelectedShape = flag;
     }
 
+    /**
+     *
+     */
     public void copySelectedShape() {
 
         // Don't do anything if 'copy' hasn't been set on the current shape
@@ -531,11 +541,20 @@ public class Canvas extends JPanel implements MouseMotionListener, MouseInputLis
      *
      */
     public void export(File to, String extension) {
-        if (!extension.equals("jpg") || !extension.equals("png")) {
+        if (!extension.equals("jpg") && !extension.equals("png")) {
             throw new UnsupportedOperationException("Can't export to specified extension");
         }
 
-        var image = new BufferedImage(getWidth(), getHeight(), BufferedImage.TYPE_INT_ARGB);
+        BufferedImage image;
+
+        // Determine the colour mode based on file extension
+        if (extension.equals("png")) {
+            image = new BufferedImage(getWidth(), getHeight(), BufferedImage.TYPE_INT_ARGB);
+        } else {
+            image = new BufferedImage(getWidth(), getHeight(), BufferedImage.TYPE_INT_RGB);
+        }
+
+
         var g = image.createGraphics();
 
         // we need to temporarily disable any kind of 'currentObject', 'selectedObject', and
@@ -551,10 +570,19 @@ public class Canvas extends JPanel implements MouseMotionListener, MouseInputLis
         try (
                 var out = new FileOutputStream(to)
         ) {
-            if (to.createNewFile()) {
-                System.out.println("LOG: Exporting image to " + to.toString());
-                ImageIO.write(image, extension, out);
+
+            // Create the file before export if we need to
+            if (!to.exists()) {
+                boolean createdFile = to.createNewFile();
+
+                if (createdFile) {
+                    System.out.println("LOG: created file...");
+                }
             }
+
+            System.out.println("LOG: Exporting image to " + to.toString());
+            ImageIO.write(image, extension, out);
+
         } catch (IOException e) {
             e.printStackTrace();
         }

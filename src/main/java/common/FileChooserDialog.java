@@ -16,7 +16,7 @@ import java.io.IOException;
  * */
 public class FileChooserDialog {
 
-    public static File showSafeFileChoose() {
+    public static File showSaveFileChooser() {
         var fileChooser = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory());
 
         // filter for image files only
