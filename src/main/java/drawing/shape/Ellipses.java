@@ -21,8 +21,8 @@ public class Ellipses extends Shape {
     }
 
     public Ellipses copy()  {
-        int width = (int) ((Point) this.getProperties().get("end").getValue()).getX();
-        int height = (int) ((Point) this.getProperties().get("end").getValue()).getY();
+        int width = (int) ((Point) this.getPropertyMap().get("end").getValue()).getX();
+        int height = (int) ((Point) this.getPropertyMap().get("end").getValue()).getY();
 
         var clazz = new Ellipses(this.getX(), this.getY(), this.getX() + width, this.getY() + height);
         clazz.setProperties((ShapeProperties) CopyUtils.deepCopy(this.properties));
@@ -61,7 +61,7 @@ public class Ellipses extends Shape {
         int width = (int) ((Point) this.properties.get("end").getValue()).getX();
         int height = (int) ((Point) this.properties.get("end").getValue()).getY();
 
-        int thicknessValue = (Integer) this.getProperties().get("thickness").getValue();
+        int thicknessValue = (Integer) this.getPropertyMap().get("thickness").getValue();
         g.setStroke(new BasicStroke(thicknessValue));
 
         // draw the rectangle

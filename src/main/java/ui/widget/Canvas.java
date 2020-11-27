@@ -116,7 +116,7 @@ public class Canvas extends JPanel implements MouseMotionListener, MouseInputLis
                 return;
             }
 
-            var shapeProperties = this.selectedShape.getProperties();
+            var shapeProperties = this.selectedShape.getPropertyMap();
 
             var updatedProperties = (Map<String, Object>) event.getNewValue();
 

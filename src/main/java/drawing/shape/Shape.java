@@ -11,9 +11,9 @@ import java.util.Map;
 public abstract class Shape implements Serializable {
     protected static final Color SELECTOR_COLOUR = new Color(0x3399FF);
 
-    protected ShapeProperties properties = new ShapeProperties();
+    public ShapeProperties properties = new ShapeProperties();
 
-    protected ShapePropertyFactory propertyFactory = new ShapePropertyFactory();
+    public ShapePropertyFactory propertyFactory = new ShapePropertyFactory();
 
 
     public Shape(int x, int y, int x2, int y2) {
@@ -72,8 +72,12 @@ public abstract class Shape implements Serializable {
         start.setValue(newPoint);
     }
 
-    public Map<String, ShapeProperty<?>> getProperties() {
+    public Map<String, ShapeProperty<?>> getPropertyMap() {
         return this.properties.getProperties();
+    }
+
+    public ShapeProperties getProperties() {
+        return this.properties;
     }
 
     void setProperties(ShapeProperties properties) {

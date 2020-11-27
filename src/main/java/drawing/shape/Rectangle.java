@@ -19,8 +19,8 @@ public class Rectangle extends Shape {
     }
 
     public Rectangle copy()  {
-        int width = (int) ((Point) this.getProperties().get("end").getValue()).getX();
-        int height = (int) ((Point) this.getProperties().get("end").getValue()).getY();
+        int width = (int) ((Point) this.getPropertyMap().get("end").getValue()).getX();
+        int height = (int) ((Point) this.getPropertyMap().get("end").getValue()).getY();
 
         var clazz = new Rectangle(this.getX(), this.getY(), this.getX() + width, this.getY() + height);
         clazz.setProperties((ShapeProperties) CopyUtils.deepCopy(this.properties));
@@ -36,10 +36,12 @@ public class Rectangle extends Shape {
 
     @Override
     public void drawSelectedBoundary(Graphics2D g) {
-        int x = (int) ((Point) this.getProperties().get("start").getValue()).getX();
-        int y = (int) ((Point) this.getProperties().get("start").getValue()).getY();
-        int width = (int) ((Point) this.getProperties().get("end").getValue()).getX();
-        int height = (int) ((Point) this.getProperties().get("end").getValue()).getY();
+        int x = (int) ((Point) this.getPropertyMap().get("start").getValue()).getX();
+        int y = (int) ((Point) this.getPropertyMap().get("start").getValue()).getY();
+        int width = (int) ((Point) this.getPropertyMap().get("end").getValue()).getX();
+        int height = (int) ((Point) this.getPropertyMap().get("end").getValue()).getY();
+
+
 
         // highlight the line, we can use draw boundary
         // here because it is the same as the highlighting border
@@ -49,25 +51,34 @@ public class Rectangle extends Shape {
 
     @Override
     public void drawBoundary(Graphics2D g) {
-        int x = (int) ((Point) this.getProperties().get("start").getValue()).getX();
-        int y = (int) ((Point) this.getProperties().get("start").getValue()).getY();
+        int x = (int) ((Point) this.getPropertyMap().get("start").getValue()).getX();
+        int y = (int) ((Point) this.getPropertyMap().get("start").getValue()).getY();
         int width = (int) ((Point) this.properties.get("end").getValue()).getX();
         int height = (int) ((Point) this.properties.get("end").getValue()).getY();
+
+        // @Improvement: add rotation
+        //        int rotation = Math.toRadians((int) this.properties.get("rotation").getValue());
+        //        g.rotate(rotation);
 
         g.setStroke(new BasicStroke(2));
         g.setColor(Shape.SELECTOR_COLOUR);
 
         g.drawRect(x, y, width, height);
+        g.dispose();
     }
 
     @Override
     public void draw(Graphics2D g, boolean isResizing) {
-        int x = (int) ((Point) this.getProperties().get("start").getValue()).getX();
-        int y = (int) ((Point) this.getProperties().get("start").getValue()).getY();
+        int x = (int) ((Point) this.getPropertyMap().get("start").getValue()).getX();
+        int y = (int) ((Point) this.getPropertyMap().get("start").getValue()).getY();
         int width = (int) ((Point) this.properties.get("end").getValue()).getX();
         int height = (int) ((Point) this.properties.get("end").getValue()).getY();
 
-        int thicknessValue = (Integer) this.getProperties().get("thickness").getValue();
+        // @Improvement: add rotation
+        //        int rotation = Math.toRadians((int) this.properties.get("rotation").getValue());
+        //        g.rotate(rotation);
+
+        int thicknessValue = (Integer) this.getPropertyMap().get("thickness").getValue();
         g.setStroke(new BasicStroke(thicknessValue));
 
         // draw the rectangle
@@ -76,6 +87,7 @@ public class Rectangle extends Shape {
 
         g.setColor(this.getShapeStrokeColour());
         g.drawRect(x, y, width, height);
+        g.dispose();
     }
 
     @Override
@@ -85,8 +97,8 @@ public class Rectangle extends Shape {
 
     @Override
     public boolean isPointWithinBounds(Point point) {
-        int x = (int) ((Point) this.getProperties().get("start").getValue()).getX();
-        int y = (int) ((Point) this.getProperties().get("start").getValue()).getY();
+        int x = (int) ((Point) this.getPropertyMap().get("start").getValue()).getX();
+        int y = (int) ((Point) this.getPropertyMap().get("start").getValue()).getY();
         int width = (int) ((Point) this.properties.get("end").getValue()).getX();
         int height = (int) ((Point) this.properties.get("end").getValue()).getY();
 

@@ -15,17 +15,17 @@ public class ImageToolWidget extends BaseToolWidget {
         var startPosition = new CoordinateInput("start", new Point(shape.getX(), shape.getY()), "X", "Y");
         this.tools.add(startPosition);
 
-        int width = (int) ((Point) shape.getProperties().get("end").getValue()).getX();
-        int height = (int) ((Point) shape.getProperties().get("end").getValue()).getY();
+        int width = (int) ((Point) shape.getPropertyMap().get("end").getValue()).getX();
+        int height = (int) ((Point) shape.getPropertyMap().get("end").getValue()).getY();
 
         var endPosition = new CoordinateInput("end", new Point(width, height), "W", "H");
         this.tools.add(endPosition);
 
-        int rotationValue = (Integer) shape.getProperties().get("rotation").getValue();
+        int rotationValue = (Integer) shape.getPropertyMap().get("rotation").getValue();
         var rotation = new NumberFieldInput("rotation", rotationValue, "rotation", true);
         this.tools.add(rotation);
 
-        var grayScaleValue = (Boolean) shape.getProperties().get("grayScale").getValue();
+        var grayScaleValue = (Boolean) shape.getPropertyMap().get("grayScale").getValue();
         var grayScale = new CheckBoxInput("grayScale", grayScaleValue, "Grayscale");
         this.tools.add(grayScale);
 

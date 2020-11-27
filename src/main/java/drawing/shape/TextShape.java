@@ -9,7 +9,6 @@ import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.geom.Rectangle2D;
-import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -30,8 +29,8 @@ public class TextShape extends Shape {
     }
 
     public TextShape copy() {
-        int width = (int) ((Point) this.getProperties().get("end").getValue()).getX();
-        int height = (int) ((Point) this.getProperties().get("end").getValue()).getY();
+        int width = (int) ((Point) this.getPropertyMap().get("end").getValue()).getX();
+        int height = (int) ((Point) this.getPropertyMap().get("end").getValue()).getY();
 
         var clazz = new TextShape(this.getX(), this.getY(), this.getX() + width, this.getY() + height);
         clazz.setProperties((ShapeProperties) CopyUtils.deepCopy(this.properties));

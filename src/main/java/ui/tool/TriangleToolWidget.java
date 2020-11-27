@@ -18,29 +18,29 @@ public class TriangleToolWidget extends BaseToolWidget {
         var startPosition = new CoordinateInput("start", new Point(shape.getX(), shape.getY()), "X", "Y");
         this.tools.add(startPosition);
 
-        int width = (int) ((Point) shape.getProperties().get("end").getValue()).getX();
-        int height = (int) ((Point) shape.getProperties().get("end").getValue()).getY();
+        int width = (int) ((Point) shape.getPropertyMap().get("end").getValue()).getX();
+        int height = (int) ((Point) shape.getPropertyMap().get("end").getValue()).getY();
 
         var endPosition = new CoordinateInput("end", new Point(width, height), "W", "H");
         this.tools.add(endPosition);
 
-        int rotationValue = (Integer) shape.getProperties().get("rotation").getValue();
+        int rotationValue = (Integer) shape.getPropertyMap().get("rotation").getValue();
         var rotation = new NumberFieldInput("rotation", rotationValue, "rotation", true);
         this.tools.add(rotation);
 
 
-        int thicknessValue = (Integer) shape.getProperties().get("thickness").getValue();
+        int thicknessValue = (Integer) shape.getPropertyMap().get("thickness").getValue();
 
         var lineThickness = new SliderInput("thickness", thicknessValue, "thickness", 1, 16);
 
         this.tools.add(lineThickness);
 
-        Color strokeValue = (Color) shape.getProperties().get("strokeColour").getValue();
+        Color strokeValue = (Color) shape.getPropertyMap().get("strokeColour").getValue();
         var strokeColour = new ColourPickerInput("strokeColour", strokeValue, "STROKE", frame);
 
         this.tools.add(strokeColour);
 
-        Color fillValue = (Color) shape.getProperties().get("fillColour").getValue();
+        Color fillValue = (Color) shape.getPropertyMap().get("fillColour").getValue();
         var fillColour = new ColourPickerInput("fillColour", fillValue, "FILL", frame);
 
         this.tools.add(fillColour);

@@ -26,8 +26,8 @@ public class Triangle extends Shape {
     }
 
     public Triangle copy() {
-        int width = (int) ((Point) this.getProperties().get("end").getValue()).getX();
-        int height = (int) ((Point) this.getProperties().get("end").getValue()).getY();
+        int width = (int) ((Point) this.getPropertyMap().get("end").getValue()).getX();
+        int height = (int) ((Point) this.getPropertyMap().get("end").getValue()).getY();
 
         var clazz = new Triangle(this.getX(), this.getY(), this.getX() + width, this.getY() + height);
         clazz.setProperties((ShapeProperties) CopyUtils.deepCopy(this.properties));

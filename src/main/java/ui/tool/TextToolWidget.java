@@ -6,7 +6,6 @@ import ui.input.ColourPickerInput;
 import ui.input.CoordinateInput;
 import ui.input.NumberFieldInput;
 import ui.input.SliderInput;
-import ui.input.TextFieldInput;
 
 import javax.swing.JFrame;
 import java.awt.Color;
@@ -19,29 +18,29 @@ public class TextToolWidget extends BaseToolWidget {
         var startPosition = new CoordinateInput("start", new Point(shape.getX(), shape.getY()), "X", "Y");
         this.tools.add(startPosition);
 
-        int width = (int) ((Point) shape.getProperties().get("end").getValue()).getX();
-        int height = (int) ((Point) shape.getProperties().get("end").getValue()).getY();
+        int width = (int) ((Point) shape.getPropertyMap().get("end").getValue()).getX();
+        int height = (int) ((Point) shape.getPropertyMap().get("end").getValue()).getY();
 
         var endPosition = new CoordinateInput("end", new Point(width, height), "W", "H");
         this.tools.add(endPosition);
 
-        int rotationValue =  (Integer) shape.getProperties().get("rotation").getValue();
+        int rotationValue =  (Integer) shape.getPropertyMap().get("rotation").getValue();
         var rotation = new NumberFieldInput("rotation", rotationValue, "rotation", true);
         this.tools.add(rotation);
 
 
-        int fontSizeValue = (Integer) shape.getProperties().get("fontSize").getValue();
+        int fontSizeValue = (Integer) shape.getPropertyMap().get("fontSize").getValue();
 
         var fontSize = new SliderInput("fontSize", fontSizeValue, "font size", 4, 20);
 
         this.tools.add(fontSize);
 
-        Color strokeValue = (Color) shape.getProperties().get("strokeColour").getValue();
+        Color strokeValue = (Color) shape.getPropertyMap().get("strokeColour").getValue();
         var strokeColour = new ColourPickerInput("strokeColour", strokeValue, "STROKE", frame);
 
         this.tools.add(strokeColour);
 
-        Color fillValue = (Color) shape.getProperties().get("fillColour").getValue();
+        Color fillValue = (Color) shape.getPropertyMap().get("fillColour").getValue();
         var fillColour = new ColourPickerInput("fillColour", fillValue, "FILL", frame);
 
         this.tools.add(fillColour);
