@@ -627,6 +627,10 @@ public class CanvasContainer extends JPanel implements MouseMotionListener, Mous
         this.shapes.remove(this.selectedShape);
         selectedShape = null;
 
+        if (this.shapes.size() == 0) {
+            this.clear();
+        }
+
         this.repaint();
     }
 
