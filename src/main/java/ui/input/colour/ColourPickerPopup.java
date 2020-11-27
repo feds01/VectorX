@@ -7,6 +7,7 @@ import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.border.MatteBorder;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Component;
@@ -259,8 +260,8 @@ public class ColourPickerPopup extends Box {
      *
      */
     @Override
-    protected void paintBorder(Graphics g) {
-        super.paintBorder(g);
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
 
         Graphics2D g2 = (Graphics2D) g;
 

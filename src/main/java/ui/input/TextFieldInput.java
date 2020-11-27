@@ -51,10 +51,7 @@ public class TextFieldInput extends BaseInput<String> {
 
         // slow the blinking rate to once a second
         this.field.getCaret().setBlinkRate(1000);
-
-        this.field.addActionListener(e -> {
-            this.getComponent().requestFocus();
-        });
+        this.field.addActionListener(e -> this.getComponent().requestFocus());
 
         this.field.addFocusListener(new FocusListener() {
             @Override

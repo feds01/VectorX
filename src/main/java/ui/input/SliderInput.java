@@ -144,12 +144,17 @@ public class SliderInput extends BaseInput<Integer> {
         try {
             int textValue = Integer.parseInt(field.getText());
 
+
+            // prevent the slider from allowing a setting that is out of bounds
+            if (textValue < slider.getMinimum() || textValue > slider.getMaximum()) {
+                throw new IllegalStateException("Invalid setting, out of bounds");
+            }
+
             // set the text field input value to the slider value
             changes.firePropertyChange(name, this.slider.getValue(), textValue);
 
             this.slider.setValue(textValue);
-
-        } catch (NumberFormatException e) {
+        } catch (NumberFormatException | IllegalStateException e) {
             field.setText(String.valueOf(this.slider.getValue()));
         }
     }

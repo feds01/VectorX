@@ -51,14 +51,7 @@ public class NumberFieldInput extends BaseInput<Integer> {
 
         // slow the blinking rate to once a second
         this.field.getCaret().setBlinkRate(1000);
-
-        this.field.addActionListener(e -> {
-            for (PropertyChangeListener l : this.field.getPropertyChangeListeners()) {
-                l.propertyChange(new PropertyChangeEvent(this.field, name, oldValue, this.field.getText()));
-            }
-
-            this.oldValue = Integer.parseInt(this.field.getText());
-        });
+        this.field.addActionListener(e -> this.getComponent().requestFocus());
 
         this.field.addFocusListener(new FocusListener() {
             @Override
@@ -73,6 +66,23 @@ public class NumberFieldInput extends BaseInput<Integer> {
                 var field = (JTextField) e.getSource();
 
                 field.setBorder(new MatteBorder(new Insets(0, 0, 1, 0), Color.GRAY));
+
+                try {
+                    int value = Integer.parseInt(field.getText());
+
+                    // ensure that the value is not a negative value
+                    if (value < 0) {
+                        throw new IllegalStateException("Cannot have negative number");
+                    }
+
+                    for (PropertyChangeListener l : field.getPropertyChangeListeners()) {
+                        l.propertyChange(new PropertyChangeEvent(field, name, oldValue, field.getText()));
+                    }
+
+                    oldValue = Integer.valueOf(field.getText());
+                } catch (IllegalStateException | NumberFormatException ignored) {
+                    field.setText(String.valueOf(oldValue));
+                }
             }
         });
 

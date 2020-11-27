@@ -133,11 +133,9 @@ public class CanvasContainer extends JPanel implements MouseMotionListener, Mous
      *
      */
     private void toolChangeListener(PropertyChangeEvent event) {
-
         // Propagate the cursor when the tool changes...
         this.setCursor(toolController.getCurrentTool().getCursor());
 
-        this.selectedShape = null;
         this.repaint();
     }
 
@@ -165,7 +163,15 @@ public class CanvasContainer extends JPanel implements MouseMotionListener, Mous
                 var newProperty = updatedProperties.get(name);
 
                 if (shapeProperties.get(name) != null) {
-                    this.selectedShape.setProperty(name, newProperty);
+
+
+                    // if setProperty throws an IllegalArgumentException, this means
+                    // that the property is invalid and should not be propagated
+                    try {
+                        this.selectedShape.setProperty(name, newProperty);
+                    } catch (IllegalArgumentException e) {
+                        return;
+                    }
                 }
             }
 
@@ -243,7 +249,6 @@ public class CanvasContainer extends JPanel implements MouseMotionListener, Mous
 
                 this.repaint();
 
-
                 // update the widget controller with the newly selected shape
                 this.widgetController.setCurrentWidgetFromShape(selectedShape);
             }
@@ -295,6 +300,8 @@ public class CanvasContainer extends JPanel implements MouseMotionListener, Mous
                     // update the widget if the selected component is not null
                     if (selectedShape != null) {
                         this.widgetController.setCurrentWidgetFromShape(this.selectedShape);
+                    } else {
+                        this.widgetController.setCurrentWidget(new EmptyToolWidget());
                     }
                 }
             }
@@ -498,6 +505,8 @@ public class CanvasContainer extends JPanel implements MouseMotionListener, Mous
      */
     public void clear() {
         this.shapes.clear();
+
+        this.setBackground(Color.WHITE);
 
         // clear all the temporary objects
         this.resetSelectedObject();

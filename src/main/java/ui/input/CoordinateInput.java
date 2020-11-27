@@ -60,16 +60,29 @@ public class CoordinateInput extends BaseInput<Point> {
 
         Point oldPoint = this.value;
 
-        if (input.getName().equals("x")) {
-            this.value.x = Integer.parseInt(input.getText());
-        } else {
-            this.value.y = Integer.parseInt(input.getText());
-        }
+        try {
+            if (input.getName().equals("x")) {
+                this.value.x = Integer.parseInt(input.getText());
+            } else {
+                this.value.y = Integer.parseInt(input.getText());
+            }
 
-        // @Workaround: Weird bug where if multiple listeners are registered within lambdas,
-        // events aren't being detected.
-        for (PropertyChangeListener l : this.changes.getPropertyChangeListeners()) {
-            l.propertyChange(new PropertyChangeEvent(this, name, oldPoint, this.value));
+            // check if any of the values are negative, we don't allow negatives in the
+            // CoordinateInput
+            if (this.value.x < 0 || this.value.y < 0) {
+                throw new IllegalStateException("Invalid coordinates");
+            }
+
+            // @Workaround: Weird bug where if multiple listeners are registered within lambdas,
+            // events aren't being detected.
+            for (PropertyChangeListener l : this.changes.getPropertyChangeListeners()) {
+                l.propertyChange(new PropertyChangeEvent(this, name, oldPoint, this.value));
+            }
+        } catch (NumberFormatException | IllegalStateException e) {
+            this.value = oldPoint;
+
+            // reset the old value
+            input.setText(String.valueOf(event.getOldValue()));
         }
     }
 
