@@ -10,6 +10,7 @@ import drawing.shape.TextShape;
 import drawing.shape.Triangle;
 import ui.controllers.ToolController;
 import ui.controllers.WidgetController;
+import ui.tool.EmptyToolWidget;
 
 import javax.imageio.ImageIO;
 import javax.swing.JFileChooser;
@@ -237,8 +238,6 @@ public class Canvas extends JPanel implements MouseMotionListener, MouseInputLis
             mouseX1 = e.getX();
             mouseY1 = e.getY();
 
-            System.out.println("bing");
-
             if (currentTool.getType() == ToolType.SELECTOR) {
                 var selectedShape = getShapeIfHoveringShape(e.getPoint());
 
@@ -322,7 +321,7 @@ public class Canvas extends JPanel implements MouseMotionListener, MouseInputLis
         var currentTool = toolController.getCurrentTool();
 
         if (SwingUtilities.isLeftMouseButton(e)) {
-            if (currentTool.getType() == ToolType.SELECTOR && this.isDragging) {
+            if (currentTool.getType() == ToolType.SELECTOR && this.isDragging && this.selectedShape != null) {
                 this.selectedShape.setX(this.selectedShape.getX() + (e.getX() - mouseX1));
                 this.selectedShape.setY(this.selectedShape.getY() + (e.getY() - mouseY1));
 
@@ -373,7 +372,7 @@ public class Canvas extends JPanel implements MouseMotionListener, MouseInputLis
             Shape newHighlightedShape = this.getShapeIfHoveringShape(e.getPoint());
 
             // Show a 'move' cursor when hovering over a selected object
-            if (Objects.equals(this.selectedShape, newHighlightedShape)) {
+            if (Objects.equals(this.selectedShape, newHighlightedShape) && this.selectedShape != null) {
                 this.setCursor(new Cursor(Cursor.MOVE_CURSOR));
             }
 
@@ -411,6 +410,27 @@ public class Canvas extends JPanel implements MouseMotionListener, MouseInputLis
         }
 
         return null;
+    }
+
+    /**
+     *
+     * */
+    public void clear() {
+        this.objects.clear();
+
+        // clear all the temporary objects
+        this.resetSelectedObject();
+        this.highlightedShape = null;
+        this.currentObject = null;
+
+        // set the current tool to the selector and set the property editor
+        // widget to an empty widget since we're totally resetting the editor
+        this.toolController.setCurrentTool(ToolType.SELECTOR);
+
+        this.widgetController.setCurrentWidget(new EmptyToolWidget());
+
+        // finally repaint
+        this.repaint();
     }
 
     /**

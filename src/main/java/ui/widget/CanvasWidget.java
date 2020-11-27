@@ -183,7 +183,11 @@ public class CanvasWidget extends JPanel implements MouseListener, MouseMotionLi
     }
 
 
+    /**
+     *
+     * */
     public Canvas getCanvas() {
         return this.canvas;
     }
+
 }

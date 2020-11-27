@@ -5,41 +5,58 @@ import common.FileChooserDialog;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import java.awt.Cursor;
 import java.io.File;
-import java.io.IOException;
 
 /**
  *
- * */
-public class TopMenu {
+ */
+public class TopMenu extends JMenuBar {
+
 
     /**
      *
-     * */
+     */
+    public TopMenu(CanvasWidget widget) {
+        this.setCursor(Cursor.getDefaultCursor());
+
+        this.add(createFileMenu(widget));
+        this.add(createEditMenu());
+        this.add(createExportMenu(widget));
+        this.add(createHelpMenu());
+    }
+
+    /**
+     *
+     */
     private JMenu createEditMenu() {
-        var editMenu = new JMenu("Edit");
+        var subMenu = new JMenu("Edit");
+
+        subMenu.setCursor(Cursor.getDefaultCursor());
 
         JMenuItem undoItem = new JMenuItem("Undo");
-        editMenu.add(undoItem);
+        subMenu.add(undoItem);
         JMenuItem redoItem = new JMenuItem("Redo");
-        editMenu.add(redoItem);
+        subMenu.add(redoItem);
 
         JMenuItem copyItem = new JMenuItem("Copy");
-        editMenu.add(copyItem);
+        subMenu.add(copyItem);
         JMenuItem pasteItem = new JMenuItem("Paste");
-        editMenu.add(pasteItem);
-        return editMenu;
+        subMenu.add(pasteItem);
+        return subMenu;
     }
 
     private JMenu createExportMenu(CanvasWidget widget) {
-        var editMenu = new JMenu("Export");
+        var subMenu = new JMenu("Export");
+
+        subMenu.setCursor(Cursor.getDefaultCursor());
 
         var exportToPNG = new JMenuItem("Export to PNG");
 
         exportToPNG.addActionListener(e -> {
             File file = FileChooserDialog.showSaveFileChooser();
 
-            widget.getCanvas().export(file,"png");
+            widget.getCanvas().export(file, "png");
 
         });
 
@@ -48,50 +65,49 @@ public class TopMenu {
         exportToJPG.addActionListener(e -> {
             File file = FileChooserDialog.showSaveFileChooser();
 
-            widget.getCanvas().export(file,"jpg");
+            widget.getCanvas().export(file, "jpg");
         });
 
-        editMenu.add(exportToPNG);
-        editMenu.add(exportToJPG);
+        subMenu.add(exportToPNG);
+        subMenu.add(exportToJPG);
 
-        return editMenu;
+        return subMenu;
     }
 
     /**
      *
-     * */
+     */
     private JMenu createHelpMenu() {
-        JMenu helpMenu = new JMenu("Help");
+        JMenu subMenu = new JMenu("Help");
+        subMenu.setCursor(Cursor.getDefaultCursor());
+
         JMenuItem cutItem = new JMenuItem("About");
-        helpMenu.add(cutItem);
+        subMenu.add(cutItem);
 
-        return helpMenu;
+        return subMenu;
     }
 
     /**
      *
-     * */
-    private JMenu createFileMenu() {
-        JMenu fileMenu = new JMenu("File");
+     */
+    private JMenu createFileMenu(CanvasWidget widget) {
+        JMenu subMenu = new JMenu("File");
+        subMenu.setCursor(Cursor.getDefaultCursor());
+
         JMenuItem newItem = new JMenuItem("New");
-        fileMenu.add(newItem);
+
+        newItem.addActionListener(e -> {
+            widget.getCanvas().clear();
+        });
+
+
         JMenuItem openItem = new JMenuItem("Open");
-        fileMenu.add(openItem);
         JMenuItem saveItem = new JMenuItem("Save");
-        fileMenu.add(saveItem);
-        return fileMenu;
-    }
 
-    /**
-     *
-     * */
-    public JMenuBar createMenu(CanvasWidget widget) {
-        JMenuBar menuBar = new JMenuBar();
-        menuBar.add(createFileMenu());
-        menuBar.add(createEditMenu());
-        menuBar.add(createExportMenu(widget));
-        menuBar.add(createHelpMenu());
+        subMenu.add(newItem);
+        subMenu.add(openItem);
+        subMenu.add(saveItem);
 
-        return menuBar;
+        return subMenu;
     }
 }

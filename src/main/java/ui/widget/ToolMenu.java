@@ -25,7 +25,6 @@ import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.Insets;
-import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -43,7 +42,7 @@ public class ToolMenu extends JToolBar {
     /**
      *
      */
-    private final Map<ToolType, DrawingTool> toolMap = new LinkedHashMap<>() {
+    public static final Map<ToolType, DrawingTool> toolMap = new LinkedHashMap<>() {
         {
             put(ToolType.SELECTOR, new GenericTool(
                     ToolType.SELECTOR,
@@ -105,6 +104,8 @@ public class ToolMenu extends JToolBar {
     public ToolMenu(JFrame frame, ToolController controller, WidgetController widgetController) {
         super(SwingConstants.VERTICAL);
 
+        this.setCursor(new Cursor(Cursor.HAND_CURSOR));
+
         this.frame = frame;
         this.controller = controller;
         this.widgetController = widgetController;
@@ -157,7 +158,7 @@ public class ToolMenu extends JToolBar {
         panel.setLayout(new GridLayout(0, 1, 0, 20));
 
         // Add the actions to the toolbars.
-        this.toolMap.keySet().forEach(key -> this.buttonMap.put(key, setupAction(this.toolMap.get(key))));
+        toolMap.keySet().forEach(key -> this.buttonMap.put(key, setupAction(toolMap.get(key))));
 
         // Add all the created buttons in button map
         this.buttonMap.values().forEach(panel::add);

@@ -86,7 +86,6 @@ public class VectorMain extends JFrame {
             frame.setBackground(Color.GRAY);
             frame.setFont(fontLoader.getFont("NotoSans"));
 
-            var menuMaker = new TopMenu();
 
             // setup the tool controller so the state can be shared between the tool chooser,
             // the canvas and the property bar. The tool controller is assuming that no tool
@@ -101,7 +100,7 @@ public class VectorMain extends JFrame {
             this.propertiesPanel = new PropertiesMenu(widgetController);
 
             // make the menu
-            var menu = menuMaker.createMenu(canvasWidget);
+            var menu = new TopMenu(canvasWidget);
 
             frame.setJMenuBar(menu);
 
