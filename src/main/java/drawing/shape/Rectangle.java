@@ -42,7 +42,6 @@ public class Rectangle extends Shape {
         int height = (int) ((Point) this.getPropertyMap().get("end").getValue()).getY();
 
 
-
         // highlight the line, we can use draw boundary
         // here because it is the same as the highlighting border
         ShapeUtility.drawSelectorRect(g, x, y, width, height);
@@ -64,7 +63,6 @@ public class Rectangle extends Shape {
         g.setColor(Shape.SELECTOR_COLOUR);
 
         g.drawRect(x, y, width, height);
-        g.dispose();
     }
 
     @Override
@@ -87,7 +85,6 @@ public class Rectangle extends Shape {
 
         g.setColor(this.getShapeStrokeColour());
         g.drawRect(x, y, width, height);
-        g.dispose();
     }
 
     @Override

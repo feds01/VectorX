@@ -332,13 +332,24 @@ public class CanvasContainer extends JPanel implements MouseMotionListener, Mous
 
         if (SwingUtilities.isLeftMouseButton(e)) {
             if (currentTool.getType() == ToolType.SELECTOR && this.isDragging && this.selectedShape != null) {
-                this.selectedShape.setX(this.selectedShape.getX() + (e.getX() - mouseX1));
-                this.selectedShape.setY(this.selectedShape.getY() + (e.getY() - mouseY1));
 
-                mouseX1 = e.getX();
-                mouseY1 = e.getY();
+                var oldX = this.selectedShape.getX();
+                var oldY = this.selectedShape.getY();
 
-                this.repaint();
+                // on the event that the shape is dragged to a boundary
+                try {
+                    this.selectedShape.setX(oldX + (e.getX() - mouseX1));
+                    this.selectedShape.setY(oldY + (e.getY() - mouseY1));
+
+                    mouseX1 = e.getX();
+                    mouseY1 = e.getY();
+
+                    this.repaint();
+                } catch (IllegalArgumentException ignored) {
+                    this.selectedShape.setX(oldX);
+                    this.selectedShape.setY(oldY);
+                }
+
             }
 
 
