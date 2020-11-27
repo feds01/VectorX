@@ -16,8 +16,15 @@ public class TopMenu extends JMenuBar {
 
     /**
      *
+     * */
+    private final CanvasWidget widget;
+
+    /**
+     *
      */
     public TopMenu(CanvasWidget widget) {
+        this.widget = widget;
+
         this.setCursor(Cursor.getDefaultCursor());
 
         this.add(createFileMenu(widget));
@@ -35,17 +42,32 @@ public class TopMenu extends JMenuBar {
         subMenu.setCursor(Cursor.getDefaultCursor());
 
         JMenuItem undoItem = new JMenuItem("Undo");
-        subMenu.add(undoItem);
         JMenuItem redoItem = new JMenuItem("Redo");
-        subMenu.add(redoItem);
 
         JMenuItem copyItem = new JMenuItem("Copy");
-        subMenu.add(copyItem);
+
+        copyItem.addActionListener(e -> {
+            this.widget.getCanvas().setCopyOnSelectedShape(true);
+        });
+
+
         JMenuItem pasteItem = new JMenuItem("Paste");
+
+        pasteItem.addActionListener(e -> {
+            this.widget.getCanvas().copySelectedShape();
+        });
+
+
+        subMenu.add(undoItem);
+        subMenu.add(redoItem);
+        subMenu.add(copyItem);
         subMenu.add(pasteItem);
         return subMenu;
     }
 
+    /**
+     *
+     * */
     private JMenu createExportMenu(CanvasWidget widget) {
         var subMenu = new JMenu("Export");
 

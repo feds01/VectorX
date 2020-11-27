@@ -211,7 +211,7 @@ public class VectorMain extends JFrame {
             case KeyEvent.VK_C: {
                 if (!e.isControlDown()) return false;
 
-                canvasWidget.getCanvas().setCopySelectedShape(true);
+                canvasWidget.getCanvas().setCopyOnSelectedShape(true);
                 break;
             }
 

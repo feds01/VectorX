@@ -5,9 +5,10 @@ import drawing.ToolType;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Point;
+import java.io.Serializable;
 import java.util.Map;
 
-public abstract class Shape {
+public abstract class Shape implements Serializable {
     protected static final Color SELECTOR_COLOUR = new Color(0x3399FF);
 
     protected ShapeProperties properties = new ShapeProperties();

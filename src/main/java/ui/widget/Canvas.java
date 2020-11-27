@@ -506,7 +506,7 @@ public class Canvas extends JPanel implements MouseMotionListener, MouseInputLis
     /**
      *
      */
-    public void setCopySelectedShape(boolean flag) {
+    public void setCopyOnSelectedShape(boolean flag) {
         this.copySelectedShape = flag;
     }
 
