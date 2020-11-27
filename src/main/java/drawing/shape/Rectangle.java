@@ -101,18 +101,10 @@ public class Rectangle extends Shape {
         int thicknessValue = (Integer) this.getPropertyMap().get("thickness").getValue();
         g.setStroke(new BasicStroke(thicknessValue));
 
-        // set the alpha for the fill
-        int alpha = this.getShapeFillColour().getAlpha();
-        ShapeUtility.setAlpha(g, alpha);
-
         // draw the rectangle
         g.setColor(this.getShapeFillColour());
         g.fillRect(x, y, width, height);
 
-
-        // set the alpha for the stroke
-        int alphaStroke = this.getShapeStrokeColour().getAlpha();
-        ShapeUtility.setAlpha(g, alphaStroke);
 
         g.setColor(this.getShapeStrokeColour());
         g.drawRect(x, y, width, height);

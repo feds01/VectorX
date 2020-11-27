@@ -8,6 +8,7 @@ import javax.swing.JPanel;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.util.ArrayList;
@@ -108,22 +109,30 @@ public abstract class BaseToolWidget {
     /**
      *
      */
-    protected void constructUI() {}
+    protected void constructUI() {
+    }
 
     /**
      *
      */
     protected void setupInputListeners() {
-        this.tools.forEach(tool -> {
-            tool.addPropertyChangeListener(evt -> {
-                changes.firePropertyChange(tool.getName(), evt.getOldValue(), evt.getNewValue());
-            });
-        });
+        this.tools.forEach(tool -> tool.addPropertyChangeListener(evt -> {
+            for (PropertyChangeListener l : changes.getPropertyChangeListeners()) {
+
+                // fire property change for each listener
+                l.propertyChange(new PropertyChangeEvent(
+                        this,
+                        tool.getName(),
+                        evt.getOldValue(),
+                        evt.getNewValue()
+                ));
+            }
+        }));
     }
 
     /**
      *
-     * */
+     */
     public void update() {
         this.tools.forEach(tool -> {
             tool.setValue(this.shape.getProperty(tool.getName()));

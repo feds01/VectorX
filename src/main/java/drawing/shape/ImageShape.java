@@ -8,6 +8,7 @@ import javax.swing.GrayFilter;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.Image;
 import java.awt.Point;
 import java.awt.Toolkit;
 import java.awt.image.BufferedImage;
@@ -37,7 +38,10 @@ public class ImageShape extends Shape {
 
         this.image = image;
 
+
+        // override the start and end positions...
         this.properties.set("start", propertyFactory.createPointProperty("start", new Point(x, y)));
+        this.properties.set("end", propertyFactory.createPointProperty("end", new Point(image.getWidth(), image.getHeight())));
 
         this.properties.addProperty(new ShapeProperty<>("grayScale", false, value -> true));
         this.properties.addProperty(propertyFactory.createColourProperty("strokeColour", Color.BLACK));
@@ -113,11 +117,11 @@ public class ImageShape extends Shape {
      */
     @Override
     public void drawSelectedBoundary(Graphics2D g) {
-        int width =  image.getWidth();
-        int height = image.getHeight();
+        int width = getWidth();
+        int height = getHeight();
 
-        int xPos = getX() - image.getWidth() / 2;
-        int yPos = getY() - image.getHeight() / 2;
+        int xPos = getX() - getWidth() / 2;
+        int yPos = getY() - getHeight() / 2;
 
         // highlight the line, we can use draw boundary
         // here because it is the same as the highlighting border
@@ -129,12 +133,16 @@ public class ImageShape extends Shape {
      */
     @Override
     public void draw(Graphics2D g, boolean isResizing) {
-        var image = this.image;
+        var image = this.image.getScaledInstance(getWidth(), getHeight(), Image.SCALE_SMOOTH);
+
+        var resized = new BufferedImage(getWidth(), getHeight(), BufferedImage.TYPE_INT_ARGB);
+        var rg = resized.createGraphics();
+
 
         g.setStroke(new BasicStroke(2));
 
-        int xPos = getX() - image.getWidth() / 2;
-        int yPos = getY() - image.getHeight() / 2;
+        int xPos = getX() - getWidth() / 2;
+        int yPos = getY() - getHeight() / 2;
 
         // It the user specifies the image to be drawn with a gray scale filter,
         // then do so...
@@ -149,10 +157,21 @@ public class ImageShape extends Shape {
             ImageFilter filter = new GrayFilter(true, 50);
             ImageProducer producer = new FilteredImageSource(image.getSource(), filter);
 
-            g.drawImage(Toolkit.getDefaultToolkit().createImage(producer), xPos, yPos, null);
+            rg.drawImage(Toolkit.getDefaultToolkit().createImage(producer), 0, 0, null);
         } else {
-            g.drawImage(image, xPos, yPos, null);
+            rg.drawImage(image,0, 0, null);
         }
+
+        // draw the resized image
+        g.drawImage(resized, xPos, yPos, null);
+    }
+
+    public int getWidth() {
+        return (int) ((Point) this.properties.get("end").getValue()).getX();
+    }
+
+    public int getHeight() {
+        return (int) ((Point) this.properties.get("end").getValue()).getY();
     }
 
     /**
@@ -168,11 +187,11 @@ public class ImageShape extends Shape {
      */
     @Override
     public boolean isPointWithinBounds(Point point) {
-        int width =  image.getWidth();
-        int height = image.getHeight();
+        int width = getWidth();
+        int height = getHeight();
 
-        int xPos = getX() - image.getWidth() / 2;
-        int yPos = getY() - image.getHeight() / 2;
+        int xPos = getX() - getWidth() / 2;
+        int yPos = getY() - getHeight() / 2;
 
         return (
                 point.getX() >= xPos && point.getX() <= xPos + width &&

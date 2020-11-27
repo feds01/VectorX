@@ -27,7 +27,7 @@ public class LineToolWidget extends BaseToolWidget {
         int width = (int) ((Point) shape.getPropertyMap().get("end").getValue()).getX();
         int height = (int) ((Point) shape.getPropertyMap().get("end").getValue()).getY();
 
-        var endPosition = new CoordinateInput("end", new Point(width, height), "W", "H");
+        var endPosition = new CoordinateInput("end", new Point(width, height), "X2", "Y2");
         this.tools.add(endPosition);
 
         int rotationValue = (Integer) shape.getPropertyMap().get("rotation").getValue();

@@ -24,7 +24,7 @@ public class HistoryManager {
     /**
      *
      */
-    private Stack<Map<Integer, ShapeProperties>> historyFrames = new Stack<>();
+    private final Stack<Map<Integer, ShapeProperties>> historyFrames = new Stack<>();
 
     /**
      *
@@ -47,11 +47,14 @@ public class HistoryManager {
      *
      */
     public void addShape(Shape shape) {
-        this.currentFrame = Map.copyOf(currentFrame);
+        this.currentFrame = new LinkedHashMap<>(currentFrame);
 
-        var propertyCopy = (ShapeProperties) CopyUtils.deepCopy(shape.getProperties());
+        var shapeCopy = (Shape) CopyUtils.deepCopy(shape);
 
-        currentFrame.put(historyFrames.size(), propertyCopy);
+        this.addedCanvasShapes.add(shapeCopy);
+
+        assert shapeCopy != null;
+        currentFrame.put(historyFrames.size(), shapeCopy.getProperties());
 
     }
 
@@ -63,11 +66,21 @@ public class HistoryManager {
 
         var propertyCopy = (ShapeProperties) CopyUtils.deepCopy(shape.getProperties());
 
-        copy.put(addedCanvasShapes.indexOf(shape), propertyCopy);
-        this.historyFrames.push(copy);
-        this.currentFrame = copy;
+        if (addedCanvasShapes.contains(shape)) {
+            var globalShape = addedCanvasShapes.get(addedCanvasShapes.indexOf(shape));
 
-        currentFrameId++;
+            // don't add it if no change was detected
+            if (!globalShape.getProperties().equals(propertyCopy)) {
+                System.out.println(globalShape.getProperties());
+                System.out.println(propertyCopy);
+
+                copy.put(addedCanvasShapes.indexOf(shape), propertyCopy);
+                this.historyFrames.push(copy);
+                this.currentFrame = copy;
+
+                currentFrameId++;
+            }
+        }
     }
 
     /**
@@ -150,5 +163,17 @@ public class HistoryManager {
      */
     public void setCurrentFrameId(int currentFrameId) {
         this.currentFrameId = currentFrameId;
+    }
+
+    public Map<Integer, ShapeProperties> getCurrentFrame() {
+        return this.currentFrame;
+    }
+
+    public List<Shape> getAddedCanvasShapes() {
+        return addedCanvasShapes;
+    }
+
+    public Stack<Map<Integer, ShapeProperties>> getHistoryFrames() {
+        return historyFrames;
     }
 }

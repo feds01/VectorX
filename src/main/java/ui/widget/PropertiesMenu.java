@@ -39,6 +39,8 @@ public class PropertiesMenu {
 
         this.setWidgetController(widgetController);
 
+        panel.setFocusable(true);
+
         panel.setCursor(Cursor.getDefaultCursor());
 
         // Add the left side border

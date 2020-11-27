@@ -113,6 +113,8 @@ public class ToolMenu extends JToolBar {
 
         this.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
+        this.setFocusable(true);
+
         this.frame = frame;
         this.controller = controller;
         this.widgetController = widgetController;

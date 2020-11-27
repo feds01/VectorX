@@ -25,7 +25,7 @@ public class TextShape extends Shape {
 
         this.properties.addProperty(propertyFactory.createColourProperty("strokeColour", Color.BLACK));
         this.properties.addProperty(propertyFactory.createColourProperty("fillColour", Color.WHITE));
-        this.properties.addProperty(new ShapeProperty<>("fontSize", 10, value -> 4 <= value && value <= 20));
+        this.properties.addProperty(new ShapeProperty<>("fontSize", 14, value -> 8 <= value && value <= 28));
     }
 
     /**

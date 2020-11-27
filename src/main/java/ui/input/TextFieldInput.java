@@ -40,12 +40,12 @@ public class TextFieldInput extends BaseInput<String> {
 
         this.oldValue = value;
 
-        this.panel.setPreferredSize(new Dimension(100, 20));
+        this.panel.setPreferredSize(new Dimension(240, 20));
 
-        this.field = new JTextField(value, 2);
+        this.field = new JTextField(value);
 
-        this.field.setPreferredSize(new Dimension(40, 20));
-        this.field.setMaximumSize(new Dimension(40, 20));
+        this.field.setPreferredSize(new Dimension(120, 20));
+        this.field.setMaximumSize(new Dimension(120, 20));
 
         this.field.setName(name);
 
@@ -53,11 +53,7 @@ public class TextFieldInput extends BaseInput<String> {
         this.field.getCaret().setBlinkRate(1000);
 
         this.field.addActionListener(e -> {
-            for (PropertyChangeListener l : this.field.getPropertyChangeListeners()) {
-                l.propertyChange(new PropertyChangeEvent(this.field, name, oldValue, this.field.getText()));
-            }
-
-            this.oldValue = this.field.getText();
+            this.getComponent().requestFocus();
         });
 
         this.field.addFocusListener(new FocusListener() {
@@ -73,6 +69,12 @@ public class TextFieldInput extends BaseInput<String> {
                 var field = (JTextField) e.getSource();
 
                 field.setBorder(new MatteBorder(new Insets(0, 0, 1, 0), Color.GRAY));
+
+                for (PropertyChangeListener l : field.getPropertyChangeListeners()) {
+                    l.propertyChange(new PropertyChangeEvent(field, name, oldValue, field.getText()));
+                }
+
+                oldValue = field.getText();
             }
         });
 

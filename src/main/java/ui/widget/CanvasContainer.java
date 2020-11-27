@@ -170,7 +170,6 @@ public class CanvasContainer extends JPanel implements MouseMotionListener, Mous
             }
 
             // Update our history manager
-            System.out.println("Adding entry to history manager...");
             this.historyManager.addHistoryEntry(this.selectedShape);
 
             this.revalidate();
@@ -327,6 +326,9 @@ public class CanvasContainer extends JPanel implements MouseMotionListener, Mous
                     currentTool.getType() != ToolType.IMAGE) {
                 shapes.add(currentObject);
 
+                // add the item to shape history
+                this.historyManager.addShape(currentObject);
+
                 // Update the widget controller to our newest shape on the canvas
                 this.selectedShape = currentObject;
                 this.widgetController.setCurrentWidgetFromShape(selectedShape);
@@ -390,7 +392,10 @@ public class CanvasContainer extends JPanel implements MouseMotionListener, Mous
                     this.selectedShape.setY(oldY);
                 }
 
-            } else if (currentTool.getType() != ToolType.FILL && currentTool.getType() != ToolType.IMAGE) {
+            }
+
+            if (currentTool.getType() != ToolType.SELECTOR &&
+                    currentTool.getType() != ToolType.FILL && currentTool.getType() != ToolType.IMAGE) {
                 // Perform a drawing action if the current tool is not fill
                 // or an image inserter.
 
@@ -398,7 +403,7 @@ public class CanvasContainer extends JPanel implements MouseMotionListener, Mous
                 var endY = e.getY();
 
 
-                // create the new object based on the currently selected ool
+                // create the new object based on the currently selected tool
                 this.currentObject = this.createNewObject(mouseX1, mouseY1, endX, endY);
 
                 if (this.currentObject != null) {

@@ -15,12 +15,12 @@ public class CoordinateInput extends BaseInput<Point> {
     /**
      *
      */
-    private final TextFieldInput xField;
+    private final NumberFieldInput xField;
 
     /**
      *
      */
-    private final TextFieldInput yField;
+    private final NumberFieldInput yField;
 
     /**
      *
@@ -28,7 +28,7 @@ public class CoordinateInput extends BaseInput<Point> {
     public CoordinateInput(String name, Point point, String xLabel, String yLabel) {
         super(name, point);
 
-        this.xField = new TextFieldInput("x", String.valueOf(point.x), xLabel, true);
+        this.xField = new NumberFieldInput("x", point.x, xLabel, true);
 
         this.xField.getComponent().setMaximumSize(new Dimension(60, 20));
         this.xField.getComponent().setPreferredSize(new Dimension(60, 20));
@@ -38,7 +38,7 @@ public class CoordinateInput extends BaseInput<Point> {
         this.xField.addPropertyChangeListener(this::valueChangeListener);
 
 
-        this.yField = new TextFieldInput("y", String.valueOf(point.y), yLabel, true);
+        this.yField = new NumberFieldInput("y", point.y, yLabel, true);
         this.yField.getComponent().setMaximumSize(new Dimension(60, 20));
         this.yField.getComponent().setPreferredSize(new Dimension(60, 20));
         this.yField.getLabel().setPreferredSize(new Dimension(20, 20));
@@ -87,14 +87,14 @@ public class CoordinateInput extends BaseInput<Point> {
     /**
      *
      */
-    public TextFieldInput getXField() {
+    public NumberFieldInput getXField() {
         return xField;
     }
 
     /**
      *
      */
-    public TextFieldInput getYField() {
+    public NumberFieldInput getYField() {
         return yField;
     }
 }

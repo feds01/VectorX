@@ -103,7 +103,9 @@ public class Triangle extends Shape {
      */
     @Override
     public void draw(Graphics2D g, boolean isResizing) {
-        // draw the rectangle
+
+        // if the points changed, we'll need to recompute them..
+        this.setPoints();
 
         int thicknessValue = (Integer) this.getPropertyMap().get("thickness").getValue();
         g.setStroke(new BasicStroke(thicknessValue));

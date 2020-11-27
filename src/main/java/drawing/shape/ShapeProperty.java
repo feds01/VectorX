@@ -92,4 +92,12 @@ public class ShapeProperty<T> implements Serializable {
 
         this.value = reflectedValue;
     }
+
+    @Override
+    public String toString() {
+        return "ShapeProperty{" +
+                "name='" + name + '\'' +
+                ", value=" + value +
+                '}';
+    }
 }
