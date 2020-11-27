@@ -142,6 +142,7 @@ public class CanvasContainer extends JPanel implements MouseMotionListener, Mous
     /**
      *
      */
+    @SuppressWarnings("unchecked")
     private void widgetPropertiesChangeListener(PropertyChangeEvent event) {
         if (event.getPropertyName().equals("widgetPropertyChange")) {
 

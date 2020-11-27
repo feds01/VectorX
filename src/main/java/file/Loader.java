@@ -35,6 +35,7 @@ public class Loader {
     /**
      *
      */
+    @SuppressWarnings("unchecked")
     public List<Shape> load() {
         List<Shape> shapes = null;
 

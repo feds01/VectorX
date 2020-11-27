@@ -77,6 +77,7 @@ public abstract class BaseInput<T> {
     /**
      *
      * */
+    @SuppressWarnings("unchecked")
     public void setValue(Object value) {
         this.value = (T) value;
     }

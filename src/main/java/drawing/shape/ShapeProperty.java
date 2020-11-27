@@ -81,6 +81,7 @@ public class ShapeProperty<T> implements Serializable {
     /**
      *
      */
+    @SuppressWarnings("unchecked")
     public void setValue(Object value) throws IllegalArgumentException {
 
         // @Workaround: java generics workaround to set the type externally.

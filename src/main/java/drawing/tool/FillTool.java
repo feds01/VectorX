@@ -69,9 +69,9 @@ public class FillTool implements DrawingTool {
         ImageIcon icon;
 
         if (selected) {
-            icon = new ImageIcon(FillTool.class.getResource("/icons/fill_selected.png"));
+            icon = new ImageIcon(FillTool.class.getResource("/resources/icons/fill_selected.png"));
         } else {
-            icon = new ImageIcon(FillTool.class.getResource("/icons/fill.png"));
+            icon = new ImageIcon(FillTool.class.getResource("/resources/icons/fill.png"));
         }
 
         return ImageUtils.resizeIcon(icon, 20, 20);

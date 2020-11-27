@@ -140,7 +140,9 @@ public class VectorMain extends JFrame {
             frame.setLocationByPlatform(true);
             frame.pack();
             frame.setVisible(true);
-            setDefaultCloseOperation(EXIT_ON_CLOSE);
+            frame.setDefaultCloseOperation(EXIT_ON_CLOSE);
+
+            System.out.println("VectorX started...");
         });
     }
 

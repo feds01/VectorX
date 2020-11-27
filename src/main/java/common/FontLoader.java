@@ -24,7 +24,7 @@ public class FontLoader {
     private final Map<String, Font> fontMap = new HashMap<>();
 
     private FontLoader() {
-        try (var fontStream = FontLoader.class.getResourceAsStream("/font/NotoSans.ttf")) {
+        try (var fontStream = FontLoader.class.getResourceAsStream("/resources/font/NotoSans.ttf")) {
 
             this.fontMap.put("NotoSans", Font.createFont(Font.TRUETYPE_FONT, fontStream));
 
