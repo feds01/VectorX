@@ -3,7 +3,7 @@ Mini Project 2 Practical Assessment
 In this practical you are required to write a simple vector graphics drawing program. At a minimum your
 program should support the following feature requirements.
 
-### Compiling and running the program
+Compiling and running the program
 ------------------------------------------------------
 
 - Compile the program (Linux/Windows):  
@@ -13,13 +13,20 @@ program should support the following feature requirements.
 - Run the Application:<br/>
      ```java -jar VectorX.jar```
 
+Or use the build script and then run
+------------------------------------------------------
+- Run the script
+```./build.sh```
+- Run the program
+```java -jar VectorX.jar```
+
   
-### Example run
+Example run
 ------------------------------------------------------
 ```shell script
 $ javac -cp "./src/main/java" -d build src/main/java/VectorMain.java
 $ jar cmf manifest.mf VectorX.jar -C build . -C src\main resources
 $ java -jar VectorX.jar
-
+VectorX started...
 ```
 
