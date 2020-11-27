@@ -3,6 +3,7 @@ package drawing.shape;
 import common.CopyUtils;
 import drawing.ToolType;
 
+import javax.imageio.ImageIO;
 import javax.swing.GrayFilter;
 import java.awt.BasicStroke;
 import java.awt.Color;
@@ -13,10 +14,13 @@ import java.awt.image.BufferedImage;
 import java.awt.image.FilteredImageSource;
 import java.awt.image.ImageFilter;
 import java.awt.image.ImageProducer;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.Objects;
 
 public class ImageShape extends Shape {
-    private final BufferedImage image;
+    private transient BufferedImage image;
 
 
     public ImageShape(int x, int y, BufferedImage image) {
@@ -36,6 +40,14 @@ public class ImageShape extends Shape {
         return clazz;
     }
 
+    public BufferedImage getImage() {
+        return this.image;
+    }
+
+    public void setImage(BufferedImage image) {
+        this.image = image;
+    }
+
     @Override
     public ToolType getToolType() {
         return ToolType.IMAGE;
@@ -49,6 +61,19 @@ public class ImageShape extends Shape {
         g.setStroke(new BasicStroke(2));
         g.setColor(Shape.SELECTOR_COLOUR);
         g.drawRect(xPos, yPos, image.getWidth(), image.getHeight());
+    }
+
+    private void writeObject(ObjectOutputStream outputStream) throws IOException {
+        outputStream.defaultWriteObject();
+
+        // write how many images there are to follow
+        ImageIO.write(this.image, "png", outputStream);
+    }
+
+    private void readObject(ObjectInputStream inputStream) throws IOException, ClassNotFoundException {
+        inputStream.defaultReadObject();
+
+        this.image = ImageIO.read(inputStream);
     }
 
     @Override

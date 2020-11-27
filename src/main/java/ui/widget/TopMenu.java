@@ -1,7 +1,10 @@
 package ui.widget;
 
 import common.FileChooserDialog;
+import file.Loader;
+import file.Saver;
 
+import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
@@ -18,12 +21,14 @@ public class TopMenu extends JMenuBar {
      *
      * */
     private final CanvasWidget widget;
+    private final JFrame frame;
 
     /**
      *
      */
-    public TopMenu(CanvasWidget widget) {
+    public TopMenu(CanvasWidget widget, JFrame frame) {
         this.widget = widget;
+        this.frame = frame;
 
         this.setCursor(Cursor.getDefaultCursor());
 
@@ -76,7 +81,7 @@ public class TopMenu extends JMenuBar {
         var exportToPNG = new JMenuItem("Export to PNG");
 
         exportToPNG.addActionListener(e -> {
-            File file = FileChooserDialog.showSaveFileChooser();
+            File file = FileChooserDialog.showSaveFileChooser("png");
 
             widget.getCanvas().export(file, "png");
 
@@ -85,7 +90,7 @@ public class TopMenu extends JMenuBar {
         var exportToJPG = new JMenuItem("Export to JPG");
 
         exportToJPG.addActionListener(e -> {
-            File file = FileChooserDialog.showSaveFileChooser();
+            File file = FileChooserDialog.showSaveFileChooser("jpg");
 
             widget.getCanvas().export(file, "jpg");
         });
@@ -124,7 +129,35 @@ public class TopMenu extends JMenuBar {
 
 
         JMenuItem openItem = new JMenuItem("Open");
+
+        openItem.addActionListener(e -> {
+            File file = FileChooserDialog.showSaveFileChooser("vex");
+
+            // create the saver object and invoke a save action
+            var loader = new Loader(file, frame);
+            var data = loader.load();
+
+
+            if (data != null) {
+                assert file != null;
+
+                frame.setTitle("Editing " + file.getName());
+                widget.getCanvas().setShapes(data);
+            }
+
+        });
+
         JMenuItem saveItem = new JMenuItem("Save");
+
+        saveItem.addActionListener(e -> {
+            File file = FileChooserDialog.showSaveFileChooser("vex");
+
+            var data = widget.getCanvas().getShapes();
+
+            // create the saver object and invoke a save action
+            var saver = new Saver(file, data);
+            saver.save();
+        });
 
         subMenu.add(newItem);
         subMenu.add(openItem);

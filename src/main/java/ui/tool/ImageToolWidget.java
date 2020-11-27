@@ -25,8 +25,9 @@ public class ImageToolWidget extends BaseToolWidget {
         var rotation = new NumberFieldInput("rotation", rotationValue, "rotation", true);
         this.tools.add(rotation);
 
-        var monochromeValue = (Boolean) shape.getProperties().get("grayScale").getValue();
-        var monochrome = new CheckBoxInput("grayScale", monochromeValue, "Grayscale");
+        var grayScaleValue = (Boolean) shape.getProperties().get("grayScale").getValue();
+        var grayScale = new CheckBoxInput("grayScale", grayScaleValue, "Grayscale");
+        this.tools.add(grayScale);
 
         // setup listeners for tools
         this.setupInputListeners();

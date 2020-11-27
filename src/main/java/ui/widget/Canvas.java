@@ -51,7 +51,7 @@ public class Canvas extends JPanel implements MouseMotionListener, MouseInputLis
     /**
      *
      */
-    private final List<Shape> objects = new ArrayList<>();
+    private final List<Shape> shapes = new ArrayList<>();
 
     /**
      * The temporary object that is being used to display a pre-emptive shape that
@@ -148,7 +148,7 @@ public class Canvas extends JPanel implements MouseMotionListener, MouseInputLis
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
         // Draw all of the components on the canvas
-        this.objects.forEach(shape -> shape.draw(g2, false));
+        this.shapes.forEach(shape -> shape.draw(g2, false));
 
         // Draw the current shape to add interactivity to the canvas. The user
         // can see what they are about to draw.
@@ -197,7 +197,7 @@ public class Canvas extends JPanel implements MouseMotionListener, MouseInputLis
             if (this.currentObject == null) {
                 this.currentObject = createNewObject(mouseX1, mouseY1, 0, 0);
             } else {
-                this.objects.add(currentObject);
+                this.shapes.add(currentObject);
 
                 this.selectedShape = this.currentObject;
                 this.currentObject = null;
@@ -282,7 +282,7 @@ public class Canvas extends JPanel implements MouseMotionListener, MouseInputLis
                     && currentTool.getType() != ToolType.IMAGE
             ) {
                 if (currentObject != null) {
-                    objects.add(currentObject);
+                    shapes.add(currentObject);
 
                     // Update the widget controller to our newest shape on the canvas
                     this.selectedShape = currentObject;
@@ -393,9 +393,26 @@ public class Canvas extends JPanel implements MouseMotionListener, MouseInputLis
 
     /**
      *
+     * */
+    public List<Shape> getShapes() {
+        return shapes;
+    }
+
+    /**
+     *
+     * */
+    public void setShapes(List<Shape> shapes) {
+        this.shapes.clear();
+        this.shapes.addAll(shapes);
+
+        this.repaint();
+    }
+
+    /**
+     *
      */
     public Shape getShapeIfHoveringShape(Point point) {
-        List<Shape> shapes = this.objects;
+        List<Shape> shapes = this.shapes;
 
         // Because we care about the items that are on the top
         // of the stack first, we will inspect items that are on
@@ -416,7 +433,7 @@ public class Canvas extends JPanel implements MouseMotionListener, MouseInputLis
      *
      * */
     public void clear() {
-        this.objects.clear();
+        this.shapes.clear();
 
         // clear all the temporary objects
         this.resetSelectedObject();
@@ -536,7 +553,7 @@ public class Canvas extends JPanel implements MouseMotionListener, MouseInputLis
         this.repaint();
 
         this.selectedShape = newObject;
-        this.objects.add(this.selectedShape);
+        this.shapes.add(this.selectedShape);
 
         this.repaint();
     }
@@ -550,7 +567,7 @@ public class Canvas extends JPanel implements MouseMotionListener, MouseInputLis
             return;
         }
 
-        this.objects.remove(this.selectedShape);
+        this.shapes.remove(this.selectedShape);
         selectedShape = null;
 
         this.repaint();

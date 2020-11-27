@@ -100,11 +100,9 @@ public class VectorMain extends JFrame {
             this.propertiesPanel = new PropertiesMenu(widgetController);
 
             // make the menu
-            var menu = new TopMenu(canvasWidget);
+            var menu = new TopMenu(canvasWidget, frame);
 
             frame.setJMenuBar(menu);
-
-
             frame.add(toolbar, BorderLayout.WEST);
 
             // Setup the editor scroll pane.

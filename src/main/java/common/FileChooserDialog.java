@@ -16,12 +16,12 @@ import java.io.IOException;
  * */
 public class FileChooserDialog {
 
-    public static File showSaveFileChooser() {
+    public static File showSaveFileChooser(String extension) {
         var fileChooser = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory());
 
         // filter for image files only
         FileFilter imageFilter = new FileNameExtensionFilter(
-                "Image files", "jpg", "png");
+                "File Type", extension);
 
         fileChooser.setFileFilter(imageFilter);
 
