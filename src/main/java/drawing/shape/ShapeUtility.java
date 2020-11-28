@@ -10,12 +10,21 @@ import java.awt.Point;
 import java.awt.geom.Ellipse2D;
 
 /**
+ * Class that holds utility methods to instantiate frequently used shapes
+ * by any Object that implements the Shape class.
  *
- */
+ * @author 200008575
+ * */
 public class ShapeUtility {
 
     /**
+     * A method to draw a selector point at the specified coordinates. A selector
+     * point is a visual representation of a point that the user can interact with
+     * the shape. A white circle will be painted with a blue selector colour border.
      *
+     * @param g The canvas graphical context.
+     * @param x - The x coordinate of where the selector point should be drawn.
+     * @param y - The y coordinate of where the selector point should be drawn.
      */
     public static void drawSelectorPoint(Graphics2D g, double x, double y) {
         g.setStroke(new BasicStroke(2));
@@ -27,7 +36,13 @@ public class ShapeUtility {
     }
 
     /**
+     * A method to draw a selector point at the specified coordinates. A selector
+     * point is a visual representation of a point that the user can interact with
+     * the shape. A white circle will be painted with a blue selector colour border.
      *
+     * @param g The canvas graphical context.
+     * @param x - The x coordinate of where the selector point should be drawn.
+     * @param y - The y coordinate of where the selector point should be drawn.
      */
     public static void drawSelectorPoint(Graphics2D g, int x, int y) {
         g.setStroke(new BasicStroke(2));
@@ -39,51 +54,43 @@ public class ShapeUtility {
     }
 
     /**
+     * A method to draw a selector rectangle for a given bounding box. The method will
+     * draw selector points at each corner of the box, and at each midpoint of the selector
+     * bounding box. A visual representation of a point that the user can interact with
+     * the shape.
      *
+     * @param x - The x coordinate of start of the bounding box.
+     * @param y - The y coordinate of start of the bounding box.
+     * @param width - The width of shapes bounding box.
+     * @param height - The width of shapes bounding box.
      */
     public static void drawSelectorRect(Graphics2D g, int x, int y, int width, int height) {
+        // draw the rectangle first
         g.setStroke(new BasicStroke(2));
         g.setColor(Shape.SELECTOR_COLOUR);
         g.drawRect(x, y, width, height);
 
-        // draw modifying circle at the start
-        ShapeUtility.drawSelectorPoint(g, x, y);
+        Point[] selectorPoints = createResizePoints(x, y, width, height);
 
-        // draw modifying circle at the end of line
-        ShapeUtility.drawSelectorPoint(g, x, y + height / 2);
-
-        // draw modifying circle at the end of line
-        ShapeUtility.drawSelectorPoint(g, x, y + height);
-
-        // draw modifying circle at the end of line
-        ShapeUtility.drawSelectorPoint(g, x + width / 2, y + height);
-
-        // draw modifying circle at the end of line
-        ShapeUtility.drawSelectorPoint(g, x + width / 2, y);
-
-        // draw modifying circle at the end of line
-        ShapeUtility.drawSelectorPoint(g, x + width, y);
-
-        // draw modifying circle at the end of line
-        ShapeUtility.drawSelectorPoint(g, x + width / 2, y + height);
-
-        // draw modifying circle at the end of line
-        ShapeUtility.drawSelectorPoint(g, x + width, y + height / 2);
-
-        // draw modifying circle at the end of line
-        ShapeUtility.drawSelectorPoint(g, x + width, y + height);
+        // Draw each selector point
+        for (Point point : selectorPoints) {
+            ShapeUtility.drawSelectorPoint(g, point.x, point.y);
+        }
     }
 
 
-    public static void setAlpha(Graphics2D g, int alpha) {
-        float a = (float) alpha / 255.0f;
-
-        var alphaComposite = AlphaComposite.getInstance(
-                AlphaComposite.SRC_OVER, a);
-
-        g.setComposite(alphaComposite);
-    }
-
+    /**
+     * A method to draw a selector point at the specified coordinates. A selector
+     * point is a visual representation of a point that the user can interact with
+     * the shape. A white circle will be painted with a blue selector colour border.
+     *
+     * @param x - The x coordinate of where the selector point should be drawn.
+     * @param y - The y coordinate of where the selector point should be drawn.
+     * @param width - The width of shapes bounding box.
+     * @param height - The width of shapes bounding box.
+     *
+     * @return an Array of points to where the selector points should be drawn.
+     */
     public static Point[] createResizePoints(int x, int y, int width, int height) {
         var points = new Point[8];
 

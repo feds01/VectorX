@@ -14,7 +14,10 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
 /**
+ * TextFieldInput class that is used to render a text field input which
+ * is derived from the BaseInput class.
  *
+ * @author 200008575
  * */
 public class TextFieldInput extends BaseInput<String> {
     /**

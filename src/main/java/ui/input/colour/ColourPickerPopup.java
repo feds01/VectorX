@@ -26,8 +26,10 @@ import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 
 /**
+ * ColourPickerPopup class
  *
- */
+ * @author 200008575
+ * */
 public class ColourPickerPopup extends Box {
     /**
      *

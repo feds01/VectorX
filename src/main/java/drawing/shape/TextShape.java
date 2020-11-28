@@ -1,7 +1,7 @@
 package drawing.shape;
 
 import common.CopyUtils;
-import drawing.ToolType;
+import drawing.tool.ToolType;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
@@ -12,16 +12,21 @@ import java.awt.geom.Rectangle2D;
 import java.util.Objects;
 
 /**
+ * TextShape class that is used to draw shapes that are of ellipse
+ * type. This class extends the base class Shape to implement
+ * the methods for drawing an ellipse.
  *
+ * @author 200008575
  */
 public class TextShape extends Shape {
     /**
-     *
+     * TextShape constructor method
      */
     public TextShape(int x, int y, int x2, int y2) {
         super(x, y, x2, y2);
 
-        this.properties.addProperty(new ShapeProperty<>("value", "text", value -> true));
+        // set the text value for the object
+        this.properties.addProperty(new ShapeProperty<>("value", "", value -> true));
 
         this.properties.addProperty(ShapePropertyFactory.createColourProperty("strokeColour", Color.BLACK));
         this.properties.addProperty(ShapePropertyFactory.createColourProperty("fillColour", Color.WHITE));
@@ -29,7 +34,9 @@ public class TextShape extends Shape {
     }
 
     /**
+     * Method to copy the current shape and make a new instance of it
      *
+     * @return A new TextShape object that holds the same properties as this object.
      */
     public TextShape copy() {
         int width = (int) ((Point) this.getPropertyMap().get("end").getValue()).getX();
@@ -42,7 +49,9 @@ public class TextShape extends Shape {
     }
 
     /**
+     * This method returns the Text ToolType for this method
      *
+     * @return The tool type
      */
     @Override
     public ToolType getToolType() {
@@ -50,7 +59,10 @@ public class TextShape extends Shape {
     }
 
     /**
+     * This method is used to draw the boundary of the object when it
+     * is being highlighted on the canvas.
      *
+     * @param g The canvas graphical context.
      */
     @Override
     public void drawBoundary(Graphics2D g) {
@@ -64,7 +76,10 @@ public class TextShape extends Shape {
     }
 
     /**
+     * This method is used to draw the selection boundary of the object when it
+     * is selected on the canvas.
      *
+     * @param g The canvas graphical context.
      */
     @Override
     public void drawSelectedBoundary(Graphics2D g) {
@@ -77,7 +92,13 @@ public class TextShape extends Shape {
     }
 
     /**
+     * This method is used to draw the object when it is present on
+     * the canvas.
      *
+     * @param g          The canvas graphical context.
+     * @param isResizing a boolean representing if the shape is currently being
+     *                   resized. This value can be used to display a special
+     *                   style when it's being resized.
      */
     @Override
     public void draw(Graphics2D g, boolean isResizing) {
@@ -113,7 +134,10 @@ public class TextShape extends Shape {
     }
 
     /**
+     * Returns whether or not this object can be filled.
      *
+     * @return a boolean whether the Fill tool can be used on this
+     * object.
      */
     @Override
     public boolean isFillable() {
@@ -121,7 +145,11 @@ public class TextShape extends Shape {
     }
 
     /**
+     * Check whether or not a certain point is within the hover-able
+     * boundary of the shape.
      *
+     * @param point - The point to be checked whether it is within the bounds
+     * @return Whether or not the given point is within the bounds
      */
     @Override
     public boolean isPointWithinBounds(Point point) {
@@ -134,7 +162,7 @@ public class TextShape extends Shape {
     }
 
     /**
-     *
+     * Equality method for the the TextShape shape object.
      */
     @Override
     public boolean equals(Object o) {
@@ -147,7 +175,7 @@ public class TextShape extends Shape {
     }
 
     /**
-     *
+     * Hash method for the TextShape shape object.
      */
     @Override
     public int hashCode() {

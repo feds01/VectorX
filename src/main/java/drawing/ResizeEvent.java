@@ -2,7 +2,18 @@ package drawing;
 
 import java.awt.Cursor;
 
+/**
+ * Class that holds utility methods to dictate ResizeEvent behaviours
+ * for objects.
+ *
+ * @author 200008575
+ * */
 public class ResizeEvent {
+
+    /**
+     * The collection of ids corresponding to the visual
+     * representation of where the ResizeEvent occurs.
+     * */
     public static final int NORTH = 0;
     public static final int NORTH_EAST = 1;
     public static final int EAST = 2;
@@ -13,13 +24,15 @@ public class ResizeEvent {
     public static final int NORTH_WEST = 7;
 
     /**
+     * A method to return a {@link Cursor} based on the id of the
+     * resize event.
      *
+     * @param resizeEvent - The id of the resize event.
+     * @return the cursor for the the resize event
+     *
+     * @throws IllegalArgumentException if the resizeEvent is out of the defined bounds.
      */
     public static Cursor getCursorFromResizeEvent(int resizeEvent) {
-        if (resizeEvent < 0 || resizeEvent > 7) {
-            throw new IllegalStateException("Invalid resize event.");
-        }
-
         switch (resizeEvent) {
             case 0:
                 return new Cursor(Cursor.N_RESIZE_CURSOR);
@@ -37,8 +50,8 @@ public class ResizeEvent {
                 return new Cursor(Cursor.W_RESIZE_CURSOR);
             case 7:
                 return new Cursor(Cursor.NW_RESIZE_CURSOR);
+            default:
+                throw new IllegalArgumentException("Invalid resize event.");
         }
-
-        return null;
     }
 }

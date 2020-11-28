@@ -1,15 +1,14 @@
 package ui.widget;
 
 import drawing.ResizeEvent;
-import drawing.ToolType;
-import drawing.shape.Ellipses;
+import drawing.shape.Ellipse;
 import drawing.shape.ImageShape;
 import drawing.shape.Line;
 import drawing.shape.Rectangle;
 import drawing.shape.Shape;
 import drawing.shape.TextShape;
 import drawing.shape.Triangle;
-import history.HistoryManager;
+import drawing.tool.ToolType;
 import ui.controllers.ToolController;
 import ui.controllers.WidgetController;
 import ui.tool.EmptyToolWidget;
@@ -42,18 +41,14 @@ import java.util.Map;
 import java.util.Objects;
 
 /**
+ * CanvasContainer class that holds all of the logic to draw the class.
  *
+ * @author 200008575
  */
 public class CanvasContainer extends JPanel implements MouseMotionListener, MouseInputListener {
 
     /**
-     *
-     */
-    private final HistoryManager historyManager;
-
-
-    /**
-     *
+     * A list of the current shapes that are present on the canvas.
      */
     private final List<Shape> shapes = new ArrayList<>();
 
@@ -64,57 +59,64 @@ public class CanvasContainer extends JPanel implements MouseMotionListener, Mous
     private Shape currentObject = null;
 
     /**
-     *
+     * A reference of the currently selected shape if any.
      */
     private Shape selectedShape = null;
 
     /**
-     *
+     * A reference of the currently highlighted shape if any.
      */
     private Shape highlightedShape = null;
 
     /**
-     *
+     * A boolean to represent whether the currently selected shape
+     * if any has been marked for copying by the user.
      */
     private boolean copySelectedShape = false;
 
     /**
-     *
+     * The ToolController reference to access, modify and listen for changes in
+     * the current selected tool.
      */
     private final ToolController toolController;
 
     /**
-     *
+     * The WidgetController reference to access, modify and listen for changes in
+     * the current active widget.
      */
     private final WidgetController widgetController;
 
     /**
-     *
+     * The x coordinate location of the last click
      */
     private int mouseX1;
 
     /**
-     *
+     * The y coordinate location of the last click
      */
     private int mouseY1;
 
     /**
-     *
+     * The ResizeEvent id of the current action the user is trying
+     * to perform.
      */
     private int isResizing = -1;
 
     /**
-     *
+     * A boolean to represent if the user is currently dragging (or resizing)
+     * the current selected shape.
      */
     private boolean isDragging = false;
 
     /**
-     *
+     * A boolean to represent if the canvas should paint additional overlay
+     * such as selected or highlighted shape. This is used to export the
+     * canvas to an image format.
      */
     private boolean additionalOverlay = true;
 
     /**
-     *
+     * CanvasContainer constructor
      */
     public CanvasContainer(ToolController toolController, WidgetController widgetController) {
         this.toolController = toolController;
@@ -126,17 +128,17 @@ public class CanvasContainer extends JPanel implements MouseMotionListener, Mous
         this.addMouseListener(this);
         this.addMouseMotionListener(this);
 
-
-        // Instantiate the history manager
-        this.historyManager = new HistoryManager();
-
         // setup widget property change listener
         this.toolController.addPropertyChangeListener(this::toolChangeListener);
         this.widgetController.addPropertyChangeListener(this::widgetPropertiesChangeListener);
     }
 
     /**
+     * Method to listen to changes in the toolController. This is used to
+     * update the internal state of the canvas based on the currently selected
+     * tool.
      *
+     * @param event - The change event
      */
     private void toolChangeListener(PropertyChangeEvent event) {
         // Propagate the cursor when the tool changes...
@@ -146,7 +148,11 @@ public class CanvasContainer extends JPanel implements MouseMotionListener, Mous
     }
 
     /**
+     * Method to listen to changes in the widgetController. This is used to
+     * update the properties of the currently selected shape. These updates
+     * properties are derived from the current tool widget.
      *
+     * @param event - The change event
      */
     @SuppressWarnings("unchecked")
     private void widgetPropertiesChangeListener(PropertyChangeEvent event) {
@@ -182,8 +188,9 @@ public class CanvasContainer extends JPanel implements MouseMotionListener, Mous
                 }
             }
 
+            // TODO: fixme
             // Update our history manager
-            this.historyManager.addHistoryEntry(this.selectedShape);
+            // this.historyManager.addHistoryEntry(this.selectedShape);
 
             this.revalidate();
             this.repaint();
@@ -192,8 +199,11 @@ public class CanvasContainer extends JPanel implements MouseMotionListener, Mous
 
 
     /**
-     * This overridden paint method will be called by Swing when Canvas.repaint() is called from
-     * SimpleGuiDelegate.propertyChange().
+     * This method is used to draw the shape objects on the canvas. It overrides
+     * the default Swing Component paintComponent method to only paint shapes on
+     * the JPanel.
+     *
+     * @param g          The canvas graphical context.
      */
     public void paintComponent(Graphics g) {
         g.setColor(this.getBackground());
@@ -231,10 +241,12 @@ public class CanvasContainer extends JPanel implements MouseMotionListener, Mous
 
 
     /**
+     * Method to handle mouse event clicks that occur on the canvas.
      *
+     * @param event - The mouse event
      */
     @Override
-    public void mouseClicked(MouseEvent e) {
+    public void mouseClicked(MouseEvent event) {
         var currentTool = this.toolController.getCurrentTool();
 
         // Handle a click event when 'image' tool is enabled
@@ -247,7 +259,7 @@ public class CanvasContainer extends JPanel implements MouseMotionListener, Mous
 
                 // add the current shape to the canvas and the history manager for future
                 // reference...
-                this.historyManager.addShape(currentObject);
+                // this.historyManager.addShape(currentObject);
 
                 this.shapes.add(currentObject);
 
@@ -266,7 +278,7 @@ public class CanvasContainer extends JPanel implements MouseMotionListener, Mous
         if (currentTool.getType() == ToolType.FILL) {
             this.selectedShape = null;
 
-            var selectedShape = getShapeIfHoveringShape(e.getPoint());
+            var selectedShape = getShapeIfHoveringShape(event.getPoint());
 
             // get the current colour from the FillWidget
             var fillValue = (Color) this.widgetController.getCurrentToolWidget().getValue("fill");
@@ -283,22 +295,24 @@ public class CanvasContainer extends JPanel implements MouseMotionListener, Mous
     }
 
     /**
+     * Method to handle mouse event presses that occur on the canvas.
      *
+     * @param event - The mouse event
      */
     @Override
-    public void mousePressed(MouseEvent e) {
+    public void mousePressed(MouseEvent event) {
         var currentTool = this.toolController.getCurrentTool();
 
-        if (SwingUtilities.isLeftMouseButton(e)) {
-            mouseX1 = e.getX();
-            mouseY1 = e.getY();
+        if (SwingUtilities.isLeftMouseButton(event)) {
+            mouseX1 = event.getX();
+            mouseY1 = event.getY();
 
             if (currentTool.getType() == ToolType.SELECTOR) {
-                var selectedShape = getShapeIfHoveringShape(e.getPoint());
+                var selectedShape = getShapeIfHoveringShape(event.getPoint());
 
                 if (this.selectedShape != null) {
                     this.isDragging = true;
-                    this.isResizing = this.selectedShape.getResizePoint(e.getPoint());
+                    this.isResizing = this.selectedShape.getResizeEventAt(event.getPoint());
                 }
 
                 // use the isOnResizePoint method to check whether a point
@@ -319,18 +333,20 @@ public class CanvasContainer extends JPanel implements MouseMotionListener, Mous
                 }
             }
         } else {
-            this.getParent().dispatchEvent(e);
+            this.getParent().dispatchEvent(event);
         }
     }
 
     /**
+     * Method to handle mouse event press releases that occur on the canvas.
      *
+     * @param event - The mouse event
      */
     @Override
-    public void mouseReleased(MouseEvent e) {
+    public void mouseReleased(MouseEvent event) {
         var currentTool = toolController.getCurrentTool();
 
-        if (SwingUtilities.isLeftMouseButton(e)) {
+        if (SwingUtilities.isLeftMouseButton(event)) {
 
             // Reset the isDragging flag since the user let go of the mouse
             if (currentTool.getType() == ToolType.SELECTOR) {
@@ -348,7 +364,7 @@ public class CanvasContainer extends JPanel implements MouseMotionListener, Mous
                 shapes.add(currentObject);
 
                 // add the item to shape history
-                this.historyManager.addShape(currentObject);
+                // this.historyManager.addShape(currentObject);
 
                 // Update the widget controller to our newest shape on the canvas
                 this.selectedShape = currentObject;
@@ -359,18 +375,20 @@ public class CanvasContainer extends JPanel implements MouseMotionListener, Mous
             }
 
         } else {
-            this.getParent().dispatchEvent(e);
+            this.getParent().dispatchEvent(event);
         }
     }
 
     /**
+     * Method to handle mouse drag events that occur on the canvas.
      *
+     * @param event - The mouse event
      */
     @Override
-    public void mouseDragged(MouseEvent e) {
+    public void mouseDragged(MouseEvent event) {
         var currentTool = toolController.getCurrentTool();
 
-        if (SwingUtilities.isLeftMouseButton(e)) {
+        if (SwingUtilities.isLeftMouseButton(event)) {
 
             // Check if we need to drag or resize the current object based on selector
             // state
@@ -378,8 +396,8 @@ public class CanvasContainer extends JPanel implements MouseMotionListener, Mous
                 var oldX = this.selectedShape.getX();
                 var oldY = this.selectedShape.getY();
 
-                var dx = (e.getX() - mouseX1);
-                var dy = (e.getY() - mouseY1);
+                var dx = (event.getX() - mouseX1);
+                var dy = (event.getY() - mouseY1);
 
                 // perform resizing operation
                 if (this.isResizing > -1) {
@@ -387,8 +405,8 @@ public class CanvasContainer extends JPanel implements MouseMotionListener, Mous
 
 
                     // update the mouse values to the current point
-                    mouseX1 = e.getX();
-                    mouseY1 = e.getY();
+                    mouseX1 = event.getX();
+                    mouseY1 = event.getY();
 
                     this.repaint();
                 } else if (this.isDragging) {
@@ -401,16 +419,16 @@ public class CanvasContainer extends JPanel implements MouseMotionListener, Mous
 
                         // only do this for line objects
                         if (this.selectedShape instanceof Line) {
-                            var oldEndX = ((Line) this.selectedShape).getEndX();
-                            var oldEndY = ((Line) this.selectedShape).getEndY();
+                            var oldEndX = this.selectedShape.getWidth();
+                            var oldEndY = this.selectedShape.getHeight();
 
-                            ((Line) (this.selectedShape)).setEndX(oldEndX + dx);
-                            ((Line) (this.selectedShape)).setEndY(oldEndY + dy);
+                            this.selectedShape.setWidth(oldEndX + dx);
+                            this.selectedShape.setHeight(oldEndY + dy);
                         }
 
                         // update the mouse values to the current point
-                        mouseX1 = e.getX();
-                        mouseY1 = e.getY();
+                        mouseX1 = event.getX();
+                        mouseY1 = event.getY();
 
                         this.repaint();
                     } catch (IllegalArgumentException ignored) {
@@ -426,8 +444,8 @@ public class CanvasContainer extends JPanel implements MouseMotionListener, Mous
                 // Perform a drawing action if the current tool is not fill
                 // or an image inserter.
 
-                var endX = e.getX();
-                var endY = e.getY();
+                var endX = event.getX();
+                var endY = event.getY();
 
 
                 // create the new object based on the currently selected tool
@@ -438,29 +456,31 @@ public class CanvasContainer extends JPanel implements MouseMotionListener, Mous
                 }
             }
 
-        } else if (SwingUtilities.isMiddleMouseButton(e)) {
-            this.getParent().dispatchEvent(e);
+        } else if (SwingUtilities.isMiddleMouseButton(event)) {
+            this.getParent().dispatchEvent(event);
         }
     }
 
     /**
+     * Method to handle mouse drag events that occur on the canvas.
      *
+     * @param event - The mouse event
      */
     @Override
-    public void mouseMoved(MouseEvent e) {
+    public void mouseMoved(MouseEvent event) {
         var currentTool = toolController.getCurrentTool();
 
         // If the image tool is selected, and already created. The x and y
         // coordinates of the shape should be updated so it can be re-drawn.
         if (currentTool.getType() == ToolType.IMAGE && currentObject != null) {
-            currentObject.setX(e.getX());
-            currentObject.setY(e.getY());
+            currentObject.setX(event.getX());
+            currentObject.setY(event.getY());
 
             this.repaint();
         }
 
         if (currentTool.getType() == ToolType.SELECTOR) {
-            Shape newHighlightedShape = this.getShapeIfHoveringShape(e.getPoint());
+            Shape newHighlightedShape = this.getShapeIfHoveringShape(event.getPoint());
 
 
             // check for resize events if the selectedShape is not null
@@ -471,7 +491,7 @@ public class CanvasContainer extends JPanel implements MouseMotionListener, Mous
                 }
 
 
-                var onResize = this.selectedShape.getResizePoint(e.getPoint());
+                var onResize = this.selectedShape.getResizeEventAt(event.getPoint());
 
                 // use the isOnResizePoint method to check whether a point
 
@@ -496,7 +516,9 @@ public class CanvasContainer extends JPanel implements MouseMotionListener, Mous
     }
 
     /**
+     * Method to retrieve the current shapes on the canvas
      *
+     * @return the current shapes on the canvas
      */
     public List<Shape> getShapes() {
         return shapes;
@@ -513,7 +535,13 @@ public class CanvasContainer extends JPanel implements MouseMotionListener, Mous
     }
 
     /**
+     * Method to return whether the user is currently hovering
+     * a shape.
      *
+     * @param point location of the cursor
+     *
+     * @return the shape that the user is currently hovering, if no shape
+     * is being hovered, the method will return null.
      */
     public Shape getShapeIfHoveringShape(Point point) {
         List<Shape> shapes = new ArrayList<>(this.shapes);
@@ -525,7 +553,6 @@ public class CanvasContainer extends JPanel implements MouseMotionListener, Mous
 
         for (Shape shape : shapes) {
             if (shape.isPointWithinBounds(point)) {
-
                 return shape;
             }
         }
@@ -534,7 +561,9 @@ public class CanvasContainer extends JPanel implements MouseMotionListener, Mous
     }
 
     /**
-     *
+     * Method used to clear the canvas which includes resetting
+     * all of the shapes, and setting the current tool to the
+     * selector and the widget to an empty widget.
      */
     public void clear() {
         this.shapes.clear();
@@ -557,7 +586,15 @@ public class CanvasContainer extends JPanel implements MouseMotionListener, Mous
     }
 
     /**
+     * Method used to create a new object from the coordinate pair
+     * that is derived from where mouse began dragging and ended dragging
      *
+     * @param x1 - Start x of mouse drag.
+     * @param y1 - Start y of mouse drag.
+     * @param x2 - Start x of mouse drag.
+     * @param y2 - End y of mouse drag.
+     *
+     * @return the shape based on the coordinates and the current tool.
      */
     private Shape createNewObject(int x1, int y1, int x2, int y2) {
         var currentTool = toolController.getCurrentTool();
@@ -602,8 +639,8 @@ public class CanvasContainer extends JPanel implements MouseMotionListener, Mous
                     return new Triangle(x1, y1, x2, y2);
                 case RECTANGLE:
                     return new Rectangle(x1, y1, x2, y2);
-                case ELLIPSIS:
-                    return new Ellipses(x1, y1, x2, y2);
+                case ELLIPSE:
+                    return new Ellipse(x1, y1, x2, y2);
                 case TEXT:
                     return new TextShape(x1, y1, x2, y2);
             }
@@ -614,7 +651,7 @@ public class CanvasContainer extends JPanel implements MouseMotionListener, Mous
     }
 
     /**
-     *
+     * Internal method used to reset the currently selected object.
      */
     private void resetSelectedObject() {
         this.selectedShape = null;
@@ -622,13 +659,18 @@ public class CanvasContainer extends JPanel implements MouseMotionListener, Mous
     }
 
     /**
+     * Method used to mark the currently selected object for copying
      *
+     * @param flag - Whether or not the object is marked for copying
      */
     public void setCopyOnSelectedShape(boolean flag) {
         this.copySelectedShape = flag;
     }
 
     /**
+     * Method used to copy the currently selected shape. The shape and it's properties
+     * will be copied and the shape will be moved 5pixels to the left and down to
+     * differentiate the copied object from the original object.
      *
      */
     public void copySelectedShape() {
@@ -660,7 +702,8 @@ public class CanvasContainer extends JPanel implements MouseMotionListener, Mous
     }
 
     /**
-     *
+     * Method used to delete the currently selected shape. The shape and it's properties
+     * will be deleted from the current shapes.
      */
     public void deleteSelectedShape() {
         // Don't do anything if there is no selected shape
@@ -681,7 +724,14 @@ public class CanvasContainer extends JPanel implements MouseMotionListener, Mous
 
 
     /**
+     * Method used to export the current drawing on the canvas to
+     * a image file. The image file can either be a JPG or a PNG.
+     * The image file will not contain any currently applied effects
+     * such as object selectivity or hovered object borders.
      *
+     * @param to - The file object where the image will be written to
+     * @param extension - The extension of the file that the object will
+     *                  be written to.
      */
     public void export(File to, String extension) {
         if (!extension.equals("jpg") && !extension.equals("png")) {
@@ -732,6 +782,9 @@ public class CanvasContainer extends JPanel implements MouseMotionListener, Mous
     }
 
 
-    public void mouseEntered(MouseEvent e) { }
-    public void mouseExited(MouseEvent e) { }
+    public void mouseEntered(MouseEvent e) {
+    }
+
+    public void mouseExited(MouseEvent e) {
+    }
 }

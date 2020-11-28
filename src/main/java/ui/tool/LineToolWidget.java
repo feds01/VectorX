@@ -12,12 +12,15 @@ import java.awt.Color;
 import java.awt.Point;
 
 /**
+ * LineToolWidget widget class that is used to edit and display the properties
+ * for lines.
  *
- */
+ * @author 200008575
+ * */
 public class LineToolWidget extends BaseToolWidget {
     /**
-     *
-     */
+     * LineToolWidget constructor
+     * */
     public LineToolWidget(Line shape, JFrame frame) {
         super(shape);
 
@@ -52,7 +55,7 @@ public class LineToolWidget extends BaseToolWidget {
     }
 
     /**
-     *
+     * Method to build the properties menu widget ui
      */
     @Override
     protected void constructUI() {

@@ -6,7 +6,10 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
 /**
+ * Class that holds utility methods to copy objects and make a new
+ * instance of the object.
  *
+ * @author 200008575
  * */
 public class CopyUtils {
     /**

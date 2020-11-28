@@ -5,11 +5,18 @@ import java.awt.Point;
 import java.io.Serializable;
 
 /**
+ * Class that holds utility methods to instantiate frequently used shape
+ * property objects with pre-defined validators.
  *
- */
-public class ShapePropertyFactory implements Serializable {
+ * @author 200008575
+ * */
+public class ShapePropertyFactory {
 
     /**
+     * Create a new ShapeProperty that holds a colour object value
+     *
+     * @param name The name of the property
+     * @param value The value of the colour that will be set for the shape property.
      *
      */
     public static ShapeProperty<Color> createColourProperty(String name, Color value) {
@@ -17,6 +24,10 @@ public class ShapePropertyFactory implements Serializable {
     }
 
     /**
+     * Create a new ShapeProperty that holds a Point object value
+     *
+     * @param name The name of the property
+     * @param value The value of the Point that will be set for the shape property.
      *
      */
     public static ShapeProperty<Point> createPointProperty(String name, Point value) {

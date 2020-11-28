@@ -23,8 +23,11 @@ import java.beans.PropertyChangeEvent;
 
 
 /**
+ * SliderInput class that is used to render a text field input which
+ * is derived from the BaseInput class.
  *
- */
+ * @author 200008575
+ * */
 public class SliderInput extends BaseInput<Integer> {
 
 
@@ -220,8 +223,11 @@ public class SliderInput extends BaseInput<Integer> {
 
 
 /**
+ * Class that holds utility methods to copy objects and make a new
+ * instance of the object.
  *
- */
+ * @author 200008575
+ * */
 class SliderUI extends BasicSliderUI {
 
     /**

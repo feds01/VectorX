@@ -9,13 +9,16 @@ import ui.input.NumberFieldInput;
 import java.awt.Point;
 
 /**
+ * ImageToolWidget widget class that is used to edit and display the properties
+ * for ImageShapes.
  *
- */
+ * @author 200008575
+ * */
 public class ImageToolWidget extends BaseToolWidget {
 
     /**
-     *
-     */
+     * ImageToolWidget constructor
+     * */
     public ImageToolWidget(ImageShape shape) {
         super(shape);
 
@@ -43,7 +46,7 @@ public class ImageToolWidget extends BaseToolWidget {
     }
 
     /**
-     *
+     * Method to build the properties menu widget ui
      */
     public void constructUI() {
         this.panel.add(WidgetFactory.createTitleWidget("TRANSFORM"));

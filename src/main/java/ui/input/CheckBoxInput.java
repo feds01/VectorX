@@ -8,7 +8,10 @@ import java.awt.Color;
 import java.awt.event.ActionEvent;
 
 /**
+ * CheckboxInput class that is used to render a text field input which
+ * is derived from the BaseInput class.
  *
+ * @author 200008575
  * */
 public class CheckBoxInput extends BaseInput<Boolean> {
 

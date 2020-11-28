@@ -13,8 +13,11 @@ import java.awt.Cursor;
 import java.io.File;
 
 /**
+ * TopMenu widget class that is used to create and display the action
+ * menu.
  *
- */
+ * @author 200008575
+ * */
 public class TopMenu extends JMenuBar {
 
 

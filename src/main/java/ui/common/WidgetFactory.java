@@ -1,7 +1,7 @@
 package ui.common;
 
 import common.FontLoader;
-import drawing.shape.Ellipses;
+import drawing.shape.Ellipse;
 import drawing.shape.ImageShape;
 import drawing.shape.Line;
 import drawing.shape.Rectangle;
@@ -30,8 +30,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * WidgetFactory class holds utility methods to create re-usable
+ * widgets across the application.
  *
- */
+ * @author 200008575
+ * */
 public class WidgetFactory {
 
     /**
@@ -109,8 +112,8 @@ public class WidgetFactory {
                 var rectangle = (Rectangle) shape;
 
                 return new ShapeToolWidget(rectangle, frame);
-            case ELLIPSIS:
-                var ellipsis = (Ellipses) shape;
+            case ELLIPSE:
+                var ellipsis = (Ellipse) shape;
 
                 return new ShapeToolWidget(ellipsis, frame);
             case IMAGE:

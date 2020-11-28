@@ -18,8 +18,11 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
 /**
+ * PropertiesMenu widget class that is used to create and display the properties
+ * menu.
  *
- */
+ * @author 200008575
+ * */
 public class PropertiesMenu {
     /**
      *

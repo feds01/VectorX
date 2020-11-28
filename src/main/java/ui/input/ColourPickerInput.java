@@ -8,14 +8,12 @@ import javax.swing.JLabel;
 import java.awt.Color;
 
 /**
+ * ColourPickerInput class that is used to render a text field input which
+ * is derived from the BaseInput class.
  *
- */
+ * @author 200008575
+ * */
 public class ColourPickerInput extends BaseInput<Color> {
-
-    /**
-     *
-     */
-    private final ColourPicker picker;
 
     /**
      *
@@ -24,9 +22,9 @@ public class ColourPickerInput extends BaseInput<Color> {
         super(name, value);
 
         // create the picker component
-        this.picker = new ColourPicker(value, frame);
+        ColourPicker picker = new ColourPicker(value, frame);
 
-        this.picker.addPropertyChangeListener(e -> {
+        picker.addPropertyChangeListener(e -> {
             var colourPicker = (ColourPicker) e.getSource();
 
             var oldValue = this.value;
@@ -41,7 +39,7 @@ public class ColourPickerInput extends BaseInput<Color> {
         label.setForeground(Color.GRAY);
 
         // add components to the panel component
-        this.panel.add(this.picker);
+        this.panel.add(picker);
         this.panel.add(Box.createHorizontalStrut(5));
         this.panel.add(label);
     }

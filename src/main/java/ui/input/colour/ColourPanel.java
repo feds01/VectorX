@@ -20,8 +20,10 @@ import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 
 /**
+ * ColourPanel class
  *
- */
+ * @author 200008575
+ * */
 public class ColourPanel extends JPanel {
 
     /**

@@ -12,14 +12,17 @@ import java.util.Map;
 import java.util.Stack;
 
 /**
+ * Class that holds utility methods to copy objects and make a new
+ * instance of the object.
  *
- */
+ * @author 200008575
+ * */
 public class HistoryManager {
 
     /**
      *
      */
-    private List<Shape> addedCanvasShapes = new ArrayList<>();
+    private final List<Shape> addedCanvasShapes = new ArrayList<>();
 
     /**
      *
@@ -71,9 +74,6 @@ public class HistoryManager {
 
             // don't add it if no change was detected
             if (!globalShape.getProperties().equals(propertyCopy)) {
-                System.out.println(globalShape.getProperties());
-                System.out.println(propertyCopy);
-
                 copy.put(addedCanvasShapes.indexOf(shape), propertyCopy);
                 this.historyFrames.push(copy);
                 this.currentFrame = copy;
@@ -165,14 +165,23 @@ public class HistoryManager {
         this.currentFrameId = currentFrameId;
     }
 
+    /**
+     *
+     */
     public Map<Integer, ShapeProperties> getCurrentFrame() {
         return this.currentFrame;
     }
 
+    /**
+     *
+     */
     public List<Shape> getAddedCanvasShapes() {
         return addedCanvasShapes;
     }
 
+    /**
+     *
+     */
     public Stack<Map<Integer, ShapeProperties>> getHistoryFrames() {
         return historyFrames;
     }

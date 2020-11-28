@@ -1,6 +1,6 @@
 package ui.controllers;
 
-import drawing.ToolType;
+import drawing.tool.ToolType;
 import drawing.tool.DrawingTool;
 import ui.widget.ToolMenu;
 
@@ -9,8 +9,10 @@ import java.beans.PropertyChangeListener;
 
 
 /**
+ * ToolController class
  *
- */
+ * @author 200008575
+ * */
 public class ToolController {
 
     /**

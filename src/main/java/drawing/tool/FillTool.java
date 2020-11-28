@@ -1,7 +1,6 @@
 package drawing.tool;
 
 import common.ImageUtils;
-import drawing.ToolType;
 
 import javax.swing.ImageIcon;
 import java.awt.Cursor;
@@ -9,33 +8,37 @@ import java.awt.Point;
 import java.awt.Toolkit;
 import java.util.Objects;
 
+
 /**
+ * FillTool class that implements the DrawingTool class. This class
+ * represents the Fill tool within the application.
  *
- */
+ * @author 200008575
+ * */
 public class FillTool implements DrawingTool {
     /**
-     *
+     * Get the swing application toolkit.
      */
     private final Toolkit toolkit = Toolkit.getDefaultToolkit();
 
     /**
-     *
+     * The type of the tool
      */
-    private final ToolType type;
+    private final ToolType type = ToolType.FILL;
 
     /**
-     *
+     * FillTool constructor
      */
-    public FillTool() {
-        this.type = ToolType.FILL;
-    }
+    public FillTool() { }
 
     /**
+     * Get the {@link Cursor} for the tool.
      *
+     * @return the cursor
      */
     @Override
     public Cursor getCursor() {
-        var icon = new ImageIcon(FillTool.class.getResource("/icons/fill.png"));
+        var icon = new ImageIcon(FillTool.class.getResource("/resources/icons/fill.png"));
 
         // get the best width and height based on Operating System using the Toolkit
         var dimensions = toolkit.getBestCursorSize(32, 32);
@@ -46,7 +49,10 @@ public class FillTool implements DrawingTool {
     }
 
     /**
+     * Get the tooltip for the tool, that will be displayed when a user
+     * hovers over the item.
      *
+     * @return the tooltip
      */
     @Override
     public String getToolTip() {
@@ -54,7 +60,9 @@ public class FillTool implements DrawingTool {
     }
 
     /**
+     * Get the {@link ToolType} for the tool.
      *
+     * @return the ToolType for the tool.
      */
     @Override
     public ToolType getType() {
@@ -62,16 +70,23 @@ public class FillTool implements DrawingTool {
     }
 
     /**
+     * Get the ImageIcon for the tool. This icon is used
+     * within the ToolWidget to display the button to enable
+     * the tool.
      *
+     * @param selected Whether or not the icon should be displayed
+     *                 as selected.
+     *
+     * @return the icon for the current tool.
      */
     @Override
     public ImageIcon getImageIcon(boolean selected) {
         ImageIcon icon;
 
         if (selected) {
-            icon = new ImageIcon(FillTool.class.getResource("/icons/fill_selected.png"));
+            icon = new ImageIcon(FillTool.class.getResource("/resources/icons/fill_selected.png"));
         } else {
-            icon = new ImageIcon(FillTool.class.getResource("/icons/fill.png"));
+            icon = new ImageIcon(FillTool.class.getResource("/resources/icons/fill.png"));
         }
 
         return ImageUtils.resizeIcon(icon, 20, 20);

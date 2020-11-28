@@ -13,8 +13,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * WidgetController class
  *
- */
+ * @author 200008575
+ * */
 public class WidgetController {
 
     /**

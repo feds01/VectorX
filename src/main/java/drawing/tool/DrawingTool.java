@@ -1,31 +1,46 @@
 package drawing.tool;
 
-import drawing.ToolType;
-
 import javax.swing.ImageIcon;
 import java.awt.Cursor;
 
 /**
+ * Interface to describe a DrawingTool that can be implemented by
+ * any child classes.
  *
- */
+ * @author 200008575
+ * */
 public interface DrawingTool {
     /**
+     * Get the {@link Cursor} for the tool.
      *
+     * @return the cursor
      */
-    public Cursor getCursor();
+    Cursor getCursor();
 
     /**
+     * Get the tooltip for the tool, that will be displayed when a user
+     * hovers over the item.
      *
+     * @return the tooltip
      */
-    public String getToolTip();
+    String getToolTip();
 
     /**
+     * Get the {@link ToolType} for the tool.
      *
+     * @return the ToolType for the tool.
      */
-    public ToolType getType();
+    ToolType getType();
 
     /**
+     * Get the ImageIcon for the tool. This icon is used
+     * within the ToolWidget to display the button to enable
+     * the tool.
      *
+     * @param selected Whether or not the icon should be displayed
+     *                 as selected.
+     *
+     * @return the icon for the current tool.
      */
-    public ImageIcon getImageIcon(boolean selected);
+    ImageIcon getImageIcon(boolean selected);
 }

@@ -1,7 +1,7 @@
 package drawing.shape;
 
 import common.CopyUtils;
-import drawing.ToolType;
+import drawing.tool.ToolType;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
@@ -10,11 +10,15 @@ import java.awt.Point;
 import java.util.Objects;
 
 /**
+ * Rectangle class that is used to draw shapes that are of ellipse
+ * type. This class extends the base class Shape to implement
+ * the methods for drawing an ellipse.
  *
- */
+ * @author 200008575
+ * */
 public class Rectangle extends Shape {
     /**
-     *
+     * Rectangle constructor method
      */
     public Rectangle(int x, int y, int x2, int y2) {
         super(x, y, x2, y2);
@@ -25,7 +29,9 @@ public class Rectangle extends Shape {
     }
 
     /**
+     * Method to copy the current shape and make a new instance of it
      *
+     * @return A new Rectangle object that holds the same properties as this object.
      */
     public Rectangle copy() {
         int width = (int) ((Point) this.getPropertyMap().get("end").getValue()).getX();
@@ -38,7 +44,9 @@ public class Rectangle extends Shape {
     }
 
     /**
+     * This method returns the Rectangle ToolType for this method
      *
+     * @return The tool type
      */
     @Override
     public ToolType getToolType() {
@@ -47,7 +55,10 @@ public class Rectangle extends Shape {
 
 
     /**
+     * This method is used to draw the boundary of the object when it
+     * is being highlighted on the canvas.
      *
+     * @param g The canvas graphical context.
      */
     @Override
     public void drawSelectedBoundary(Graphics2D g) {
@@ -64,7 +75,10 @@ public class Rectangle extends Shape {
 
 
     /**
+     * This method is used to draw the selection boundary of the object when it
+     * is selected on the canvas.
      *
+     * @param g The canvas graphical context.
      */
     @Override
     public void drawBoundary(Graphics2D g) {
@@ -74,8 +88,8 @@ public class Rectangle extends Shape {
         int height = (int) ((Point) this.properties.get("end").getValue()).getY();
 
         // @Improvement: add rotation
-        //        int rotation = Math.toRadians((int) this.properties.get("rotation").getValue());
-        //        g.rotate(rotation);
+        // double rotation = Math.toRadians((int) this.properties.get("rotation").getValue());
+        // g.rotate(rotation);
 
         g.setStroke(new BasicStroke(2));
         g.setColor(Shape.SELECTOR_COLOUR);
@@ -84,7 +98,13 @@ public class Rectangle extends Shape {
     }
 
     /**
+     * This method is used to draw the object when it is present on
+     * the canvas.
      *
+     * @param g The canvas graphical context.
+     * @param isResizing a boolean representing if the shape is currently being
+     *                   resized. This value can be used to display a special
+     *                   style when it's being resized.
      */
     @Override
     public void draw(Graphics2D g, boolean isResizing) {
@@ -94,8 +114,8 @@ public class Rectangle extends Shape {
         int height = (int) ((Point) this.properties.get("end").getValue()).getY();
 
         // @Improvement: add rotation
-        //        int rotation = Math.toRadians((int) this.properties.get("rotation").getValue());
-        //        g.rotate(rotation);
+        // double rotation = Math.toRadians((int) this.properties.get("rotation").getValue());
+        // g.rotate(rotation);
 
         int thicknessValue = (Integer) this.getPropertyMap().get("thickness").getValue();
         g.setStroke(new BasicStroke(thicknessValue));
@@ -106,11 +126,21 @@ public class Rectangle extends Shape {
 
 
         g.setColor(this.getShapeStrokeColour());
-        g.drawRect(x, y, width, height);
+
+        // Apply the thickness offset for stroke so it doesn't creep
+        // out of bounds.
+        g.drawRect(getX() + thicknessValue / 2,
+                getY() + thicknessValue / 2,
+                width - thicknessValue,
+                height - thicknessValue
+        );
     }
 
     /**
+     * Returns whether or not this object can be filled.
      *
+     * @return a boolean whether the Fill tool can be used on this
+     * object.
      */
     @Override
     public boolean isFillable() {
@@ -118,7 +148,11 @@ public class Rectangle extends Shape {
     }
 
     /**
+     * Check whether or not a certain point is within the hover-able
+     * boundary of the shape.
      *
+     * @param point - The point to be checked whether it is within the bounds
+     * @return Whether or not the given point is within the bounds
      */
     @Override
     public boolean isPointWithinBounds(Point point) {
@@ -134,7 +168,7 @@ public class Rectangle extends Shape {
     }
 
     /**
-     *
+     * Equality method for the the Rectangle shape object.
      */
     @Override
     public boolean equals(Object o) {
@@ -147,7 +181,7 @@ public class Rectangle extends Shape {
     }
 
     /**
-     *
+     * Hash method for the Rectangle shape object.
      */
     @Override
     public int hashCode() {

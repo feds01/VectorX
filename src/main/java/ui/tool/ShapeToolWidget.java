@@ -1,6 +1,5 @@
 package ui.tool;
 
-import drawing.shape.Rectangle;
 import drawing.shape.Shape;
 import ui.common.WidgetFactory;
 import ui.input.ColourPickerInput;
@@ -13,13 +12,16 @@ import java.awt.Color;
 import java.awt.Point;
 
 /**
+ * ShapeToolWidget widget class that is used to edit and display the properties
+ * for Rectangles, Triangles, and Ellipses.
  *
- */
+ * @author 200008575
+ * */
 public class ShapeToolWidget extends BaseToolWidget {
 
     /**
-     *
-     */
+     * ShapeToolWidget constructor
+     * */
     public ShapeToolWidget(Shape shape, JFrame frame) {
         super(shape);
 
@@ -32,7 +34,7 @@ public class ShapeToolWidget extends BaseToolWidget {
         var endPosition = new CoordinateInput("end", new Point(width, height), "W", "H");
         this.tools.add(endPosition);
 
-        int rotationValue =  (Integer) shape.getPropertyMap().get("rotation").getValue();
+        int rotationValue = (Integer) shape.getPropertyMap().get("rotation").getValue();
         var rotation = new NumberFieldInput("rotation", rotationValue, "rotation", true);
         this.tools.add(rotation);
 
@@ -59,7 +61,7 @@ public class ShapeToolWidget extends BaseToolWidget {
     }
 
     /**
-     *
+     * Method to build the properties menu widget ui
      */
     public void constructUI() {
         this.panel.add(WidgetFactory.createTitleWidget("TRANSFORM"));

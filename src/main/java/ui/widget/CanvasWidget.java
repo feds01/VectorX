@@ -21,8 +21,12 @@ import java.awt.event.MouseWheelEvent;
 import java.awt.geom.AffineTransform;
 
 /**
+ * CanvasWidget widget class that is used to create and display the canvas
+ * container. The widget also listens for mouse events that are passed to
+ * the canvas for it to either be moved or zoomed in.
  *
- */
+ * @author 200008575
+ * */
 public class CanvasWidget extends JPanel implements MouseListener, MouseMotionListener {
 
     /**

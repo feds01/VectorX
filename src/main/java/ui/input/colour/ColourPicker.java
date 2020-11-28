@@ -21,8 +21,10 @@ import java.awt.event.MouseEvent;
 import java.awt.geom.RoundRectangle2D;
 
 /**
+ * ColourPicker class
  *
- */
+ * @author 200008575
+ * */
 public class ColourPicker extends JToggleButton {
     /**
      *

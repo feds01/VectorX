@@ -7,13 +7,16 @@ import javax.swing.JFrame;
 import java.awt.Color;
 
 /**
+ * FillToolWidget widget class that is used to edit and display the properties
+ * for the Fill tool.
  *
- */
+ * @author 200008575
+ * */
 public class FillToolWidget extends BaseToolWidget {
 
     /**
-     *
-     */
+     * EmptyToolWidget constructor
+     * */
     public FillToolWidget(JFrame frame) {
         super(null);
 
@@ -25,7 +28,7 @@ public class FillToolWidget extends BaseToolWidget {
     }
 
     /**
-     *
+     * Method to build the properties menu widget ui
      */
     public void constructUI() {
         this.panel.add(WidgetFactory.createTitleWidget("APPEARANCE"));

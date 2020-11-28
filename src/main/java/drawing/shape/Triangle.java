@@ -1,7 +1,7 @@
 package drawing.shape;
 
 import common.CopyUtils;
-import drawing.ToolType;
+import drawing.tool.ToolType;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
@@ -12,21 +12,27 @@ import java.util.Arrays;
 import java.util.Objects;
 
 /**
+ * Triangle class that is used to draw shapes that are of ellipse
+ * type. This class extends the base class Shape to implement
+ * the methods for drawing an ellipse.
  *
+ * @author 200008575
  */
 public class Triangle extends Shape {
     /**
-     *
+     * An array that holds the y-points of the triangle that
+     * will be drawn on the canvas
      */
     private int[] yPoints;
 
     /**
-     *
+     * An array that holds the x-points of the triangle that
+     * will be drawn on the canvas
      */
     private int[] xPoints;
 
     /**
-     *
+     * Triangle constructor method
      */
     public Triangle(int x, int y, int x2, int y2) {
         super(x, y, x2, y2);
@@ -35,11 +41,13 @@ public class Triangle extends Shape {
         this.properties.addProperty(ShapePropertyFactory.createColourProperty("fillColour", Color.WHITE));
         this.properties.addProperty(new ShapeProperty<>("thickness", 1, value -> 1 <= value && value <= 16));
 
-        this.setPoints();
+        this.setPoints(1);
     }
 
     /**
+     * Method to copy the current shape and make a new instance of it
      *
+     * @return A new Triangle object that holds the same properties as this object.
      */
     public Triangle copy() {
         int width = (int) ((Point) this.getPropertyMap().get("end").getValue()).getX();
@@ -52,22 +60,32 @@ public class Triangle extends Shape {
     }
 
     /**
+     * A method to compute the vertices of the triangle based
+     * on the width and height of the bounding box. The method
+     * also takes in the thickness value of the stroke to account
+     * for thickness offsetting the stroke outside of the bounding box.
      *
+     * @param thickness - The thickness of the stroke for the current shape.
      */
-    private void setPoints() {
+    private void setPoints(int thickness) {
+        int x = getX() + thickness / 2;
+        int y = getY() + thickness / 2;
+
         int width = (int) ((Point) this.properties.get("end").getValue()).getX();
         int height = (int) ((Point) this.properties.get("end").getValue()).getY();
 
-        int x2 = this.getX() + width;
-        int y2 = this.getY() + height;
+        int x2 = getX() + width - thickness;
+        int y2 = getY() + height - thickness;
 
         // build triangle points using our algorithm
-        this.xPoints = new int[]{getX(), getX() + width / 2, x2};
-        this.yPoints = new int[]{y2, getY(), y2};
+        this.xPoints = new int[]{x, x + width / 2, x2};
+        this.yPoints = new int[]{y2, y, y2};
     }
 
     /**
+     * This method returns the Triangle ToolType for this method
      *
+     * @return The tool type
      */
     @Override
     public ToolType getToolType() {
@@ -75,7 +93,10 @@ public class Triangle extends Shape {
     }
 
     /**
+     * This method is used to draw the boundary of the object when it
+     * is being highlighted on the canvas.
      *
+     * @param g The canvas graphical context.
      */
     @Override
     public void drawBoundary(Graphics2D g) {
@@ -86,7 +107,10 @@ public class Triangle extends Shape {
     }
 
     /**
+     * This method is used to draw the selection boundary of the object when it
+     * is selected on the canvas.
      *
+     * @param g The canvas graphical context.
      */
     @Override
     public void drawSelectedBoundary(Graphics2D g) {
@@ -99,13 +123,19 @@ public class Triangle extends Shape {
     }
 
     /**
+     * This method is used to draw the object when it is present on
+     * the canvas.
      *
+     * @param g          The canvas graphical context.
+     * @param isResizing a boolean representing if the shape is currently being
+     *                   resized. This value can be used to display a special
+     *                   style when it's being resized.
      */
     @Override
     public void draw(Graphics2D g, boolean isResizing) {
 
         // if the points changed, we'll need to recompute them..
-        this.setPoints();
+        this.setPoints(1);
 
         int thicknessValue = (Integer) this.getPropertyMap().get("thickness").getValue();
         g.setStroke(new BasicStroke(thicknessValue));
@@ -114,12 +144,18 @@ public class Triangle extends Shape {
         g.fillPolygon(xPoints, yPoints, 3);
 
         g.setColor(this.getShapeStrokeColour());
+
+        this.setPoints(thicknessValue);
+
         g.drawPolygon(xPoints, yPoints, 3);
 
     }
 
     /**
+     * Returns whether or not this object can be filled.
      *
+     * @return a boolean whether the Fill tool can be used on this
+     * object.
      */
     @Override
     public boolean isFillable() {
@@ -127,7 +163,11 @@ public class Triangle extends Shape {
     }
 
     /**
+     * Check whether or not a certain point is within the hover-able
+     * boundary of the shape.
      *
+     * @param point - The point to be checked whether it is within the bounds
+     * @return Whether or not the given point is within the bounds
      */
     @Override
     public boolean isPointWithinBounds(Point point) {
@@ -139,7 +179,7 @@ public class Triangle extends Shape {
     }
 
     /**
-     *
+     * Equality method for the the Triangle shape object.
      */
     @Override
     public boolean equals(Object o) {
@@ -154,7 +194,7 @@ public class Triangle extends Shape {
     }
 
     /**
-     *
+     * Hash method for the Triangle shape object.
      */
     @Override
     public int hashCode() {

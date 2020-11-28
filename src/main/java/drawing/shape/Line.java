@@ -2,7 +2,7 @@ package drawing.shape;
 
 import common.CopyUtils;
 import drawing.ResizeEvent;
-import drawing.ToolType;
+import drawing.tool.ToolType;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
@@ -13,11 +13,15 @@ import java.awt.geom.Line2D;
 import java.util.Objects;
 
 /**
+ * Line class that is used to draw shapes that are of ellipse
+ * type. This class extends the base class Shape to implement
+ * the methods for drawing an ellipse.
  *
- */
+ * @author 200008575
+ * */
 public class Line extends Shape {
     /**
-     *
+     * Line constructor method
      */
     public Line(int x, int y, int x2, int y2) {
         super(x, y, x2, y2);
@@ -31,56 +35,22 @@ public class Line extends Shape {
     }
 
     /**
+     * Method to copy the current shape and make a new instance of it
      *
+     * @return A new Line object that holds the same properties as this object.
      */
     public Line copy() {
-        var clazz = new Line(this.getX(), this.getY(), this.getEndX(), this.getEndY());
+        var clazz = new Line(this.getX(), this.getY(), this.getWidth(), this.getHeight());
         clazz.setProperties((ShapeProperties) CopyUtils.deepCopy(this.properties));
 
         return clazz;
     }
 
-    public int getEndX() {
-        var end = this.properties.get("end");
-
-        var point = (Point) (end.getValue());
-
-        return point.x;
-    }
-
-    public void setEndX(int x) {
-        var end = this.properties.get("end");
-
-        var point = (Point) (end.getValue());
-        var newPoint = new Point(x, point.y);
-
-        end.setValue(newPoint);
-    }
-
-
-    public void setEndY(int y) {
-        var end = this.properties.get("end");
-
-        var point = (Point) (end.getValue());
-        var newPoint = new Point(point.x, y);
-
-        end.setValue(newPoint);
-    }
-
 
     /**
+     * This method returns the Line ToolType for this method
      *
-     */
-    public int getEndY() {
-        var end = this.properties.get("end");
-
-        var point = (Point) (end.getValue());
-
-        return point.y;
-    }
-
-    /**
-     *
+     * @return The tool type
      */
     @Override
     public ToolType getToolType() {
@@ -89,10 +59,18 @@ public class Line extends Shape {
 
 
     /**
+     * Method to get the locations of the resize points on the
+     * shape. The line method will override the default shape
+     * method so that the object can be resized.
      *
+     * @param p The point to get the resize event at.
+     *
+     * @return the resize event type from the current point. If the current
+     *         point is not present on any resize point, the method will return
+     *         negative one.
      */
     @Override
-    public int getResizePoint(Point p) {
+    public int getResizeEventAt(Point p) {
         // we only need to check if the point is on the ellipse at
         // each end of the line.
 
@@ -101,15 +79,17 @@ public class Line extends Shape {
                 getY() - 4,
                 8, 8);
 
+        // check if the point is on the northern resize point
         if (ellipseN.contains(p)) {
             return ResizeEvent.NORTH;
         }
 
         var ellipseS = new Ellipse2D.Double(
-                getEndX() - 4,
-                getEndY() - 4,
+                getWidth() - 4,
+                getHeight() - 4,
                 8, 8);
 
+        // check if the point is on the southern resize point
         if (ellipseS.contains(p)) {
             return ResizeEvent.SOUTH;
         }
@@ -121,7 +101,10 @@ public class Line extends Shape {
 
 
     /**
+     * This method is used to draw the boundary of the object when it
+     * is being highlighted on the canvas.
      *
+     * @param g The canvas graphical context.
      */
     @Override
     public void drawBoundary(Graphics2D g) {
@@ -129,11 +112,14 @@ public class Line extends Shape {
         g.setColor(Shape.SELECTOR_COLOUR);
 
 
-        g.draw(new Line2D.Double(getX(), getY(), getEndX(), getEndY()));
+        g.draw(new Line2D.Double(getX(), getY(), getWidth(), getHeight()));
     }
 
     /**
+     * This method is used to draw the selection boundary of the object when it
+     * is selected on the canvas.
      *
+     * @param g The canvas graphical context.
      */
     @Override
     public void drawSelectedBoundary(Graphics2D g) {
@@ -146,12 +132,18 @@ public class Line extends Shape {
         ShapeUtility.drawSelectorPoint(g, getX(), getY());
 
         // draw modifying circle at the end of line
-        ShapeUtility.drawSelectorPoint(g, getEndX(), getEndY());
+        ShapeUtility.drawSelectorPoint(g, getWidth(), getHeight());
 
     }
 
     /**
+     * This method is used to draw the object when it is present on
+     * the canvas.
      *
+     * @param g The canvas graphical context.
+     * @param isResizing a boolean representing if the shape is currently being
+     *                   resized. This value can be used to display a special
+     *                   style when it's being resized.
      */
     @Override
     public void draw(Graphics2D g, boolean isResizing) {
@@ -159,11 +151,14 @@ public class Line extends Shape {
         g.setStroke(new BasicStroke(thickness));
 
         g.setColor(this.getShapeStrokeColour());
-        g.draw(new Line2D.Double(getX(), getY(), getEndX(), getEndY()));
+        g.draw(new Line2D.Double(getX(), getY(), getWidth(), getHeight()));
     }
 
     /**
+     * Returns whether or not this object can be filled.
      *
+     * @return a boolean whether the Fill tool can be used on this
+     * object.
      */
     @Override
     public boolean isFillable() {
@@ -171,17 +166,23 @@ public class Line extends Shape {
     }
 
     /**
+     * Check whether or not a certain point is within the hover-able
+     * boundary of the shape.
      *
+     * @param point - The point to be checked whether it is within the bounds
+     * @return Whether or not the given point is within the bounds
      */
     @Override
     public boolean isPointWithinBounds(Point point) {
-        double distance = Line2D.ptSegDist(getX(), getY(), getEndX(), getEndY(), point.getX(), point.getY());
+        double distance = Line2D.ptSegDist(getX(), getY(), getWidth(), getHeight(), point.getX(), point.getY());
 
+        // To make the line select-ability more usable check that the pointer it at least
+        // four pixels near the line/
         return distance < 4;
     }
 
     /**
-     *
+     * Equality method for the the Line shape object.
      */
     @Override
     public boolean equals(Object o) {
@@ -190,16 +191,16 @@ public class Line extends Shape {
         Line line = (Line) o;
         return Double.compare(line.getX(), getX()) == 0 &&
                 Double.compare(line.getY(), getY()) == 0 &&
-                Double.compare(line.getEndX(), getEndX()) == 0 &&
-                Double.compare(line.getEndY(), getEndY()) == 0 &&
+                Double.compare(line.getWidth(), getHeight()) == 0 &&
+                Double.compare(line.getWidth(), getHeight()) == 0 &&
                 Objects.equals(properties, line.properties);
     }
 
     /**
-     *
+     * Hash method for the Line shape object.
      */
     @Override
     public int hashCode() {
-        return Objects.hash(getX(), getY(), getEndX(), getEndY(), properties);
+        return Objects.hash(getX(), getY(), getWidth(), getHeight(), properties);
     }
 }

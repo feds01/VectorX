@@ -1,7 +1,7 @@
 package ui.widget;
 
 import common.ImageUtils;
-import drawing.ToolType;
+import drawing.tool.ToolType;
 import drawing.tool.DrawingTool;
 import drawing.tool.FillTool;
 import drawing.tool.GenericTool;
@@ -30,8 +30,11 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
+ * ToolMenu widget class that is used to create and display the tool
+ * menu.
  *
- */
+ * @author 200008575
+ * */
 public class ToolMenu extends JToolBar {
 
     /**
@@ -48,7 +51,7 @@ public class ToolMenu extends JToolBar {
                     ToolType.SELECTOR,
                     new Cursor(Cursor.DEFAULT_CURSOR),
                     "Select (S)",
-                    "/icons/selector"));
+                    "/resources/icons/selector"));
 
             put(ToolType.FILL, new FillTool());
 
@@ -56,36 +59,36 @@ public class ToolMenu extends JToolBar {
                     ToolType.LINE,
                     new Cursor(Cursor.CROSSHAIR_CURSOR),
                     "Line (L)",
-                    "/icons/line"));
+                    "/resources/icons/line"));
 
             put(ToolType.RECTANGLE, new GenericTool(
                     ToolType.RECTANGLE,
                     new Cursor(Cursor.CROSSHAIR_CURSOR),
                     "Rectangle (R)",
-                    "/icons/rectangle"));
+                    "/resources/icons/rectangle"));
 
-            put(ToolType.ELLIPSIS, new GenericTool(
-                    ToolType.ELLIPSIS,
+            put(ToolType.ELLIPSE, new GenericTool(
+                    ToolType.ELLIPSE,
                     new Cursor(Cursor.CROSSHAIR_CURSOR),
                     "Ellipse (E)",
-                    "/icons/circle"));
+                    "/resources/icons/circle"));
 
             put(ToolType.TRIANGLE, new GenericTool(
                     ToolType.TRIANGLE,
                     new Cursor(Cursor.CROSSHAIR_CURSOR),
                     "Triangle (T)",
-                    "/icons/triangle"));
+                    "/resources/icons/triangle"));
 
             put(ToolType.IMAGE, new GenericTool(
                     ToolType.IMAGE,
                     new Cursor(Cursor.HAND_CURSOR),
                     "Image (I)",
-                    "/icons/image"));
+                    "/resources/icons/image"));
             put(ToolType.TEXT, new GenericTool(
                     ToolType.TEXT,
                     new Cursor(Cursor.TEXT_CURSOR),
                     "Text (W)",
-                    "/icons/text"
+                    "/resources/icons/text"
             ));
         }
     };

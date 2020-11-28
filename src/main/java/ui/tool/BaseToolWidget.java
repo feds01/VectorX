@@ -17,12 +17,15 @@ import java.util.List;
 import java.util.Map;
 
 /**
+ * BaseToolWidget widget class that is used to create PropertiesMenu
+ * widgets that will be rendered based on the currently selected shape.
  *
- */
+ * @author 200008575
+ * */
 public abstract class BaseToolWidget {
 
     /**
-     *
+     * The reference of the currently edited shape.
      */
     Shape shape;
 
@@ -42,8 +45,8 @@ public abstract class BaseToolWidget {
     protected final JPanel panel;
 
     /**
-     *
-     */
+     * BaseToolWidget constructor
+     * */
     public BaseToolWidget(Shape shape) {
         this.shape = shape;
         this.panel = new JPanel();

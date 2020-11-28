@@ -1,7 +1,7 @@
 package drawing.shape;
 
 import common.CopyUtils;
-import drawing.ToolType;
+import drawing.tool.ToolType;
 
 import javax.imageio.ImageIO;
 import javax.swing.GrayFilter;
@@ -21,17 +21,22 @@ import java.io.ObjectOutputStream;
 import java.util.Objects;
 
 /**
+ * ImageShape class that is used to draw shapes that are of ellipse
+ * type. This class extends the base class Shape to implement
+ * the methods for drawing an ellipse.
  *
- */
+ * @author 200008575
+ * */
 public class ImageShape extends Shape {
 
     /**
-     *
+     * The image object that is used for drawing on the canvas. This
+     * variable must be transient since it can't be serialized.
      */
     private transient BufferedImage image;
 
     /**
-     *
+     * ImageShape constructor method
      */
     public ImageShape(int x, int y, BufferedImage image) {
         super(x, y, x + image.getWidth(), y + image.getHeight());
@@ -49,7 +54,9 @@ public class ImageShape extends Shape {
     }
 
     /**
+     * Method to copy the current shape and make a new instance of it
      *
+     * @return A new ImageShape object that holds the same properties as this object.
      */
     public ImageShape copy()  {
         var clazz = new ImageShape(this.getX(), this.getY(), image);
@@ -59,21 +66,27 @@ public class ImageShape extends Shape {
     }
 
     /**
+     * Method to get the image for this object
      *
+     * @return the buffered image of the current ImageShape.
      */
     public BufferedImage getImage() {
         return this.image;
     }
 
     /**
+     * Method to get the image for this object
      *
+     * @param image set a new buffered image of the current ImageShape.
      */
     public void setImage(BufferedImage image) {
         this.image = image;
     }
 
     /**
+     * This method returns the ImageShape ToolType for this method
      *
+     * @return The tool type
      */
     @Override
     public ToolType getToolType() {
@@ -81,20 +94,24 @@ public class ImageShape extends Shape {
     }
 
     /**
+     * This method is used to draw the boundary of the object when it
+     * is being highlighted on the canvas.
      *
+     * @param g The canvas graphical context.
      */
     @Override
     public void drawBoundary(Graphics2D g) {
-        int xPos = getX() - image.getWidth() / 2;
-        int yPos = getY() - image.getHeight() / 2;
+        int xPos = getX() - getWidth() / 2;
+        int yPos = getY() - getHeight() / 2;
 
         g.setStroke(new BasicStroke(2));
         g.setColor(Shape.SELECTOR_COLOUR);
-        g.drawRect(xPos, yPos, image.getWidth(), image.getHeight());
+        g.drawRect(xPos, yPos, getWidth(), getHeight());
     }
 
     /**
-     *
+     * Override the writing method for the Serializable interface
+     * so that the image object can be written to the save file.
      */
     private void writeObject(ObjectOutputStream outputStream) throws IOException {
         outputStream.defaultWriteObject();
@@ -104,16 +121,19 @@ public class ImageShape extends Shape {
     }
 
     /**
-     *
+     * Override the reading method for the Serializable interface
+     * so that the image object can be read from the save file.
      */
     private void readObject(ObjectInputStream inputStream) throws IOException, ClassNotFoundException {
         inputStream.defaultReadObject();
 
         this.image = ImageIO.read(inputStream);
     }
-
     /**
+     * This method is used to draw the selection boundary of the object when it
+     * is selected on the canvas.
      *
+     * @param g The canvas graphical context.
      */
     @Override
     public void drawSelectedBoundary(Graphics2D g) {
@@ -129,7 +149,13 @@ public class ImageShape extends Shape {
     }
 
     /**
+     * This method is used to draw the object when it is present on
+     * the canvas.
      *
+     * @param g The canvas graphical context.
+     * @param isResizing a boolean representing if the shape is currently being
+     *                   resized. This value can be used to display a special
+     *                   style when it's being resized.
      */
     @Override
     public void draw(Graphics2D g, boolean isResizing) {
@@ -166,16 +192,11 @@ public class ImageShape extends Shape {
         g.drawImage(resized, xPos, yPos, null);
     }
 
-    public int getWidth() {
-        return (int) ((Point) this.properties.get("end").getValue()).getX();
-    }
-
-    public int getHeight() {
-        return (int) ((Point) this.properties.get("end").getValue()).getY();
-    }
-
     /**
+     * Returns whether or not this object can be filled.
      *
+     * @return a boolean whether the Fill tool can be used on this
+     * object.
      */
     @Override
     public boolean isFillable() {
@@ -183,7 +204,11 @@ public class ImageShape extends Shape {
     }
 
     /**
+     * Check whether or not a certain point is within the hover-able
+     * boundary of the shape.
      *
+     * @param point - The point to be checked whether it is within the bounds
+     * @return Whether or not the given point is within the bounds
      */
     @Override
     public boolean isPointWithinBounds(Point point) {
@@ -200,7 +225,7 @@ public class ImageShape extends Shape {
     }
 
     /**
-     *
+     * Equality method for the the ImageShape shape object.
      */
     @Override
     public boolean equals(Object o) {
@@ -214,7 +239,7 @@ public class ImageShape extends Shape {
     }
 
     /**
-     *
+     * Hash method for the ImageShape shape object.
      */
     @Override
     public int hashCode() {

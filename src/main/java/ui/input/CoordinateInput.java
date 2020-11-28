@@ -8,8 +8,11 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
 /**
+ * CoordinateInput class that is used to render a text field input which
+ * is derived from the BaseInput class.
  *
- */
+ * @author 200008575
+ * */
 public class CoordinateInput extends BaseInput<Point> {
 
     /**

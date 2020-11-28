@@ -11,7 +11,11 @@ import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 
 /**
+ * BaseInput abstract class that is used to create inputs with
+ * pre-defined methods for listening to changes in the input, or
+ * even setting them.
  *
+ * @author 200008575
  * */
 public abstract class BaseInput<T> {
     /**

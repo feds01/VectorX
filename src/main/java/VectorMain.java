@@ -1,5 +1,5 @@
 import common.FontLoader;
-import drawing.ToolType;
+import drawing.tool.ToolType;
 import file.SaveManager;
 import ui.controllers.ToolController;
 import ui.controllers.WidgetController;
@@ -23,60 +23,70 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseWheelEvent;
 
 /**
+ * The entry point of the program, this is where the all the inital application
+ * components are instantiated.
  *
+ * @author 200008575
  */
 public class VectorMain extends JFrame {
 
     /**
-     *
+     * The initial width of the application window
      */
     private static final int WIDTH = 1024;
 
     /**
-     *
+     * The initial height of application window
      */
     private static final int HEIGHT = 768;
 
     /**
-     *
+     * FontLoader instance to set component fonts to our custom font
      */
     private final FontLoader fontLoader = FontLoader.getInstance();
 
 
+    /**
+     * The Swing JFrame of the application
+     * */
     private JFrame frame;
 
     /**
-     *
+     * The Swing scroll pane of the application which is used to
+     * house the canvas in.
      */
     private JScrollPane scrollPane;
 
     /**
-     *
+     * The canvas widget is a wrapper component for the
+     * actual canvas.
      */
     private CanvasWidget canvasWidget;
 
     /**
-     *
+     * The properties panel widget
      */
     private PropertiesMenu propertiesPanel;
 
     /**
-     *
+     * The toolbar widget for the component
      */
     private ToolMenu toolbar;
 
     /**
-     *
+     * The entry point method of the program
      */
     public static void main(String[] args) {
         new VectorMain();
     }
 
     /**
-     *
+     * VectorMain constructor class
      */
     public VectorMain() {
         EventQueue.invokeLater(() -> {
+
+            // set the system default look and feel for current application
             try {
                 UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
             } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException ignored) {
@@ -151,23 +161,29 @@ public class VectorMain extends JFrame {
     }
 
     /**
+     * Method to handle global key events. This method will invoke
+     * actions based on the mnemonics that are defined within the
+     * specification of the application.
      *
+     * @param event - The key event.
+     *
+     * @return if the event should be passed on
      */
-    private boolean shortcutListener(KeyEvent e) {
+    private boolean shortcutListener(KeyEvent event) {
         // Ignore events that come from other components than a button
-        if (e.getSource() instanceof JTextField) {
+        if (event.getSource() instanceof JTextField) {
             return false;
         }
 
         // Don't do anything if the event isn't a KEY_PRESSED event
-        if (e.getID() != KeyEvent.KEY_PRESSED) {
+        if (event.getID() != KeyEvent.KEY_PRESSED) {
             return false;
         }
 
-        switch ( e.getKeyCode() ) {
+        switch ( event.getKeyCode() ) {
             case KeyEvent.VK_S: {
 
-                if (e.isControlDown()) {
+                if (event.isControlDown()) {
                     SaveManager.getInstance().saveFile(canvasWidget, frame, false);
                 } else {
                     toolbar.setCurrentTool(ToolType.SELECTOR);
@@ -188,7 +204,7 @@ public class VectorMain extends JFrame {
                 break;
             }
             case KeyEvent.VK_E: {
-                toolbar.setCurrentTool(ToolType.ELLIPSIS);
+                toolbar.setCurrentTool(ToolType.ELLIPSE);
                 break;
             }
             case KeyEvent.VK_T: {
@@ -215,21 +231,21 @@ public class VectorMain extends JFrame {
             }
 
             case KeyEvent.VK_C: {
-                if (!e.isControlDown()) return false;
+                if (!event.isControlDown()) return false;
 
                 canvasWidget.getCanvas().setCopyOnSelectedShape(true);
                 break;
             }
 
             case KeyEvent.VK_V: {
-                if (!e.isControlDown()) return false;
+                if (!event.isControlDown()) return false;
 
                 canvasWidget.getCanvas().copySelectedShape();
                 break;
             }
 
             case KeyEvent.VK_O: {
-                if (!e.isControlDown()) return false;
+                if (!event.isControlDown()) return false;
 
                 SaveManager.getInstance().openFile(canvasWidget, frame);
             }

@@ -14,9 +14,16 @@ import java.awt.Color;
 import java.awt.Point;
 
 /**
+ * TextToolWidget widget class that is used to edit and display the properties
+ * for TextShapes.
  *
- */
+ * @author 200008575
+ * */
 public class TextToolWidget extends BaseToolWidget {
+
+    /**
+     * TextToolWidget constructor
+     * */
     public TextToolWidget(TextShape shape, JFrame frame) {
         super(shape);
 
@@ -57,7 +64,7 @@ public class TextToolWidget extends BaseToolWidget {
     }
 
     /**
-     *
+     * Method to build the properties menu widget ui
      */
     public void constructUI() {
         this.panel.add(WidgetFactory.createTitleWidget("TRANSFORM"));
