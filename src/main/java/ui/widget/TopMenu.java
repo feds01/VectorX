@@ -137,17 +137,15 @@ public class TopMenu extends JMenuBar {
             File file = FileChooserDialog.showSaveFileChooser("vex");
 
             // create the saver object and invoke a save action
-            var loader = new Loader(file, frame);
-            var data = loader.load();
+            if (file != null) {
+                var loader = new Loader(file, frame);
+                var data = loader.load();
 
-
-            if (data != null) {
-                assert file != null;
-
-                frame.setTitle("VectorX - Editing " + file.getName());
-                widget.getCanvas().setShapes(data);
+                if (data != null) {
+                    frame.setTitle("VectorX - Editing " + file.getName());
+                    widget.getCanvas().setShapes(data);
+                }
             }
-
         });
 
         JMenuItem saveItem = new JMenuItem("Save");
