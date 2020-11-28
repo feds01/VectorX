@@ -1,12 +1,14 @@
 package drawing.shape;
 
 import common.CopyUtils;
+import drawing.ResizeEvent;
 import drawing.ToolType;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Point;
+import java.awt.geom.Ellipse2D;
 import java.awt.geom.Line2D;
 import java.util.Objects;
 
@@ -31,7 +33,7 @@ public class Line extends Shape {
     /**
      *
      */
-    public Line copy()  {
+    public Line copy() {
         var clazz = new Line(this.getX(), this.getY(), this.getEndX(), this.getEndY());
         clazz.setProperties((ShapeProperties) CopyUtils.deepCopy(this.properties));
 
@@ -46,43 +48,36 @@ public class Line extends Shape {
         return ToolType.LINE;
     }
 
-    public int getEndX() {
-        var end = this.properties.get("end");
-
-        var point = (Point) (end.getValue());
-
-        return point.x;
-    }
-
-    public void setEndX(int x) {
-        var end = this.properties.get("end");
-
-        var point = (Point) (end.getValue());
-        var newPoint = new Point(x, point.y);
-
-        end.setValue(newPoint);
-    }
-
-
-    public void setEndY(int y) {
-        var end = this.properties.get("end");
-
-        var point = (Point) (end.getValue());
-        var newPoint = new Point(point.x, y);
-
-        end.setValue(newPoint);
-    }
-
 
     /**
      *
      */
-    public int getEndY() {
-        var end = this.properties.get("end");
+    @Override
+    public int getResizePoint(Point p) {
+        // we only need to check if the point is on the ellipse at
+        // each end of the line.
 
-        var point = (Point) (end.getValue());
+        var ellipseN = new Ellipse2D.Double(
+                getX() - 4,
+                getY() - 4,
+                8, 8);
 
-        return point.y;
+        if (ellipseN.contains(p)) {
+            return ResizeEvent.NORTH;
+        }
+
+        var ellipseS = new Ellipse2D.Double(
+                getEndX() - 4,
+                getEndY() - 4,
+                8, 8);
+
+        if (ellipseS.contains(p)) {
+            return ResizeEvent.SOUTH;
+        }
+
+
+        // not within range of the point
+        return -1;
     }
 
 

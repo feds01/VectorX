@@ -1,5 +1,6 @@
 package ui.widget;
 
+import drawing.ResizeEvent;
 import drawing.ToolType;
 import drawing.shape.Ellipses;
 import drawing.shape.ImageShape;
@@ -100,7 +101,12 @@ public class CanvasContainer extends JPanel implements MouseMotionListener, Mous
     /**
      *
      */
-    private boolean isDragging;
+    private int isResizing = -1;
+
+    /**
+     *
+     */
+    private boolean isDragging = false;
 
     /**
      *
@@ -291,9 +297,13 @@ public class CanvasContainer extends JPanel implements MouseMotionListener, Mous
                 var selectedShape = getShapeIfHoveringShape(e.getPoint());
 
                 this.isDragging = true;
+                this.isResizing = this.selectedShape.getResizePoint(e.getPoint());
 
-                // update the cursor to represent the movement of the object
-                if (!Objects.equals(selectedShape, this.selectedShape)) {
+                // use the isOnResizePoint method to check whether a point
+
+
+                if (this.isResizing < 0 && !Objects.equals(selectedShape, this.selectedShape)) {
+                    // update the cursor to represent the movement of the object
                     this.selectedShape = selectedShape;
 
                     this.repaint();
@@ -324,6 +334,7 @@ public class CanvasContainer extends JPanel implements MouseMotionListener, Mous
             if (currentTool.getType() == ToolType.SELECTOR) {
                 this.setCursor(currentTool.getCursor());
                 this.isDragging = false;
+                this.isResizing = -1;
 
                 // update the panel widget to reflect the newest values
                 this.widgetController.updateWidget();
@@ -372,35 +383,57 @@ public class CanvasContainer extends JPanel implements MouseMotionListener, Mous
         var currentTool = toolController.getCurrentTool();
 
         if (SwingUtilities.isLeftMouseButton(e)) {
-            if (currentTool.getType() == ToolType.SELECTOR && this.isDragging && this.selectedShape != null) {
+
+            // Check if we need to drag or resize the current object based on selector
+            // state
+            if (this.selectedShape != null && currentTool.getType() == ToolType.SELECTOR) {
                 var oldX = this.selectedShape.getX();
                 var oldY = this.selectedShape.getY();
 
-                // on the event that the shape is dragged to a boundary
-                try {
-                    this.selectedShape.setX(oldX + (e.getX() - mouseX1));
-                    this.selectedShape.setY(oldY + (e.getY() - mouseY1));
+                var dx = (e.getX() - mouseX1);
+                var dy = (e.getY() - mouseY1);
 
-                    // only do this for line objects
-                    if (this.selectedShape instanceof Line) {
-                        var oldEndX = ((Line) this.selectedShape).getEndX();
-                        var oldEndY = ((Line) this.selectedShape).getEndY();
+                // perform resizing operation
+                if (this.isResizing > -1) {
+                    System.out.println(dx);
+                    System.out.println(dy);
+                    this.selectedShape.resizeShape(this.isResizing, dx, dy);
 
-                        ((Line) (this.selectedShape)).setEndX(oldEndX + (e.getX() - mouseX1));
-                        ((Line) (this.selectedShape)).setEndY(oldEndY + (e.getY() - mouseY1));
-                    }
 
                     // update the mouse values to the current point
                     mouseX1 = e.getX();
                     mouseY1 = e.getY();
 
                     this.repaint();
-                } catch (IllegalArgumentException ignored) {
-                    this.selectedShape.setX(oldX);
-                    this.selectedShape.setY(oldY);
-                }
+                } else if (this.isDragging) {
+                    // Perform dragging operation
 
+                    // on the event that the shape is dragged to a boundary
+                    try {
+                        this.selectedShape.setX(oldX + dx);
+                        this.selectedShape.setY(oldY + dy);
+
+                        // only do this for line objects
+                        if (this.selectedShape instanceof Line) {
+                            var oldEndX = ((Line) this.selectedShape).getEndX();
+                            var oldEndY = ((Line) this.selectedShape).getEndY();
+
+                            ((Line) (this.selectedShape)).setEndX(oldEndX + dx);
+                            ((Line) (this.selectedShape)).setEndY(oldEndY + dy);
+                        }
+
+                        // update the mouse values to the current point
+                        mouseX1 = e.getX();
+                        mouseY1 = e.getY();
+
+                        this.repaint();
+                    } catch (IllegalArgumentException ignored) {
+                        this.selectedShape.setX(oldX);
+                        this.selectedShape.setY(oldY);
+                    }
+                }
             }
+
 
             if (currentTool.getType() != ToolType.SELECTOR &&
                     currentTool.getType() != ToolType.FILL && currentTool.getType() != ToolType.IMAGE) {
@@ -443,9 +476,22 @@ public class CanvasContainer extends JPanel implements MouseMotionListener, Mous
         if (currentTool.getType() == ToolType.SELECTOR) {
             Shape newHighlightedShape = this.getShapeIfHoveringShape(e.getPoint());
 
-            // Show a 'move' cursor when hovering over a selected object
-            if (Objects.equals(this.selectedShape, newHighlightedShape) && this.selectedShape != null) {
-                this.setCursor(new Cursor(Cursor.MOVE_CURSOR));
+
+            // check for resize events if the selectedShape is not null
+            if (this.selectedShape != null) {
+                // Show a 'move' cursor when hovering over a selected object
+                if (Objects.equals(this.selectedShape, newHighlightedShape)) {
+                    this.setCursor(new Cursor(Cursor.MOVE_CURSOR));
+                }
+
+
+                var onResize = this.selectedShape.getResizePoint(e.getPoint());
+
+                // use the isOnResizePoint method to check whether a point
+
+                if (onResize > -1) {
+                    this.setCursor(ResizeEvent.getCursorFromResizeEvent(onResize));
+                }
             }
 
             // Don't re-draw the selected object if they are the same or null, or equal

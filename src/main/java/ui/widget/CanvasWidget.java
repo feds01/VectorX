@@ -133,18 +133,18 @@ public class CanvasWidget extends JPanel implements MouseListener, MouseMotionLi
             at.scale(zoomFactor, zoomFactor);
 
             // TODO: fix buggy scale code
-//            Dimension dim;
+            // Dimension dim;
 
-//            if (this.zoomFactor > 1.0) {
-//                dim = new Dimension(
-//                        (int) Math.round(getWidth() * this.zoomFactor),
-//                        (int) Math.round(getHeight() * this.zoomFactor));
-//
-//            } else {
-//                dim = new Dimension(getParent().getWidth(), getParent().getHeight());
-//
-//            }
-//            this.setPreferredSize(dim);
+            //            if (this.zoomFactor > 1.0) {
+            //                dim = new Dimension(
+            //                        (int) Math.round(getWidth() * this.zoomFactor),
+            //                        (int) Math.round(getHeight() * this.zoomFactor));
+            //
+            //            } else {
+            //                dim = new Dimension(getParent().getWidth(), getParent().getHeight());
+            //
+            //            }
+            //            this.setPreferredSize(dim);
             this.revalidate();
 
             prevZoomFactor = zoomFactor;
@@ -196,6 +196,14 @@ public class CanvasWidget extends JPanel implements MouseListener, MouseMotionLi
     @Override
     public void mouseDragged(MouseEvent e) {
         Point curPoint = e.getLocationOnScreen();
+
+        // @Heisenbug: sometimes startPoint can be null, this must be a miss-firing of
+        // events.
+        if (startPoint == null) {
+            startPoint = e.getLocationOnScreen();
+        }
+
+
         xDiff = curPoint.x - startPoint.x;
         yDiff = curPoint.y - startPoint.y;
 

@@ -48,7 +48,7 @@ public class ToolMenu extends JToolBar {
                     ToolType.SELECTOR,
                     new Cursor(Cursor.DEFAULT_CURSOR),
                     "Select (S)",
-                    "/resources/icons/selector"));
+                    "/icons/selector"));
 
             put(ToolType.FILL, new FillTool());
 
@@ -56,36 +56,36 @@ public class ToolMenu extends JToolBar {
                     ToolType.LINE,
                     new Cursor(Cursor.CROSSHAIR_CURSOR),
                     "Line (L)",
-                    "/resources/icons/line"));
+                    "/icons/line"));
 
             put(ToolType.RECTANGLE, new GenericTool(
                     ToolType.RECTANGLE,
                     new Cursor(Cursor.CROSSHAIR_CURSOR),
                     "Rectangle (R)",
-                    "/resources/icons/rectangle"));
+                    "/icons/rectangle"));
 
             put(ToolType.ELLIPSIS, new GenericTool(
                     ToolType.ELLIPSIS,
                     new Cursor(Cursor.CROSSHAIR_CURSOR),
                     "Ellipse (E)",
-                    "/resources/icons/circle"));
+                    "/icons/circle"));
 
             put(ToolType.TRIANGLE, new GenericTool(
                     ToolType.TRIANGLE,
                     new Cursor(Cursor.CROSSHAIR_CURSOR),
                     "Triangle (T)",
-                    "/resources/icons/triangle"));
+                    "/icons/triangle"));
 
             put(ToolType.IMAGE, new GenericTool(
                     ToolType.IMAGE,
                     new Cursor(Cursor.HAND_CURSOR),
                     "Image (I)",
-                    "/resources/icons/image"));
+                    "/icons/image"));
             put(ToolType.TEXT, new GenericTool(
                     ToolType.TEXT,
                     new Cursor(Cursor.TEXT_CURSOR),
                     "Text (W)",
-                    "/resources/icons/text"
+                    "/icons/text"
             ));
         }
     };
