@@ -35,7 +35,7 @@ public class FillTool implements DrawingTool {
      */
     @Override
     public Cursor getCursor() {
-        var icon = new ImageIcon(FillTool.class.getResource("/icons/fill.png"));
+        var icon = new ImageIcon(FillTool.class.getResource("/resources/icons/fill.png"));
 
         // get the best width and height based on Operating System using the Toolkit
         var dimensions = toolkit.getBestCursorSize(32, 32);
