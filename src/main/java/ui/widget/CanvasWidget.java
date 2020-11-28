@@ -132,24 +132,10 @@ public class CanvasWidget extends JPanel implements MouseListener, MouseMotionLi
             at.translate(xOffset, yOffset);
             at.scale(zoomFactor, zoomFactor);
 
-            // TODO: fix buggy scale code
-            // Dimension dim;
-
-            //            if (this.zoomFactor > 1.0) {
-            //                dim = new Dimension(
-            //                        (int) Math.round(getWidth() * this.zoomFactor),
-            //                        (int) Math.round(getHeight() * this.zoomFactor));
-            //
-            //            } else {
-            //                dim = new Dimension(getParent().getWidth(), getParent().getHeight());
-            //
-            //            }
-            //            this.setPreferredSize(dim);
             this.revalidate();
 
             prevZoomFactor = zoomFactor;
             g2.transform(at);
-
 
             isZooming = false;
         }
@@ -167,6 +153,13 @@ public class CanvasWidget extends JPanel implements MouseListener, MouseMotionLi
             }
 
         }
+    }
+
+    /**
+     *
+     * */
+    public CanvasContainer getCanvas() {
+        return this.canvas;
     }
 
     /**
@@ -197,8 +190,8 @@ public class CanvasWidget extends JPanel implements MouseListener, MouseMotionLi
     public void mouseDragged(MouseEvent e) {
         Point curPoint = e.getLocationOnScreen();
 
-        // @Heisenbug: sometimes startPoint can be null, this must be a miss-firing of
-        // events.
+        // @Heisenbug: sometimes startPoint can be null, this must be a
+        // miss-firing of events.
         if (startPoint == null) {
             startPoint = e.getLocationOnScreen();
         }
@@ -214,23 +207,6 @@ public class CanvasWidget extends JPanel implements MouseListener, MouseMotionLi
             repaint();
         }
     }
-
-    /**
-     *
-     * */
-    @Override
-    public void mouseMoved(MouseEvent e) {
-    }
-
-
-    /**
-     *
-     * */
-    @Override
-    public void mouseClicked(MouseEvent e) {
-
-    }
-
 
     /**
      *
@@ -252,26 +228,8 @@ public class CanvasWidget extends JPanel implements MouseListener, MouseMotionLi
         repaint();
     }
 
-    /**
-     *
-     * */
-    @Override
-    public void mouseEntered(MouseEvent e) {
-    }
-
-    /**
-     *
-     * */
-    @Override
-    public void mouseExited(MouseEvent e) {
-    }
-
-
-    /**
-     *
-     * */
-    public CanvasContainer getCanvas() {
-        return this.canvas;
-    }
-
+    public void mouseMoved(MouseEvent e) { }
+    public void mouseClicked(MouseEvent e) { }
+    public void mouseEntered(MouseEvent e) { }
+    public void mouseExited(MouseEvent e) { }
 }

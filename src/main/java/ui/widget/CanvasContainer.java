@@ -367,20 +367,6 @@ public class CanvasContainer extends JPanel implements MouseMotionListener, Mous
      *
      */
     @Override
-    public void mouseEntered(MouseEvent e) {
-    }
-
-    /**
-     *
-     */
-    @Override
-    public void mouseExited(MouseEvent e) {
-    }
-
-    /**
-     *
-     */
-    @Override
     public void mouseDragged(MouseEvent e) {
         var currentTool = toolController.getCurrentTool();
 
@@ -746,4 +732,8 @@ public class CanvasContainer extends JPanel implements MouseMotionListener, Mous
             e.printStackTrace();
         }
     }
+
+
+    public void mouseEntered(MouseEvent e) { }
+    public void mouseExited(MouseEvent e) { }
 }
