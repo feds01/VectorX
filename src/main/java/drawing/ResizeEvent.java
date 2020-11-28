@@ -13,7 +13,7 @@ public class ResizeEvent {
     public static final int NORTH_WEST = 7;
 
     /**
-     * @return
+     *
      */
     public static Cursor getCursorFromResizeEvent(int resizeEvent) {
         if (resizeEvent < 0 || resizeEvent > 7) {

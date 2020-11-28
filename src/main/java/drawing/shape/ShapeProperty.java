@@ -1,6 +1,7 @@
 package drawing.shape;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 /**
  *
@@ -92,6 +93,20 @@ public class ShapeProperty<T> implements Serializable {
         }
 
         this.value = reflectedValue;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ShapeProperty<?> that = (ShapeProperty<?>) o;
+        return Objects.equals(name, that.name) &&
+                Objects.equals(value, that.value);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, value, validator);
     }
 
     @Override

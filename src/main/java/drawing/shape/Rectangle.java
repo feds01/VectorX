@@ -3,7 +3,6 @@ package drawing.shape;
 import common.CopyUtils;
 import drawing.ToolType;
 
-import java.awt.AlphaComposite;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
@@ -20,15 +19,15 @@ public class Rectangle extends Shape {
     public Rectangle(int x, int y, int x2, int y2) {
         super(x, y, x2, y2);
 
-        this.properties.addProperty(propertyFactory.createColourProperty("strokeColour", Color.BLACK));
-        this.properties.addProperty(propertyFactory.createColourProperty("fillColour", Color.WHITE));
+        this.properties.addProperty(ShapePropertyFactory.createColourProperty("strokeColour", Color.BLACK));
+        this.properties.addProperty(ShapePropertyFactory.createColourProperty("fillColour", Color.WHITE));
         this.properties.addProperty(new ShapeProperty<>("thickness", 1, value -> 1 <= value && value <= 16));
     }
 
     /**
      *
      */
-    public Rectangle copy()  {
+    public Rectangle copy() {
         int width = (int) ((Point) this.getPropertyMap().get("end").getValue()).getX();
         int height = (int) ((Point) this.getPropertyMap().get("end").getValue()).getY();
 
@@ -144,8 +143,7 @@ public class Rectangle extends Shape {
         Rectangle rectangle = (Rectangle) o;
         return getX() == rectangle.getX() &&
                 getY() == rectangle.getY() &&
-                Objects.equals(properties, rectangle.properties) &&
-                Objects.equals(propertyFactory, rectangle.propertyFactory);
+                Objects.equals(properties, rectangle.properties);
     }
 
     /**
@@ -153,6 +151,6 @@ public class Rectangle extends Shape {
      */
     @Override
     public int hashCode() {
-        return Objects.hash(getX(), getY(), properties, propertyFactory);
+        return Objects.hash(getX(), getY(), properties);
     }
 }

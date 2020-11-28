@@ -21,7 +21,7 @@ public class ToolController {
     /**
      *
      */
-    private final SwingPropertyChangeSupport pcs = new SwingPropertyChangeSupport(this);
+    private final SwingPropertyChangeSupport toolListener = new SwingPropertyChangeSupport(this);
 
     /**
      *
@@ -40,14 +40,14 @@ public class ToolController {
      *
      */
     public void addPropertyChangeListener(PropertyChangeListener listener) {
-        this.pcs.addPropertyChangeListener(listener);
+        this.toolListener.addPropertyChangeListener(listener);
     }
 
     /**
      *
      */
     public void removePropertyChangeListener(PropertyChangeListener listener) {
-        this.pcs.removePropertyChangeListener(listener);
+        this.toolListener.removePropertyChangeListener(listener);
     }
 
     /**
@@ -57,7 +57,7 @@ public class ToolController {
         DrawingTool oldTool = this.currentTool;
         this.currentTool = ToolMenu.toolMap.get(type);
 
-        pcs.firePropertyChange("toolChange", oldTool, this.currentTool);
+        toolListener.firePropertyChange("toolChange", oldTool, this.currentTool);
     }
 
     /**
@@ -68,6 +68,6 @@ public class ToolController {
 
         this.currentTool = currentTool;
 
-        pcs.firePropertyChange("toolChange", oldTool, this.currentTool);
+        toolListener.firePropertyChange("toolChange", oldTool, this.currentTool);
     }
 }

@@ -22,11 +22,11 @@ public class Line extends Shape {
     public Line(int x, int y, int x2, int y2) {
         super(x, y, x2, y2);
 
-        this.properties.set("start", propertyFactory.createPointProperty("start", new Point(x, y)));
-        this.properties.set("end", propertyFactory.createPointProperty("end", new Point(x2, y2)));
+        this.properties.set("start", ShapePropertyFactory.createPointProperty("start", new Point(x, y)));
+        this.properties.set("end", ShapePropertyFactory.createPointProperty("end", new Point(x2, y2)));
 
 
-        this.properties.addProperty(propertyFactory.createColourProperty("strokeColour", Color.BLACK));
+        this.properties.addProperty(ShapePropertyFactory.createColourProperty("strokeColour", Color.BLACK));
         this.properties.addProperty(new ShapeProperty<>("thickness", 1, value -> 1 <= value && value <= 16));
     }
 
@@ -192,8 +192,7 @@ public class Line extends Shape {
                 Double.compare(line.getY(), getY()) == 0 &&
                 Double.compare(line.getEndX(), getEndX()) == 0 &&
                 Double.compare(line.getEndY(), getEndY()) == 0 &&
-                Objects.equals(properties, line.properties) &&
-                Objects.equals(propertyFactory, line.propertyFactory);
+                Objects.equals(properties, line.properties);
     }
 
     /**
@@ -201,6 +200,6 @@ public class Line extends Shape {
      */
     @Override
     public int hashCode() {
-        return Objects.hash(getX(), getY(), getEndX(), getEndY(), properties, propertyFactory);
+        return Objects.hash(getX(), getY(), getEndX(), getEndY(), properties);
     }
 }

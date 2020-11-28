@@ -242,6 +242,6 @@ public class ToolMenu extends JToolBar {
             return;
         }
 
-        this.controller.setCurrentTool(this.toolMap.get(type));
+        this.controller.setCurrentTool(toolMap.get(type));
     }
 }

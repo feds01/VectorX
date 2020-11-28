@@ -12,14 +12,14 @@ public class ShapePropertyFactory implements Serializable {
     /**
      *
      */
-    public ShapeProperty<Color> createColourProperty(String name, Color value) {
+    public static ShapeProperty<Color> createColourProperty(String name, Color value) {
         return new ShapeProperty<>(name, value, any -> true);
     }
 
     /**
      *
      */
-    public ShapeProperty<Point> createPointProperty(String name, Point value) {
+    public static ShapeProperty<Point> createPointProperty(String name, Point value) {
         return new ShapeProperty<>(name, value, p -> p.getX() >= -1000 && p.getY() >= -1000);
     }
 }

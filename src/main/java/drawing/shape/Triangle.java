@@ -31,8 +31,8 @@ public class Triangle extends Shape {
     public Triangle(int x, int y, int x2, int y2) {
         super(x, y, x2, y2);
 
-        this.properties.addProperty(propertyFactory.createColourProperty("strokeColour", Color.BLACK));
-        this.properties.addProperty(propertyFactory.createColourProperty("fillColour", Color.WHITE));
+        this.properties.addProperty(ShapePropertyFactory.createColourProperty("strokeColour", Color.BLACK));
+        this.properties.addProperty(ShapePropertyFactory.createColourProperty("fillColour", Color.WHITE));
         this.properties.addProperty(new ShapeProperty<>("thickness", 1, value -> 1 <= value && value <= 16));
 
         this.setPoints();
@@ -150,8 +150,7 @@ public class Triangle extends Shape {
                 getY() == triangle.getY() &&
                 Arrays.equals(yPoints, triangle.yPoints) &&
                 Arrays.equals(xPoints, triangle.xPoints) &&
-                Objects.equals(properties, triangle.properties) &&
-                Objects.equals(propertyFactory, triangle.propertyFactory);
+                Objects.equals(properties, triangle.properties);
     }
 
     /**
@@ -159,7 +158,7 @@ public class Triangle extends Shape {
      */
     @Override
     public int hashCode() {
-        int result = Objects.hash(getX(), getY(), properties, propertyFactory);
+        int result = Objects.hash(getX(), getY(), properties);
         result = 31 * result + Arrays.hashCode(yPoints);
         result = 31 * result + Arrays.hashCode(xPoints);
         return result;

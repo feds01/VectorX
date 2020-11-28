@@ -35,7 +35,7 @@ public class WidgetController {
     /**
      *
      */
-    private final SwingPropertyChangeSupport pcs = new SwingPropertyChangeSupport(this);
+    private final SwingPropertyChangeSupport widgetListener = new SwingPropertyChangeSupport(this);
 
     /**
      *
@@ -49,14 +49,14 @@ public class WidgetController {
      *
      */
     public void addPropertyChangeListener(PropertyChangeListener listener) {
-        this.pcs.addPropertyChangeListener(listener);
+        this.widgetListener.addPropertyChangeListener(listener);
     }
 
     /**
      *
      */
     public void removePropertyChangeListener(PropertyChangeListener listener) {
-        this.pcs.removePropertyChangeListener(listener);
+        this.widgetListener.removePropertyChangeListener(listener);
     }
 
     /**
@@ -88,7 +88,7 @@ public class WidgetController {
         this.widgetProperties = this.widget.getValueMap();
         this.widget.addPropertyChangeListener(this::propertyListener);
 
-        pcs.firePropertyChange("widgetChange", oldWidget, this.widget);
+        widgetListener.firePropertyChange("widgetChange", oldWidget, this.widget);
     }
 
     /**
@@ -102,7 +102,7 @@ public class WidgetController {
 
         // @Workaround: Weird bug where if multiple listeners are registered within lambdas,
         // events aren't being detected.
-        for (PropertyChangeListener l : this.pcs.getPropertyChangeListeners()) {
+        for (PropertyChangeListener l : this.widgetListener.getPropertyChangeListeners()) {
             l.propertyChange(new PropertyChangeEvent(this, "widgetPropertyChange", oldWidgetProperties, this.widgetProperties));
         }
     }
@@ -114,7 +114,7 @@ public class WidgetController {
         BaseToolWidget oldWidget = this.widget;
         this.widget = widget;
 
-        pcs.firePropertyChange("widgetChange", oldWidget, this.widget);
+        widgetListener.firePropertyChange("widgetChange", oldWidget, this.widget);
     }
 
     /**

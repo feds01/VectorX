@@ -195,7 +195,7 @@ public class CanvasContainer extends JPanel implements MouseMotionListener, Mous
      * This overridden paint method will be called by Swing when Canvas.repaint() is called from
      * SimpleGuiDelegate.propertyChange().
      */
-    public void paint(Graphics g) {
+    public void paintComponent(Graphics g) {
         g.setColor(this.getBackground());
         g.fillRect(0, 0, getWidth(), getHeight());
 
@@ -383,8 +383,6 @@ public class CanvasContainer extends JPanel implements MouseMotionListener, Mous
 
                 // perform resizing operation
                 if (this.isResizing > -1) {
-                    System.out.println(dx);
-                    System.out.println(dy);
                     this.selectedShape.resizeShape(this.isResizing, dx, dy);
 
 

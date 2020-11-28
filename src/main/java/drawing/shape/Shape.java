@@ -30,12 +30,6 @@ public abstract class Shape implements Serializable {
     /**
      *
      */
-    public ShapePropertyFactory propertyFactory = new ShapePropertyFactory();
-
-
-    /**
-     *
-     */
     public Shape(int x, int y, int x2, int y2) {
         int xMin = Math.min(x, x2);
         int yMin = Math.min(y, y2);
@@ -43,8 +37,8 @@ public abstract class Shape implements Serializable {
         int width = Math.abs(x - x2);
         int height = Math.abs(y - y2);
 
-        this.properties.addProperty(propertyFactory.createPointProperty("start", new Point(xMin, yMin)));
-        this.properties.addProperty(propertyFactory.createPointProperty("end", new Point(width, height)));
+        this.properties.addProperty(ShapePropertyFactory.createPointProperty("start", new Point(xMin, yMin)));
+        this.properties.addProperty(ShapePropertyFactory.createPointProperty("end", new Point(width, height)));
 
         this.properties.addProperty(new ShapeProperty<>("rotation", 0, value -> value >= 0 && value <= 360));
     }
@@ -142,7 +136,7 @@ public abstract class Shape implements Serializable {
      *
      */
     public void setShapeStrokeColour(Color stroke) {
-        this.properties.set("strokeColour", propertyFactory.createColourProperty("strokeColour", stroke));
+        this.properties.set("strokeColour", ShapePropertyFactory.createColourProperty("strokeColour", stroke));
 
     }
 
@@ -157,7 +151,7 @@ public abstract class Shape implements Serializable {
      *
      */
     public void setShapeFillColour(Color fill) {
-        this.properties.set("fillColour", propertyFactory.createColourProperty("fillColour", fill));
+        this.properties.set("fillColour", ShapePropertyFactory.createColourProperty("fillColour", fill));
     }
 
     /**
@@ -288,16 +282,17 @@ public abstract class Shape implements Serializable {
             }
         }
 
-        // determine which coordinates should be used for the 'resized' shape
-        int xMin = Math.min(start.x, end.x);
-        int yMin = Math.min(start.y, end.y);
+        if (start.x != end.x || start.y != end.y) {
+            // determine which coordinates should be used for the 'resized' shape
+            int xMin = Math.min(start.x, end.x);
+            int yMin = Math.min(start.y, end.y);
 
-        int width = Math.abs(start.x - end.x);
-        int height = Math.abs(start.y - end.y);
+            int width = Math.abs(start.x - end.x);
+            int height = Math.abs(start.y - end.y);
 
-        // overwrite the new components with the calculated coordinates
-        this.setProperty("start", new Point(xMin, yMin));
-        this.setProperty("end", new Point(width, height));
-
+            // overwrite the new components with the calculated coordinates
+            this.setProperty("start", new Point(xMin, yMin));
+            this.setProperty("end", new Point(width, height));
+        }
     }
 }

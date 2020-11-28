@@ -23,8 +23,8 @@ public class TextShape extends Shape {
 
         this.properties.addProperty(new ShapeProperty<>("value", "text", value -> true));
 
-        this.properties.addProperty(propertyFactory.createColourProperty("strokeColour", Color.BLACK));
-        this.properties.addProperty(propertyFactory.createColourProperty("fillColour", Color.WHITE));
+        this.properties.addProperty(ShapePropertyFactory.createColourProperty("strokeColour", Color.BLACK));
+        this.properties.addProperty(ShapePropertyFactory.createColourProperty("fillColour", Color.WHITE));
         this.properties.addProperty(new ShapeProperty<>("fontSize", 14, value -> 8 <= value && value <= 28));
     }
 
@@ -143,8 +143,7 @@ public class TextShape extends Shape {
         TextShape textShape = (TextShape) o;
         return getX() == textShape.getX() &&
                 getY() == textShape.getY() &&
-                Objects.equals(properties, textShape.properties) &&
-                Objects.equals(propertyFactory, textShape.propertyFactory);
+                Objects.equals(properties, textShape.properties);
     }
 
     /**
@@ -152,6 +151,6 @@ public class TextShape extends Shape {
      */
     @Override
     public int hashCode() {
-        return Objects.hash(getX(), getY(), properties, propertyFactory);
+        return Objects.hash(getX(), getY(), properties);
     }
 }

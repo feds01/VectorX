@@ -21,8 +21,8 @@ public class Ellipses extends Shape {
     public Ellipses(int x, int y, int x2, int y2) {
         super(x, y, x2, y2);
 
-        this.properties.addProperty(propertyFactory.createColourProperty("strokeColour", Color.BLACK));
-        this.properties.addProperty(propertyFactory.createColourProperty("fillColour", Color.WHITE));
+        this.properties.addProperty(ShapePropertyFactory.createColourProperty("strokeColour", Color.BLACK));
+        this.properties.addProperty(ShapePropertyFactory.createColourProperty("fillColour", Color.WHITE));
         this.properties.addProperty(new ShapeProperty<>("thickness", 1, value -> 1 <= value && value <= 16));
     }
 
@@ -123,8 +123,7 @@ public class Ellipses extends Shape {
         Ellipses ellipses = (Ellipses) o;
         return getX() == ellipses.getX() &&
                 getY() == ellipses.getY() &&
-                Objects.equals(properties, ellipses.properties) &&
-                Objects.equals(propertyFactory, ellipses.propertyFactory);
+                Objects.equals(properties, ellipses.properties);
     }
 
     /**
@@ -132,6 +131,6 @@ public class Ellipses extends Shape {
      */
     @Override
     public int hashCode() {
-        return Objects.hash(getX(), getY(), properties, propertyFactory);
+        return Objects.hash(getX(), getY(), properties);
     }
 }

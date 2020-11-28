@@ -164,11 +164,7 @@ public class VectorMain extends JFrame {
             return false;
         }
 
-
-        int keyCode = e.getKeyCode();
-
-
-        switch (keyCode) {
+        switch ( e.getKeyCode() ) {
             case KeyEvent.VK_S: {
 
                 if (e.isControlDown()) {

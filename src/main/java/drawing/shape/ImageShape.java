@@ -40,12 +40,12 @@ public class ImageShape extends Shape {
 
 
         // override the start and end positions...
-        this.properties.set("start", propertyFactory.createPointProperty("start", new Point(x, y)));
-        this.properties.set("end", propertyFactory.createPointProperty("end", new Point(image.getWidth(), image.getHeight())));
+        this.properties.set("start", ShapePropertyFactory.createPointProperty("start", new Point(x, y)));
+        this.properties.set("end", ShapePropertyFactory.createPointProperty("end", new Point(image.getWidth(), image.getHeight())));
 
         this.properties.addProperty(new ShapeProperty<>("grayScale", false, value -> true));
-        this.properties.addProperty(propertyFactory.createColourProperty("strokeColour", Color.BLACK));
-        this.properties.addProperty(propertyFactory.createColourProperty("fillColour", Color.WHITE));
+        this.properties.addProperty(ShapePropertyFactory.createColourProperty("strokeColour", Color.BLACK));
+        this.properties.addProperty(ShapePropertyFactory.createColourProperty("fillColour", Color.WHITE));
     }
 
     /**
@@ -210,8 +210,7 @@ public class ImageShape extends Shape {
         return getX() == that.getX() &&
                 getY() == that.getY() &&
                 Objects.equals(image, that.image) &&
-                Objects.equals(properties, that.properties) &&
-                Objects.equals(propertyFactory, that.propertyFactory);
+                Objects.equals(properties, that.properties);
     }
 
     /**
@@ -219,6 +218,6 @@ public class ImageShape extends Shape {
      */
     @Override
     public int hashCode() {
-        return Objects.hash(getX(), getY(), image, properties, propertyFactory);
+        return Objects.hash(getX(), getY(), image, properties);
     }
 }

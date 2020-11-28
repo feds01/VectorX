@@ -22,84 +22,76 @@ import java.awt.geom.AffineTransform;
 
 /**
  *
- * */
+ */
 public class CanvasWidget extends JPanel implements MouseListener, MouseMotionListener {
 
     /**
      *
-     * */
+     */
     private final CanvasContainer canvas;
 
     /**
      *
-     * */
+     */
     private double zoomFactor = 1;
 
     /**
      *
-     * */
+     */
     private double prevZoomFactor = 1;
 
     /**
      *
-     * */
+     */
     private boolean isZooming;
 
     /**
      *
-     * */
+     */
     private boolean released;
 
     /**
      *
-     * */
+     */
     private boolean isDragging;
 
     /**
      *
-     * */
+     */
     private double xOffset = 0;
 
     /**
      *
-     * */
+     */
     private double yOffset = 0;
 
     /**
      *
-     * */
+     */
     private int xDiff;
 
     /**
      *
-     * */
+     */
     private int yDiff;
 
     /**
      *
-     * */
+     */
     private Point startPoint;
 
-    /**
-     *
-     */
-    private final double MAX_SCALE_ZOOM = 2.0;
+    public static final Dimension CANVAS_SIZE = new Dimension(600, 700);
 
     /**
      *
      */
-    private final double MIN_SCALE_ZOOM = 0.25;
-
-    /**
-     *
-     * */
     public CanvasWidget(ToolController controller, WidgetController widgetController) {
         this.setLayout(new GridBagLayout());
 
         this.canvas = new CanvasContainer(controller, widgetController);
 
-        canvas.setPreferredSize(new Dimension(600, 700));
-        canvas.setMaximumSize(new Dimension(600, 700));
+        canvas.setPreferredSize(CANVAS_SIZE);
+        canvas.setMaximumSize(CANVAS_SIZE);
 
         canvas.setBackground(Color.white);
 
@@ -111,7 +103,7 @@ public class CanvasWidget extends JPanel implements MouseListener, MouseMotionLi
 
     /**
      *
-     * */
+     */
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
@@ -131,6 +123,19 @@ public class CanvasWidget extends JPanel implements MouseListener, MouseMotionLi
 
             at.translate(xOffset, yOffset);
             at.scale(zoomFactor, zoomFactor);
+
+//             TODO: fix buggy scale code
+//            Dimension dim;
+//            if (this.zoomFactor > 1.0) {
+//                dim = new Dimension(
+//                        (int) Math.round(CANVAS_SIZE.width * this.zoomFactor),
+//                        (int) Math.round(CANVAS_SIZE.height * this.zoomFactor));
+//
+//            } else {
+//                dim = CANVAS_SIZE;
+//
+//            }
+//            this.canvas.setPreferredSize(dim);
 
             this.revalidate();
 
@@ -157,15 +162,18 @@ public class CanvasWidget extends JPanel implements MouseListener, MouseMotionLi
 
     /**
      *
-     * */
+     */
     public CanvasContainer getCanvas() {
         return this.canvas;
     }
 
     /**
      *
-     * */
+     */
     public void handleScroll(MouseWheelEvent event) {
+        double MAX_SCALE_ZOOM = 2.0;
+        double MIN_SCALE_ZOOM = 0.25;
+
         if (event.isControlDown()) {
             this.isZooming = true;
 
@@ -185,7 +193,7 @@ public class CanvasWidget extends JPanel implements MouseListener, MouseMotionLi
 
     /**
      *
-     * */
+     */
     @Override
     public void mouseDragged(MouseEvent e) {
         Point curPoint = e.getLocationOnScreen();
@@ -210,7 +218,7 @@ public class CanvasWidget extends JPanel implements MouseListener, MouseMotionLi
 
     /**
      *
-     * */
+     */
     @Override
     public void mousePressed(MouseEvent e) {
         released = false;
@@ -220,7 +228,7 @@ public class CanvasWidget extends JPanel implements MouseListener, MouseMotionLi
 
     /**
      *
-     * */
+     */
     @Override
     public void mouseReleased(MouseEvent e) {
         this.setCursor(Cursor.getDefaultCursor());
@@ -228,8 +236,15 @@ public class CanvasWidget extends JPanel implements MouseListener, MouseMotionLi
         repaint();
     }
 
-    public void mouseMoved(MouseEvent e) { }
-    public void mouseClicked(MouseEvent e) { }
-    public void mouseEntered(MouseEvent e) { }
-    public void mouseExited(MouseEvent e) { }
+    public void mouseMoved(MouseEvent e) {
+    }
+
+    public void mouseClicked(MouseEvent e) {
+    }
+
+    public void mouseEntered(MouseEvent e) {
+    }
+
+    public void mouseExited(MouseEvent e) {
+    }
 }
