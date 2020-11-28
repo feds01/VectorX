@@ -110,45 +110,6 @@ public abstract class Shape implements Serializable {
         start.setValue(newPoint);
     }
 
-    public int getEndX() {
-        var end = this.properties.get("end");
-
-        var point = (Point) (end.getValue());
-
-        return point.x;
-    }
-
-    public void setEndX(int x) {
-        var end = this.properties.get("end");
-
-        var point = (Point) (end.getValue());
-        var newPoint = new Point(x, point.y);
-
-        end.setValue(newPoint);
-    }
-
-
-    public void setEndY(int y) {
-        var end = this.properties.get("end");
-
-        var point = (Point) (end.getValue());
-        var newPoint = new Point(point.x, y);
-
-        end.setValue(newPoint);
-    }
-
-
-    /**
-     *
-     */
-    public int getEndY() {
-        var end = this.properties.get("end");
-
-        var point = (Point) (end.getValue());
-
-        return point.y;
-    }
-
     /**
      *
      */
@@ -227,16 +188,15 @@ public abstract class Shape implements Serializable {
         int width = (int) ((Point) this.properties.get("end").getValue()).getX();
         int height = (int) ((Point) this.properties.get("end").getValue()).getY();
 
-
         // The array will be created with points in a clockwise order.
         Point[] resizingPoints = ShapeUtility.createResizePoints(x, y, width, height);
 
-        // loop over points and find index if any
+        // loop over points and find point that is being hovered
         for (var index = 0; index < resizingPoints.length; index++) {
             var ellipse = new Ellipse2D.Double(
-                    resizingPoints[index].x - 6,
-                    resizingPoints[index].y - 6,
-                    12, 12);
+                    resizingPoints[index].x - 8,
+                    resizingPoints[index].y - 8,
+                    16, 16);
 
             if (ellipse.contains(p)) {
                 return index;
@@ -270,35 +230,40 @@ public abstract class Shape implements Serializable {
         oldProperty.setValue(value);
     }
 
+    /**
+     *
+     * */
     public Object getProperty(String name) {
         return this.properties.get(name).getValue();
     }
 
+
+    /**
+     *
+     * */
     public void resizeShape(int onResize, int dx, int dy) {
         var start = ((Point) this.properties.get("start").getValue());
         var lengths = ((Point) this.properties.get("end").getValue());
         var end = new Point(start.x + lengths.x, start.y + lengths.y);
 
+        // depending on which point the resize event was instantiated, apply
+        // the dx and dy components to the starting and ending coordinates of
+        // the shapes bounding box
         switch (onResize) {
             case ResizeEvent.NORTH: {
                 start.y += dy;
                 break;
             }
-
-            // Get the NORTH_EASTERN and SOUTHERN_WESTERN points
             case ResizeEvent.NORTH_EAST: {
                 end.x += dx;
                 start.y += dy;
                 break;
             }
-
             case ResizeEvent.EAST: {
                 end.x += dx;
                 break;
             }
             case ResizeEvent.SOUTH_EAST: {
-                // add dy to y2
-                // add dx to x2
                 end.x += dx;
                 end.y += dy;
                 break;
@@ -317,20 +282,20 @@ public abstract class Shape implements Serializable {
                 break;
             }
             case ResizeEvent.NORTH_WEST: {
-                // add dy to y1
-                // add dx to x1
                 start.x += dx;
                 start.y += dy;
                 break;
             }
         }
 
+        // determine which coordinates should be used for the 'resized' shape
         int xMin = Math.min(start.x, end.x);
         int yMin = Math.min(start.y, end.y);
 
         int width = Math.abs(start.x - end.x);
         int height = Math.abs(start.y - end.y);
 
+        // overwrite the new components with the calculated coordinates
         this.setProperty("start", new Point(xMin, yMin));
         this.setProperty("end", new Point(width, height));
 

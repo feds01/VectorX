@@ -217,7 +217,7 @@ public class CanvasContainer extends JPanel implements MouseMotionListener, Mous
         }
 
         // Draw any highlighted shape...
-        if (additionalOverlay && highlightedShape != null) {
+        if (additionalOverlay && highlightedShape != null && !(isDragging || isResizing > -1)) {
             highlightedShape.drawBoundary(g2);
         }
 
@@ -296,8 +296,10 @@ public class CanvasContainer extends JPanel implements MouseMotionListener, Mous
             if (currentTool.getType() == ToolType.SELECTOR) {
                 var selectedShape = getShapeIfHoveringShape(e.getPoint());
 
-                this.isDragging = true;
-                this.isResizing = this.selectedShape.getResizePoint(e.getPoint());
+                if (this.selectedShape != null) {
+                    this.isDragging = true;
+                    this.isResizing = this.selectedShape.getResizePoint(e.getPoint());
+                }
 
                 // use the isOnResizePoint method to check whether a point
 
