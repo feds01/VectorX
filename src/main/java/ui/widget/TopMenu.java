@@ -2,6 +2,7 @@ package ui.widget;
 
 import common.FileChooserDialog;
 import file.Loader;
+import file.SaveManager;
 import file.Saver;
 
 import javax.swing.JFrame;
@@ -134,35 +135,25 @@ public class TopMenu extends JMenuBar {
         JMenuItem openItem = new JMenuItem("Open");
 
         openItem.addActionListener(e -> {
-            File file = FileChooserDialog.showSaveFileChooser("vex");
-
-            // create the saver object and invoke a save action
-            if (file != null) {
-                var loader = new Loader(file, frame);
-                var data = loader.load();
-
-                if (data != null) {
-                    frame.setTitle("VectorX - Editing " + file.getName());
-                    widget.getCanvas().setShapes(data);
-                }
-            }
+            SaveManager.getInstance().openFile(widget, frame);
         });
 
         JMenuItem saveItem = new JMenuItem("Save");
 
         saveItem.addActionListener(e -> {
-            File file = FileChooserDialog.showSaveFileChooser("vex");
+            SaveManager.getInstance().saveFile(widget, frame, false);
+        });
 
-            var data = widget.getCanvas().getShapes();
+        JMenuItem saveAsItem = new JMenuItem("Save As");
 
-            // create the saver object and invoke a save action
-            var saver = new Saver(file, data);
-            saver.save();
+        saveAsItem.addActionListener(e -> {
+            SaveManager.getInstance().saveFile(widget, frame, true);
         });
 
         subMenu.add(newItem);
         subMenu.add(openItem);
         subMenu.add(saveItem);
+        subMenu.add(saveAsItem);
 
         return subMenu;
     }

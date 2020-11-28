@@ -1,5 +1,6 @@
 import common.FontLoader;
 import drawing.ToolType;
+import file.SaveManager;
 import ui.controllers.ToolController;
 import ui.controllers.WidgetController;
 import ui.widget.CanvasWidget;
@@ -41,6 +42,9 @@ public class VectorMain extends JFrame {
      */
     private final FontLoader fontLoader = FontLoader.getInstance();
 
+
+    private JFrame frame;
+
     /**
      *
      */
@@ -78,7 +82,7 @@ public class VectorMain extends JFrame {
             } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException ignored) {
             }
 
-            JFrame frame = new JFrame("VectorX - New File");
+            this.frame = new JFrame("VectorX - New File");
 
             frame.getContentPane().setLayout(new BorderLayout());
             frame.getContentPane().setPreferredSize(new Dimension(WIDTH, HEIGHT));
@@ -166,7 +170,13 @@ public class VectorMain extends JFrame {
 
         switch (keyCode) {
             case KeyEvent.VK_S: {
-                toolbar.setCurrentTool(ToolType.SELECTOR);
+
+                if (e.isControlDown()) {
+                    SaveManager.getInstance().saveFile(canvasWidget, frame, false);
+                } else {
+                    toolbar.setCurrentTool(ToolType.SELECTOR);
+                }
+
                 break;
             }
             case KeyEvent.VK_F: {
@@ -222,6 +232,11 @@ public class VectorMain extends JFrame {
                 break;
             }
 
+            case KeyEvent.VK_O: {
+                if (!e.isControlDown()) return false;
+
+                SaveManager.getInstance().openFile(canvasWidget, frame);
+            }
         }
         return false;
     }

@@ -20,6 +20,6 @@ public class ShapePropertyFactory implements Serializable {
      *
      */
     public ShapeProperty<Point> createPointProperty(String name, Point value) {
-        return new ShapeProperty<>(name, value, p -> p.getX() >= 0 && p.getY() >= 0);
+        return new ShapeProperty<>(name, value, p -> p.getX() >= -1000 && p.getY() >= -1000);
     }
 }
