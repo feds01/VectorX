@@ -1,4 +1,4 @@
-Mini Project 2 Practical Assessment
+VectorX
 ------------------------------------------------------
 In this practical you are required to write a simple vector graphics drawing program. At a minimum your
 program should support the following feature requirements.
