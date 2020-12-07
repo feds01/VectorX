@@ -129,6 +129,7 @@ public class ImageShape extends Shape {
 
         this.image = ImageIO.read(inputStream);
     }
+
     /**
      * This method is used to draw the selection boundary of the object when it
      * is selected on the canvas.
